@@ -1,0 +1,28 @@
+.header-logo {
+    display: flex;
+    align-items: center;
+    font-size: x-large;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/*img:hover {*/
+/*animation-name: rotate;*/
+/*animation-duration: 2s;*/
+/*animation-iteration-count: infinite;*/
+/*animation-timing-function: linear;*/
+/*animation-direction: reverse;*/
+/*}*/
+
+/*!*.square:hover {*!*/
+    /*!*animation-play-state: paused;*!*/
+/*!*}*!*/
+
+/*@keyframes rotate {*/
+    /*0% {*/
+
+    /*}*/
+    /*100% {*/
+
+    /*}*/
+/*}*/
