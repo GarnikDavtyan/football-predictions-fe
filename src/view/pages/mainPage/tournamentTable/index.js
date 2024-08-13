@@ -12,8 +12,6 @@ import {
     Grid,
 } from '@material-ui/core';
 
-import getTournamentTable from '../../../../helpers/apiRequests/getTournamentTable';
-
 const useStyles = makeStyles({
     paper: {
         backgroundColor: "rgba(255, 255, 255, 0.52)",
@@ -29,15 +27,8 @@ const useStyles = makeStyles({
     }
 });
 
-export default function TournamentTable({ leagueId }) {
+export default function TournamentTable({ standings }) {
     const classes = useStyles();
-
-    const [standings, setStandings] = useState([]);
-
-    useEffect(() => {
-        getTournamentTable(leagueId).then(standings => setStandings(standings.data.data))
-        
-    }, [leagueId])
 
     return (
         <div className={classes.rootDiv}>

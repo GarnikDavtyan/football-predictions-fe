@@ -21,7 +21,6 @@ import { useSnackbar } from "notistack";
 const useStyles = makeStyles(theme => ({
     paper: {
         backgroundColor: "rgba(255, 255, 255, 0.52)",
-        maxHeight: "515px",
         marginBottom: "20px"
     },
 
@@ -51,18 +50,10 @@ const useStyles = makeStyles(theme => ({
     },
 
     plsSign: {
-        // textAlign: 'center',
-        // backgroundColor: 'rgb(63,81,181)',
         color: 'orange',
         textShadow: '-2px 0 black, 0 2px black, 2px 0 black, 0 -2px black',
-        // width: 'fit-content',
-        // margin: 'auto',
-        // padding: 5,
-        // borderRadius: '15px'
     },
 }));
-
-// error()
 
 function PredictionTable({ user, leagueId, round, setRound, fixtures, rounds }) {
 
@@ -103,7 +94,7 @@ function PredictionTable({ user, leagueId, round, setRound, fixtures, rounds }) 
     return (
         <div className={classes.rootDiv}>
             <Paper square className={classes.roundCaption}>
-                <Grid container justifyContent="space-between" className={classes.prevNextDiv} alignItems='center'>
+                <Grid container justifyContent="space-between" alignItems='center'>
                     <Grid onClick={() => handleRoundChangeCLick(-1)} item>
                         <Button
                             disabled={round === 1}
@@ -161,7 +152,6 @@ function PredictionTable({ user, leagueId, round, setRound, fixtures, rounds }) 
                             ))}
                         </TableBody>
                     </Table>
-
                 </TableContainer>
                 {user
                     ? <Grid container justifyContent="flex-end">

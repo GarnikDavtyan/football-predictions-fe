@@ -20,7 +20,6 @@ function App() {
 
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState(null);
-  // const [users, setUsers] = useState([]);
   const [leagues, setLeagues] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -52,7 +51,7 @@ function App() {
         <main className="main">
           <Switch>
             <CustomRoute className="home-route" exact path={[paths.home, paths.main]} render={() => <Home leagues={leagues} />} />
-            <CustomRoute path={paths.main + '/:id'} render={() => <MainPage /* users={users} */ user={user} leagues={leagues} />} />
+            <CustomRoute path={paths.main + '/:id'} render={() => <MainPage user={user} leagues={leagues}/>} />
             <CustomRoute path={paths.signup}><SignUp handleOpen={handleOpen} setUser={setUser} setIsLoading={setIsLoading} /></CustomRoute>
             <CustomRoute path={paths.rules} component={Rules} />
             <CustomRoute path={paths.top} component={Top} />

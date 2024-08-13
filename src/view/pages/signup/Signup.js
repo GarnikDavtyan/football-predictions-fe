@@ -13,10 +13,10 @@ import {
     InputLabel,
     OutlinedInput,
     IconButton,
-    createMuiTheme,
     MuiThemeProvider,
     makeStyles,
 } from '@material-ui/core';
+import { createTheme } from '@material-ui/core/styles'
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { paths } from '../../../constants';
@@ -63,7 +63,7 @@ export default function SignUp({ handleOpen, setUser, setIsLoading }) {
     const history = useHistory();
     const classes = useStyles();
 
-    const formLabelsTheme = createMuiTheme({
+    const formLabelsTheme = createTheme({
         overrides: {
             MuiFormLabel: {
                 asterisk: {
@@ -255,7 +255,7 @@ export default function SignUp({ handleOpen, setUser, setIsLoading }) {
                         >
                             Sign Up
                         </Button>
-                        <Grid container justify="flex-end">
+                        <Grid container justifyContent="flex-end">
                             <Grid item>
                                 <Link onClick={handleOpen} to={paths.home} className={classes.link}>
                                     Already have an account? Log in

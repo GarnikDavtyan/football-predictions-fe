@@ -27,9 +27,8 @@ const useStyles = makeStyles({
         justifyContent: 'flex-start',
         alignItems: 'center',
     },
-    overflow: {
-        maxWidth: 100,
-        textOverflow: 'elipsis',
+    date: {
+        textAlign: 'center'
     },
 });
 
@@ -176,8 +175,18 @@ export default ({ user, leagueId, roundId, fixture, checkboxValue, setCheckboxVa
                 <TableCell />
                 <TableCell colSpan={3}>
                     <Paper>
-                        <Typography color="textSecondary" className={classes.overflow}>
-                            {`Match start: ${new Date(fixture.date)}`}
+                        <Typography color="textSecondary" className={classes.date}>
+                            {`Match start: 
+                                    ${new Date(fixture.date)
+                                        .toLocaleString(undefined, {
+                                            weekday: 'short',
+                                            hour: '2-digit',
+                                            minute: '2-digit',
+                                            hourCycle: 'h23',
+                                            year: 'numeric',
+                                            month: 'short',
+                                            day: 'numeric'
+                                        })}`}
                         </Typography>
                     </Paper>
                 </TableCell>

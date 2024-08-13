@@ -5,11 +5,14 @@ import PredictionTable from '../../pages/mainPage/predictionTable';
 import Top10UsersPerLeagueList from '../../pages/mainPage/top10UsersPerLeagueList';
 import TournamentTable from '../../pages/mainPage/tournamentTable';
 import getFixtures from '../../../helpers/apiRequests/getFixturesByLeagueId';
+import getTournamentTable from '../../../helpers/apiRequests/getTournamentTable';
+import getTop10ByLeague from '../../../helpers/apiRequests/getTop10ByLeague';
+import Loading from '../../components/loading';
 
 const useStyles = makeStyles({
     tablesContainer: {
         display: "grid",
-        gridTemplateColumns: "0.5fr 2fr 0.5fr",
+        gridTemplateColumns: "0.75fr 1.5fr 0.75fr",
         gridGap: "20px"
     },
     td:{
@@ -19,46 +22,49 @@ const useStyles = makeStyles({
 
 export default (props) => {
 
-    const { user, leagueId, users, league } = props;
+    const { user, leagueId, league } = props;
 
     const classes = useStyles();
     const [round, setRound] = useState(0);
     const [fixtures, setFixtures] = useState([]);
+    const [standings, setStandings] = useState([]);
+    const [top10, setTop10] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        /* let canselled = false;
-        !canselled &&  */
         setRound(league.current_round);
-        // getCurrentRound(leagueId)
-        //     .then(round => (setRound(round), round))
-        // return () => {
-        //     // canselled = true;
-        //     setRound(0);
-        // };
     }, [leagueId])
 
-    // const handler = snapshot => {
-    //     setFixtures(Object.values(snapshot.val() || fixtures).filter(el => typeof el === 'object').sort((m1, m2) => m1.event_timestamp - m2.event_timestamp))
-    // }
-
     useEffect(() => {
-        let cancelled = false;
-        !cancelled && round && getFixtures(league.id, round)
-        .then(response => {
-            setFixtures(response.data.data);
-        });
-        // getFixturesOfCurrentLeagueAndRound(handler, leagueId, round)
-        return () => {
-            cancelled = true;
+        if (round) {
+            setIsLoading(true);
+            Promise.all([
+                getFixtures(league.id, round),
+                getTournamentTable(league.id),
+                getTop10ByLeague(league.id, round),
+            ])
+            .then(([fixturesResponse, standingsResponse, top10Response]) => {
+                    setFixtures(fixturesResponse.data.data);
+                    setStandings(standingsResponse.data.data);
+                    setTop10(top10Response.data.data);
+            })
+            .catch(error => {
+                console.error("Error fetching data:", error);
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
         }
     }, [leagueId, round]);
 
     return (
-
-        < div className={classes.tablesContainer} >
-            {/* <Top10UsersPerLeagueList users={users} round={round} leagueId={leagueId} fixtures={fixtures} /> */}
-            <PredictionTable setRound={setRound} round={round} leagueId={leagueId} user={user} fixtures={fixtures}  rounds={league.rounds}/>
-            <TournamentTable round={round} leagueId={league.id} />
+        !isLoading ?
+        <div className={classes.tablesContainer} >
+            <Top10UsersPerLeagueList top10={top10} />
+            <PredictionTable setRound={setRound} round={round} leagueId={leagueId} user={user} fixtures={fixtures} rounds={league.current_round}/>
+            <TournamentTable standings={standings} />
         </div >
+        :
+        <Loading />
     )
 }
