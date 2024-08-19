@@ -16,6 +16,7 @@ import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import FixtureRow from '../../../components/FixtureRow';
 import { useSnackbar } from "notistack";
+import savePredictions from '../../../../helpers/apiRequests/savePredictions';
 
 
 const useStyles = makeStyles(theme => ({
@@ -60,8 +61,9 @@ function PredictionTable({ user, leagueId, round, setRound, fixtures, rounds }) 
     const classes = useStyles();
     const { enqueueSnackbar } = useSnackbar();
 
-    const [checkboxValue, setCheckboxValue] = useState(0);
+    const [x2FixtureId, setX2FixtureId] = useState(0);
     const [roundsCount, setRoundsCount] = useState(0);
+    const [predictions, setPredictions] = useState([]);
 
     const areAllStarted = fixtures.every(fix => fix.status !== 'NS')
 
@@ -69,25 +71,31 @@ function PredictionTable({ user, leagueId, round, setRound, fixtures, rounds }) 
 
     const handleSubmit = e => {
         e.preventDefault();
-        let c = 0;
-        Promise.all(fixtures.map(fixture => {
-            let id = fixture.id;
-            let matchRow = document.getElementById(id);
-            let x2 = checkboxValue === id;
-            let [home, away] = [...matchRow.querySelectorAll('input[type=number]')].map(inp => inp.value);
-            if (home && away) {
-                c++
-                return new Promise((resolve, reject) => {
-                    // setUserPrediction(user.user.name, leagueId, round, id, x2, home, away, 0).then(() => resolve());
-                });
-            }
-        }))
-            .then(() => enqueueSnackbar(c ? "Prediction Saved" : "Nothing To Save", { variant: c ? "success" : "warning" }))
+        try {
+            const updatedPredictions = predictions.map((prediction) => {
+                if (!prediction.score_home || !prediction.score_away) {
+                    throw new Error("Check predictions, not all the fields filled for some of the matches");
+                }
+
+                const x2Value = prediction.fixture_id === x2FixtureId ? true : false;
+                return {
+                    ...prediction,
+                    x2: x2Value,
+                };
+            });
+
+            savePredictions(leagueId, round, updatedPredictions)
+            .then(() => enqueueSnackbar("Predictions Saved", { variant: "success" }))
+            .catch((error) => {
+                enqueueSnackbar(error.message, { variant: "error" });
+            })
+        } catch (error) {
+            enqueueSnackbar(error.message, { variant: "error" });
+        }
     };
 
     useEffect(() => {
         setRoundsCount(rounds);
-        // getRoundsNumber(leagueId).then(roundsNumber => setRoundsCount(roundsNumber))
     }, [leagueId]);
 
 
@@ -142,12 +150,10 @@ function PredictionTable({ user, leagueId, round, setRound, fixtures, rounds }) 
                                     fixtures={fixtures}
                                     key={fixture.id}
                                     fixture={fixture}
-                                    checkboxValue={checkboxValue}
-                                    setCheckboxValue={setCheckboxValue}
+                                    x2FixtureId={x2FixtureId}
+                                    setX2FixtureId={setX2FixtureId}
                                     user={user}
-                                    leagueId={leagueId}
-                                    roundId={round}
-
+                                    setPredictions={setPredictions}
                                 />
                             ))}
                         </TableBody>

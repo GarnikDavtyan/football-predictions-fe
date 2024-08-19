@@ -33,50 +33,35 @@ const useStyles = makeStyles({
 });
 
 
-export default ({ user, leagueId, roundId, fixture, checkboxValue, setCheckboxValue, fixtures }) => {
+export default ({ user, fixture, x2FixtureId, setX2FixtureId, fixtures, setPredictions }) => {
     const classes = useStyles();
     const fixId = fixture.id;
-    const [info, setInfo] = useState(false);
 
+    const [info, setInfo] = useState(false);
     const [prediction, setPrediction] = useState({
-        home: '',
-        away: '',
+        fixture_id : fixId,
+        score_home: '',
+        score_away: '',
+        x2: false,
         points: 0,
     });
 
-    const predictionHandler = snapshot => {
-        let pred = snapshot.val();
-        if (pred) {
-            pred.x2 && setCheckboxValue(fixId);
-            setPrediction({
-                home: pred.homeGoals,
-                away: pred.awayGoals,
-                points: pred.fixturePoints,
-            })
-        }
-    }
-
     useEffect(() => {
-        // let canselled = false;
-        // !canselled && user && getUserPrediction(predictionHandler, user.name, leagueId, roundId, fixId)
-
-        // return () => {
-        //     canselled = true;
-        //     setCheckboxValue(0);
-        //     setPrediction({
-        //         home: '',
-        //         away: '',
-        //         points: 0,
-        //     })
-        // }
+        if (fixture.predictions && fixture.predictions.length) {
+            setPrediction(fixture.predictions[0])
+            if (fixture.predictions[0].x2) {
+                setX2FixtureId(fixId);
+            }
+            setPredictions(prevPredictions => [...prevPredictions, fixture.predictions[0]] )
+        }
     }, [])
 
     const isFinished = fixture.status === 'FT';
     const isNotStarted = fixture.status === 'NS';
 
     function handleCheckboxChange() {
-        if (checkboxValue && fixtures.find(fix => fix.id === checkboxValue).status === 'FT') return;
-        setCheckboxValue(fixId);
+        if (x2FixtureId && fixtures.find(fix => fix.id === x2FixtureId).status === 'FT') return;
+        setX2FixtureId(fixId);
     }
 
     function handleInfoClick() {
@@ -84,44 +69,6 @@ export default ({ user, leagueId, roundId, fixture, checkboxValue, setCheckboxVa
     }
 
     return (<>
-        {/* <<<<<<< table-ui */}
-        {/*                 <TableRow key={row.fixture_id}>
-                    <TableCell component="th" scope="row" align="center" className={classes.tableCell} padding="none">
-                        <IconButton onClick={handleInfoClick} value={row.fixture_id}>
-                            <InfoIcon/>
-                        </IconButton>
-                    </TableCell>
-                    <TableCell align="right" padding="none">{row.homeTeam.team_name}</TableCell>
-                    <TableCell align="center" padding="none"><span>{row.statusShort === 'FT' ? row.goalsHomeTeam + ' : ' + row.goalsAwayTeam : '- : -'}</span></TableCell>
-                    <TableCell align="left" padding="none">{row.awayTeam.team_name}</TableCell>
-                    <TableCell align="center" padding="none">
-                        <Checkbox
-                            checked={row.fixture_id == value}
-                            onChange={handleCheckboxChange}
-                            value={row.fixture_id}
-                            color='secondary'
-                            inputProps={{ 'aria-label': 'primary checkbox' }}
-                        /></TableCell>
-                    <TableCell align="center" padding="none">
-                        {row.statusShort !== 'FT' ?
-                        <div className={classes.inputsContainer}>
-                            <PredictionInput width={10} /> : <PredictionInput width={10} />
-                        </div> : '- : -'}
-                    </TableCell>
-                    <TableCell align="center" padding="none">0</TableCell>
-                </TableRow>
-        {info.includes(row.fixture_id) &&
-        <TableRow>
-            <TableCell/>
-            <TableCell colSpan={5} padding="none">
-                        <Paper>
-                            <Typography color="textSecondary">
-                                Match start:
-                            </Typography>
-                        </Paper>
-            </TableCell>
-            <TableCell padding="none"/>
-======= */}
         <TableRow key={fixId} id={fixId}>
             <TableCell component="th" scope="row" align="center" padding="none">
                 <IconButton onClick={handleInfoClick} value={fixId}>
@@ -132,16 +79,16 @@ export default ({ user, leagueId, roundId, fixture, checkboxValue, setCheckboxVa
                 <div className={classes.right}>
                     {fixture.team_home.name}
                     &nbsp;
-                    <img src={fixture.team_home.logo} /*alt={fixture.homeTeam.team_id}*/ width="30" height="30" />
+                    <img src={fixture.team_home.logo} alt={fixture.team_home.name} width="30" height="30" />
                 </div>
             </TableCell>
             <TableCell align="center" padding="none">
                 <span>
-                    {isFinished ? fixture.scoreHome + ' : ' + fixture.scoreAway : '- : -'}
+                    {isFinished ? fixture.score_home + ' : ' + fixture.score_away : '- : -'}
                 </span></TableCell>
             <TableCell align="left" padding="none">
                 <div className={classes.left}>
-                    <img src={fixture.team_away.logo} /*alt={fixture.teamAway.team_id} */ width="30" height="30" />
+                    <img src={fixture.team_away.logo} alt={fixture.team_away.name} width="30" height="30" />
                     &nbsp;
                     {fixture.team_away.name}
                 </div>
@@ -149,24 +96,37 @@ export default ({ user, leagueId, roundId, fixture, checkboxValue, setCheckboxVa
             <>
                 <TableCell align="center" padding="none">
                 <Checkbox
-                        disabled={!user || !isNotStarted || !prediction.home || !prediction.away}
-                        checked={fixId === checkboxValue}
+                        disabled={!user || !isNotStarted || !prediction.score_home || !prediction.score_away}
+                        checked={fixId === x2FixtureId}
                         onChange={handleCheckboxChange}
                         value={fixId}
                         color='secondary'
-                        // inputProps={{ 'aria-label': 'primary checkbox' }}
                     />
                 </TableCell>
                 <TableCell align="center" padding="none">
                     {isNotStarted ?
                         <div className={classes.inputsContainer}>
-                            <PredictionInput disabled={!user} prediction={prediction} setPrediction={setPrediction} which='home' />
+                            <PredictionInput 
+                                disabled={!user} 
+                                prediction={prediction} 
+                                setPrediction={setPrediction} 
+                                setPredictions={setPredictions} 
+                                fixtureId={fixture.id} 
+                                which='score_home' 
+                            />
                             {` - `}
-                            <PredictionInput disabled={!user} prediction={prediction} setPrediction={setPrediction} which='away' />
+                            <PredictionInput 
+                                disabled={!user} 
+                                prediction={prediction} 
+                                setPrediction={setPrediction} 
+                                setPredictions={setPredictions} 
+                                fixtureId={fixture.id} 
+                                which='score_away' 
+                            />
                         </div>
-                        : `${prediction.home || '-'} : ${prediction.away || '-'}`}
+                        : `${prediction.score_home || '-'} : ${prediction.score_away || '-'}`}
                 </TableCell >
-                <TableCell padding="none" align="center">{user ? prediction.points : '-'}</TableCell>
+                <TableCell padding="none" align="center">{user && prediction.points ? prediction.points : '-'}</TableCell>
             </>
         </TableRow>
         {info

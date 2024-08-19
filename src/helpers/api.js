@@ -19,7 +19,16 @@ const createAuthAxiosInstance = () => {
     return null;
 };
 
+const getAxiosInstanceType = () => {
+    return localStorage.getItem('user')
+        ? 
+        createAuthAxiosInstance()
+        :
+        axiosInstance
+}
+
 export default { 
     axiosInstance,
-    createAuthAxiosInstance
+    createAuthAxiosInstance,
+    getAxiosInstanceType
 };

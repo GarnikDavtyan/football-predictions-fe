@@ -56,7 +56,7 @@ export default ({ top10 }) => {
     useEffect(() => {
         setUser(null);
         const updatedUsers = [...top10[typeOfTop]];
-        if (updatedUsers.length > 3) {
+        if (updatedUsers.length > 10) {
             let authUser = updatedUsers.pop();
             setUser(authUser);
         }

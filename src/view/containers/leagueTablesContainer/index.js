@@ -61,7 +61,7 @@ export default (props) => {
         !isLoading ?
         <div className={classes.tablesContainer} >
             <Top10UsersPerLeagueList top10={top10} />
-            <PredictionTable setRound={setRound} round={round} leagueId={leagueId} user={user} fixtures={fixtures} rounds={league.current_round}/>
+            <PredictionTable setRound={setRound} round={round} leagueId={league.id} user={user} fixtures={fixtures} rounds={league.current_round}/>
             <TournamentTable standings={standings} />
         </div >
         :
