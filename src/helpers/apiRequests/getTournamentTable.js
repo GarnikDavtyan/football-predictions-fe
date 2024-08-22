@@ -1,5 +1,7 @@
-import api from '../api';
+import {axiosInstance} from '../api';
 
-export default (leagueId) => {
-    return api.axiosInstance.get(`leagues/${leagueId}/standings`)
+const getTournamentTable = (leagueId) => {
+    return axiosInstance.get(`leagues/${leagueId}/standings`)
 }
+
+export default getTournamentTable;

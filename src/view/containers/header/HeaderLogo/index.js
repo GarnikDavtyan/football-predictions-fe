@@ -6,7 +6,7 @@ import {paths} from '../../../../constants'
 
 
 const HeaderLogo = ({history}) => (
-    <div onClick={()=>history.push(paths.home)} className='header-logo'>PREDICT<img style={{margin: "0px 2px"}} src={logo} alt='O' /* title='predictOr' */ height="42" width="42"/>R</div>
+    <div onClick={()=>history.push(paths.home)} className='header-logo'>PREDICT<img style={{margin: "0px 2px"}} src={logo} alt='O' height="42" width="42"/>R</div>
 );
 
 export default withRouter(HeaderLogo)

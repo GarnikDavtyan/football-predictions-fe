@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import {
     Button,
     TextField,
@@ -17,9 +17,9 @@ import { paths } from '../../../constants';
 import { Link } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import "./login.css";
-import auth from '../../../helpers/auth';
+import {login} from '../../../helpers/auth';
 
-export default function LoginDialogForm({ open, handleClose, setIsLoading, setUser }) {
+export default function LoginDialog({ open, handleOpenClose, setUser }) {
 
     const [showPassword, setShowPassword] = useState(false);
 
@@ -30,14 +30,14 @@ export default function LoginDialogForm({ open, handleClose, setIsLoading, setUs
 
     function handleLogin(e) {
         e.preventDefault();
-        auth.login(email, password)
+        login(email, password)
              .then((response) => {
                 setUser(response.data.data.user);
                 localStorage.setItem('user', JSON.stringify(response.data.data));
-                handleClose();
+                handleOpenClose();
+                window.location.reload();
             })
             .catch(function (error) {
-                let errorCode = error.code;
                 let errorMessage = error.message;
                 enqueueSnackbar(errorMessage, { variant: "error" })
             })
@@ -89,7 +89,7 @@ export default function LoginDialogForm({ open, handleClose, setIsLoading, setUs
                     </FormControl>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} color="primary">
+                    <Button onClick={handleOpenClose} color="primary">
                         Cancel
                     </Button>
                     <Button type="submit" color="primary">
@@ -97,10 +97,7 @@ export default function LoginDialogForm({ open, handleClose, setIsLoading, setUs
                     </Button>
                 </DialogActions>
             </form>
-            <Link onClick={handleClose} to={paths.signup} className="link">Don't have an account?  Sign up</Link>
+            <Link onClick={handleOpenClose} to={paths.signup} className="link">Don't have an account?  Sign up</Link>
         </Dialog>
-
     );
 }
-
-

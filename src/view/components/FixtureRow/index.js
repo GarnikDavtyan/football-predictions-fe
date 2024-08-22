@@ -8,7 +8,7 @@ import {
     Typography,
     makeStyles,
 } from "@material-ui/core";
-import PredictionInput from './predictionInput';
+import PredictionInput from './PredictionInput';
 import InfoIcon from '@material-ui/icons/Info';
 
 
@@ -33,7 +33,7 @@ const useStyles = makeStyles({
 });
 
 
-export default ({ user, fixture, x2FixtureId, setX2FixtureId, fixtures, setPredictions }) => {
+export default function FixtureRow({ user, fixture, x2FixtureId, setX2FixtureId, fixtures, setPredictions }) {
     const classes = useStyles();
     const fixId = fixture.id;
 

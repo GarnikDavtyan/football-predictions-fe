@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useHistory } from 'react-router-dom';
 import { makeStyles, Paper, Tabs, Tab } from '@material-ui/core';
-import LeagueLogo from '../../../components/leagueLogo';
+import LeagueLogo from '../../../components/LeagueLogo';
 import { paths } from '../../../../constants';
 
 const useStyles = makeStyles({
@@ -23,7 +23,7 @@ const useStyles = makeStyles({
     },
 });
 
-export default ({ leagues, leagueId }) => {
+export default function LeagueNavTab({ leagues, leagueId }) {
     const classes = useStyles();
     const history = useHistory();
     const [value, setValue] = React.useState(0);

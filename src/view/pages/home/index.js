@@ -1,6 +1,6 @@
 import React from 'react';
 import { Typography, Box} from "@material-ui/core";
-import LeagueCard from "../../components/leagueCard";
+import LeagueCard from "../../components/LeagueCard";
 
 import './home.css';
 
@@ -9,8 +9,8 @@ export default function Home({leagues}){
     return (
         <div className="home">
             <Box className="box">
-                {leagues.map(liga => (
-                    <LeagueCard key={liga.league_api_id} liga={liga}/>
+                {leagues.map(league => (
+                    <LeagueCard key={league.league_api_id} league={league}/>
                     )
                 )}
             </Box>

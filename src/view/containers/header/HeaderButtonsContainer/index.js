@@ -1,13 +1,13 @@
 import React from 'react';
-import { Button, makeStyles } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import {
     Link,
     useLocation,
 } from 'react-router-dom';
 import { Typography } from "@material-ui/core";
 import { paths } from '../../../../constants';
-import LoginDialogForm from '../../loginDialog';
-import auth from '../../../../helpers/auth';
+import LoginDialogForm from '../../LoginDialog';
+import {logout} from '../../../../helpers/auth';
 
 const linkStyle = {
     textDecoration: 'none',
@@ -26,13 +26,14 @@ const blockStyle = {
     alignItems: "center"
 };
 
-
-
-export default ({ user, ...props }) => {
+export default function HeaderButtonsContainer(props) {
     const location = useLocation();
 
     const handleLogout = () => {
-        auth.logout().then(() => props.setUser(null));
+        logout().then(() => {
+            props.setUser(null);
+            window.location.reload();
+        });
     };
 
     return (
@@ -43,12 +44,12 @@ export default ({ user, ...props }) => {
             <Link to={paths.rules} style={linkStyle}>
                 <Typography variant="body2">Rules</Typography>
             </Link>
-            {!user ?
+            {!props.user ?
                 location.pathname === paths.signup || <>
                     <Button
                         color="primary"
                         variant="contained"
-                        onClick={props.handleOpen}>
+                        onClick={props.handleOpenClose}>
                         Log In
                     </Button>
                     <LoginDialogForm {...props} />

@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core';
-import './predictionInput.css'
+import './predictionInput.css';
 
 const useStyles = makeStyles({
     inputNum: {
@@ -8,11 +8,10 @@ const useStyles = makeStyles({
         textAlign: 'center',
         WebkitAppearance: 'none',
         outline: "none",
-    },
-
+    }
 });
 
-export default ({ prediction, setPrediction, which, disabled, setPredictions}) => {
+export default function PredictionInput({prediction, setPrediction, which, disabled, setPredictions}) {
     const classes = useStyles();
 
     const updatePredictions = (newPrediction) => {

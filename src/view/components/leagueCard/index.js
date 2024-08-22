@@ -35,23 +35,23 @@ const useStyles = makeStyles({
 
 });
 
-function LeagueCard({liga}) {
+export default function LeagueCard({league}) {
     const classes = useStyles();
 
     return (
-        <Link to={paths.main + '/' + liga.league_api_id} className={classes.link}>
+        <Link to={paths.main + '/' + league.league_api_id} className={classes.link}>
             <Card className={classes.card}>
                 <CardMedia
                     className={classes.media}
-                    image={liga.logo}
+                    image={league.logo}
                 />
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="h2">
-                        {liga.name}
+                        {league.name}
                     </Typography>
                 </CardContent>
             </Card>
         </Link>
     );
 }
-export default LeagueCard;
+

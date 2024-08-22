@@ -1,5 +1,7 @@
-import api from '../api';
+import {getAxiosInstanceType} from '../api';
 
-export default (leagueId, round) => {
-    return api.getAxiosInstanceType().get(`fixtures/${leagueId}/${round}`)
+const getFixturesByLeagueId = (leagueId, round) => {
+    return getAxiosInstanceType().get(`fixtures/${leagueId}/${round}`)
 }
+
+export default getFixturesByLeagueId;

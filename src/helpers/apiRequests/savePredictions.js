@@ -1,5 +1,7 @@
-import api from '../api';
+import {createAuthAxiosInstance} from '../api';
 
-export default (leagueId, round, predictions) => {
-    return api.createAuthAxiosInstance().post(`fixtures/${leagueId}/${round}`, {predictions : predictions})
+const savePredictions = (leagueId, round, predictions) => {
+    return createAuthAxiosInstance().post(`fixtures/${leagueId}/${round}`, {predictions : predictions})
 }
+
+export default savePredictions;

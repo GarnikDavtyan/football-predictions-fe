@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-
 import { Grid, 
         makeStyles, 
         Table, 
@@ -12,8 +11,7 @@ import { Grid,
         Select, 
         MenuItem, 
         Typography } from "@material-ui/core";
-
-import api from '../../../../helpers/auth';
+import {getCurrentUser} from '../../../../helpers/auth';
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -43,7 +41,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-export default ({ top10 }) => {
+export default function Top10UsersPerLeagueList({ top10 }) {
 
     const classes = useStyles();
 
@@ -62,7 +60,7 @@ export default ({ top10 }) => {
         }
         setUsers(updatedUsers);
 
-        let authUser = api.getCurrentUser();
+        let authUser = getCurrentUser();
         if (authUser) {
             setAuthUserName(authUser.user.name);
         }

@@ -1,13 +1,13 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 
 import {makeStyles} from '@material-ui/core';
-import PredictionTable from '../../pages/mainPage/predictionTable';
-import Top10UsersPerLeagueList from '../../pages/mainPage/top10UsersPerLeagueList';
-import TournamentTable from '../../pages/mainPage/tournamentTable';
+import PredictionTable from '../../pages/MainPage/PredictionTable';
+import Top10UsersPerLeagueList from '../../pages/MainPage/Top10UsersPerLeagueList';
+import TournamentTable from '../../pages/MainPage/TournamentTable';
 import getFixtures from '../../../helpers/apiRequests/getFixturesByLeagueId';
 import getTournamentTable from '../../../helpers/apiRequests/getTournamentTable';
 import getTop10ByLeague from '../../../helpers/apiRequests/getTop10ByLeague';
-import Loading from '../../components/loading';
+import Loading from '../../components/Loading';
 
 const useStyles = makeStyles({
     tablesContainer: {
@@ -20,7 +20,7 @@ const useStyles = makeStyles({
     }
 });
 
-export default (props) => {
+export default function LeagueTablesContainer(props) {
 
     const { user, leagueId, league } = props;
 
@@ -28,25 +28,46 @@ export default (props) => {
     const [round, setRound] = useState(0);
     const [fixtures, setFixtures] = useState([]);
     const [standings, setStandings] = useState([]);
-    const [top10, setTop10] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const [top10, setTop10] = useState({
+        leaguePoints: [],
+        roundPoints: []
+    });
+    const [isLoading, setIsLoading] = useState(false);
+
+    const prevLeagueIdRef = useRef();
 
     useEffect(() => {
-        setRound(league.current_round);
-    }, [leagueId])
+        const leagueIdChanged = prevLeagueIdRef.current !== leagueId;
+        const roundIsSameAsLeagueCurrent = round === league.current_round;
 
-    useEffect(() => {
-        if (round) {
+        if (leagueIdChanged) {
+            setRound(league.current_round);
+        }
+        
+        if (round && (!leagueIdChanged || roundIsSameAsLeagueCurrent)) {
             setIsLoading(true);
-            Promise.all([
-                getFixtures(league.id, round),
-                getTournamentTable(league.id),
+
+            const promises = [
                 getTop10ByLeague(league.id, round),
-            ])
-            .then(([fixturesResponse, standingsResponse, top10Response]) => {
-                    setFixtures(fixturesResponse.data.data);
-                    setStandings(standingsResponse.data.data);
-                    setTop10(top10Response.data.data);
+                getFixtures(league.id, round),
+            ];
+    
+            if (leagueIdChanged) {
+                promises.push(getTournamentTable(league.id))
+            }
+            
+            Promise.all(promises)
+            .then((responses) => {
+                const [top10Response, fixturesResponse, standingsResponse] = responses;
+                setTop10({
+                    leaguePoints: top10Response.data.data.leaguePoints,
+                    roundPoints: top10Response.data.data.roundPoints,
+                });
+                setFixtures(fixturesResponse.data.data);
+
+                if (leagueIdChanged) {
+                    setStandings(standingsResponse.data.data);  
+                }
             })
             .catch(error => {
                 console.error("Error fetching data:", error);
@@ -54,14 +75,23 @@ export default (props) => {
             .finally(() => {
                 setIsLoading(false);
             });
+
+            prevLeagueIdRef.current = leagueId;
         }
-    }, [leagueId, round]);
+    }, [round, leagueId]);
 
     return (
         !isLoading ?
         <div className={classes.tablesContainer} >
             <Top10UsersPerLeagueList top10={top10} />
-            <PredictionTable setRound={setRound} round={round} leagueId={league.id} user={user} fixtures={fixtures} rounds={league.current_round}/>
+            <PredictionTable 
+                    setRound={setRound} 
+                    round={round} 
+                    leagueId={league.id} 
+                    user={user} 
+                    fixtures={fixtures} 
+                    rounds={league.current_round}
+            />
             <TournamentTable standings={standings} />
         </div >
         :

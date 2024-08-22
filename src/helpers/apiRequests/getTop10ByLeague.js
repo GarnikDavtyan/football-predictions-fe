@@ -1,5 +1,7 @@
-import api from '../api';
+import {getAxiosInstanceType} from '../api';
 
-export default (leagueId, round) => {
-    return api.getAxiosInstanceType().get(`points/${leagueId}/${round}`)
+const getTop10ByLeague = (leagueId, round) => {
+    return getAxiosInstanceType().get(`points/${leagueId}/${round}`)
 }
+
+export default getTop10ByLeague;

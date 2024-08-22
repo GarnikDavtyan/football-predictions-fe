@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import LeagueNavTab from './leagueNavTab';
-import LeagueTablesContainer from '../../containers/leagueTablesContainer';
+import LeagueNavTab from './LeagueNavTab';
+import LeagueTablesContainer from '../../containers/LeagueTablesContainer';
 
 export default function MainPage(props) {
     let { id } = useParams();

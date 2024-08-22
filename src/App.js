@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { Switch } from 'react-router-dom';
-import CustomRoute from './view/components/customRoute';
+import CustomRoute from './view/components/CustomRoute';
 import './App.css';
-import Home from './view/pages/home';
-import SignUp from './view/pages/signup/Signup';
-import Rules from './view/pages/rules';
-import Top from './view/pages/top';
-import MainPage from './view/pages/mainPage';
-import Header from './view/containers/header';
-import Footer from './view/containers/footer';
-import NotFound from './view/pages/notfound';
+import Home from './view/pages/Home';
+import SignUp from './view/pages/Signup';
+import Rules from './view/pages/Rules';
+import Top from './view/pages/Top';
+import MainPage from './view/pages/MainPage';
+import Header from './view/containers/Header';
+import Footer from './view/containers/Footer';
+import NotFound from './view/pages/NotFound';
 import { paths } from './constants';
-import Loading from "./view/components/loading";
-import auth from './helpers/auth';
-import api from './helpers/api';
+import Loading from "./view/components/Loading";
+import {getCurrentUser} from './helpers/auth';
+import {axiosInstance} from './helpers/api';
 
 
 function App() {
@@ -24,35 +24,39 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-     if(auth.getCurrentUser()) {
-      setUser(auth.getCurrentUser().user);
+     if(getCurrentUser()) {
+      setUser(getCurrentUser().user);
      }
 
-     api.axiosInstance.get('leagues')
+     axiosInstance.get('leagues')
       .then((response) => {
         setLeagues(response.data.data);
       })
       .then(() => { setIsLoading(false)})
-     
   }, []);
 
-  function handleOpen() {
-    setOpen(true);
-  }
-
-  function handleClose() {
-    setOpen(false)
+  function handleOpenClose() {
+    setOpen(!open);
   }
 
   return (
     !isLoading ?
       <div className='App'>
-        <Header className='header' open={open} handleOpen={handleOpen} handleClose={handleClose} user={user} setIsLoading={setIsLoading} setUser={setUser} />
+        <Header className='header' open={open} handleOpenClose={handleOpenClose} user={user} setUser={setUser} />
         <main className="main">
           <Switch>
-            <CustomRoute className="home-route" exact path={[paths.home, paths.main]} render={() => <Home leagues={leagues} />} />
-            <CustomRoute path={paths.main + '/:id'} render={() => <MainPage user={user} leagues={leagues}/>} />
-            <CustomRoute path={paths.signup}><SignUp handleOpen={handleOpen} setUser={setUser} setIsLoading={setIsLoading} /></CustomRoute>
+            <CustomRoute className="home-route" exact path={[paths.home, paths.main]}>
+              <Home leagues={leagues} />
+            </CustomRoute>
+
+            <CustomRoute path={paths.main + '/:id'}>
+              <MainPage user={user} leagues={leagues}/>
+            </CustomRoute>
+
+            <CustomRoute path={paths.signup}>
+              <SignUp handleOpenClose={handleOpenClose} setUser={setUser}/>
+            </CustomRoute>
+
             <CustomRoute path={paths.rules} component={Rules} />
             <CustomRoute path={paths.top} component={Top} />
             <CustomRoute render={() => <NotFound subLink='' />} />

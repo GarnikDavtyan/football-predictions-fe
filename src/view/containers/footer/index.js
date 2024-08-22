@@ -1,18 +1,3 @@
-// import React from 'react';
-// import { withStyles } from '@material-ui/core/styles'
-//
-
-//
-// function Footer({classes}) {
-//     return (
-//         <footer className={classes.footer}>
-//             Footer
-//         </footer>
-//     )
-// }
-//
-// export default withStyles(styles)(Footer)
-
 import React from 'react';
 import {Link} from 'react-router-dom'
 import Typography from '@material-ui/core/Typography';
@@ -52,10 +37,6 @@ const useStyles = makeStyles(theme => ({
         color: "#fff",
         fontSize: "16px",
     },
-    // typography: {
-    //     color: "#fff",
-    //     fontSize: "16px"
-    // },
     link: {
         color: "rgba(252, 252, 252, 0.55)"
     }

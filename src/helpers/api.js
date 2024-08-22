@@ -2,11 +2,11 @@ import axios from 'axios';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
-const axiosInstance = axios.create({
+export const axiosInstance = axios.create({
     baseURL: API_URL
 });
 
-const createAuthAxiosInstance = () => {
+export const createAuthAxiosInstance = () => {
     const currentUser = JSON.parse(localStorage.getItem('user'));
     if (currentUser && currentUser.access_token) {
         return axios.create({
@@ -19,16 +19,10 @@ const createAuthAxiosInstance = () => {
     return null;
 };
 
-const getAxiosInstanceType = () => {
+export const getAxiosInstanceType = () => {
     return localStorage.getItem('user')
         ? 
         createAuthAxiosInstance()
         :
         axiosInstance
-}
-
-export default { 
-    axiosInstance,
-    createAuthAxiosInstance,
-    getAxiosInstanceType
 };
