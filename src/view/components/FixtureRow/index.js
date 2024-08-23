@@ -11,7 +11,6 @@ import {
 import PredictionInput from './PredictionInput';
 import InfoIcon from '@material-ui/icons/Info';
 
-
 const useStyles = makeStyles({
     inputsContainer: {
         display: 'flex',

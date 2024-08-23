@@ -23,13 +23,13 @@ const useStyles = makeStyles({
     },
 });
 
-export default function LeagueNavTab({ leagues, leagueId }) {
+export default function LeagueNavTab({ leagues, slug }) {
     const classes = useStyles();
     const history = useHistory();
     const [value, setValue] = React.useState(0);
 
     useEffect(() => {
-        leagues.length && setValue(leagues.map(liga => liga.league_api_id).indexOf(leagueId));
+        leagues.length && setValue(leagues.map(league => league.slug).indexOf(slug));
     }
         , [leagues]);
 
@@ -37,8 +37,8 @@ export default function LeagueNavTab({ leagues, leagueId }) {
         setValue(newValue);
     };
 
-    function handleTabClick(id) {
-        history.push(paths.main + '/' + id);
+    function handleTabClick(slug) {
+        history.push(paths.main + '/' + slug);
     }
 
     return (
@@ -51,14 +51,14 @@ export default function LeagueNavTab({ leagues, leagueId }) {
                 indicatorColor="secondary"
                 aria-label="leagues tab"
             >
-                {leagues.map(liga => (
+                {leagues.map(league => (
                     <Tab
-                        onClick={() => handleTabClick(liga.league_api_id)}
-                        key={liga.league_api_id}
-                        label={liga.name}
+                        onClick={() => handleTabClick(league.slug)}
+                        key={league.id}
+                        label={league.name}
                         icon={<LeagueLogo
-                            src={liga.logo}
-                            alt={liga.league_api_id}
+                            src={league.logo}
+                            alt={league.slug}
                         />}
                         className={classes.tabIndex}
                     />

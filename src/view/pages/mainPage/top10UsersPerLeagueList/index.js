@@ -12,6 +12,7 @@ import { Grid,
         MenuItem, 
         Typography } from "@material-ui/core";
 import {getCurrentUser} from '../../../../helpers/auth';
+import randomMaterialColor from 'random-material-color';
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -40,9 +41,11 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
+function getColor(namePrefix) {
+    return randomMaterialColor.getColor({text: namePrefix});
+}
 
 export default function Top10UsersPerLeagueList({ top10 }) {
-
     const classes = useStyles();
 
     const [users, setUsers] = useState([]);
@@ -97,10 +100,11 @@ export default function Top10UsersPerLeagueList({ top10 }) {
                                 </TableCell>
                                 <TableCell align="right" padding="none">
                                     <div className={classes.avatar}>
-                                        <Avatar
-                                        variant="rounded"
-                                            alt={user.user.name}
-                                            src={user.user.avatar}
+                                         <Avatar
+                                            variant="rounded"
+                                            style={{backgroundColor: getColor(user.user.name)}}
+                                            alt={user.user.name.toUpperCase()}
+                                            src={user.user.avatar  || user.user.name}
                                         />
                                         &emsp;
                                         <Typography className={authUserName === user.user.name ? classes.bold : ''} >
@@ -123,9 +127,10 @@ export default function Top10UsersPerLeagueList({ top10 }) {
                                 <TableCell align="right" padding="none">
                                     <div className={classes.avatar}>
                                         <Avatar
-                                        variant="rounded"
-                                            alt={user.user.name}
-                                            src={user.user.avatar}
+                                            variant="rounded"
+                                            style={{backgroundColor: getColor(user.user.name)}}
+                                            alt={user.user.name.toUpperCase()}
+                                            src={user.user.avatar  || user.user.name}
                                         />
                                         &emsp;
                                         <Typography className={classes.bold}>

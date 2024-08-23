@@ -10,7 +10,7 @@ export default function Home({leagues}){
         <div className="home">
             <Box className="box">
                 {leagues.map(league => (
-                    <LeagueCard key={league.league_api_id} league={league}/>
+                    <LeagueCard key={league.id} league={league}/>
                     )
                 )}
             </Box>

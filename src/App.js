@@ -49,7 +49,7 @@ function App() {
               <Home leagues={leagues} />
             </CustomRoute>
 
-            <CustomRoute path={paths.main + '/:id'}>
+            <CustomRoute path={paths.main + '/:slug'}>
               <MainPage user={user} leagues={leagues}/>
             </CustomRoute>
 

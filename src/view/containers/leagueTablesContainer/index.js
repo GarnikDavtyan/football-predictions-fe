@@ -22,7 +22,7 @@ const useStyles = makeStyles({
 
 export default function LeagueTablesContainer(props) {
 
-    const { user, leagueId, league } = props;
+    const { user, leagueSlug, league } = props;
 
     const classes = useStyles();
     const [round, setRound] = useState(0);
@@ -34,17 +34,16 @@ export default function LeagueTablesContainer(props) {
     });
     const [isLoading, setIsLoading] = useState(false);
 
-    const prevLeagueIdRef = useRef();
+    const prevLeagueSlugRef = useRef();
 
     useEffect(() => {
-        const leagueIdChanged = prevLeagueIdRef.current !== leagueId;
+        const leagueChanged = prevLeagueSlugRef.current !== leagueSlug;
         const roundIsSameAsLeagueCurrent = round === league.current_round;
-
-        if (leagueIdChanged) {
+        if (leagueChanged) {
             setRound(league.current_round);
         }
         
-        if (round && (!leagueIdChanged || roundIsSameAsLeagueCurrent)) {
+        if (round && (!leagueChanged || roundIsSameAsLeagueCurrent)) {
             setIsLoading(true);
 
             const promises = [
@@ -52,7 +51,7 @@ export default function LeagueTablesContainer(props) {
                 getFixtures(league.id, round),
             ];
     
-            if (leagueIdChanged) {
+            if (leagueChanged) {
                 promises.push(getTournamentTable(league.id))
             }
             
@@ -65,7 +64,7 @@ export default function LeagueTablesContainer(props) {
                 });
                 setFixtures(fixturesResponse.data.data);
 
-                if (leagueIdChanged) {
+                if (leagueChanged) {
                     setStandings(standingsResponse.data.data);  
                 }
             })
@@ -76,9 +75,9 @@ export default function LeagueTablesContainer(props) {
                 setIsLoading(false);
             });
 
-            prevLeagueIdRef.current = leagueId;
+            prevLeagueSlugRef.current = leagueSlug;
         }
-    }, [round, leagueId]);
+    }, [round, leagueSlug]);
 
     return (
         !isLoading ?

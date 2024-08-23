@@ -4,18 +4,17 @@ import LeagueNavTab from './LeagueNavTab';
 import LeagueTablesContainer from '../../containers/LeagueTablesContainer';
 
 export default function MainPage(props) {
-    let { id } = useParams();
-    id = +id;
+    let { slug } = useParams();
 
-    const league = props.leagues.find(league => league.league_api_id === id);
+    const league = props.leagues.find(league => league.slug === slug);
 
-    const isValidId = ~props.leagues.findIndex(league => league.league_api_id === id);
+    const isValidId = ~props.leagues.findIndex(league => league.slug === slug);
 
     return (
         <section>
-            <LeagueNavTab {...props} leagueId={id} />
+            <LeagueNavTab {...props} slug={slug} />
 
-            {isValidId ? <LeagueTablesContainer {...props} league={league} leagueId={id} /> : <h1 style={{color:'red', textAlign: 'center' }}>There is no such league id</h1>}
+            {isValidId ? <LeagueTablesContainer {...props} league={league} leagueSlug={slug} /> : <h1 style={{color:'red', textAlign: 'center' }}>There is no such league</h1>}
 
         </section>
     )

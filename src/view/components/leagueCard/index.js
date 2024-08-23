@@ -39,7 +39,7 @@ export default function LeagueCard({league}) {
     const classes = useStyles();
 
     return (
-        <Link to={paths.main + '/' + league.league_api_id} className={classes.link}>
+        <Link to={paths.main + '/' + league.slug} className={classes.link}>
             <Card className={classes.card}>
                 <CardMedia
                     className={classes.media}
