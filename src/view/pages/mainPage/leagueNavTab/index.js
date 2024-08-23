@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { makeStyles, Paper, Tabs, Tab } from '@material-ui/core';
 import LeagueLogo from '../../../components/LeagueLogo';
 import { paths } from '../../../../constants';
@@ -25,7 +25,7 @@ const useStyles = makeStyles({
 
 export default function LeagueNavTab({ leagues, slug }) {
     const classes = useStyles();
-    const history = useHistory();
+    const navigate = useNavigate();
     const [value, setValue] = React.useState(0);
 
     useEffect(() => {
@@ -38,7 +38,7 @@ export default function LeagueNavTab({ leagues, slug }) {
     };
 
     function handleTabClick(slug) {
-        history.push(paths.main + '/' + slug);
+        navigate(paths.main + '/' + slug);
     }
 
     return (

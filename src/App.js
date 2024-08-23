@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Switch } from 'react-router-dom';
-import CustomRoute from './view/components/CustomRoute';
+import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import Home from './view/pages/Home';
 import SignUp from './view/pages/Signup';
@@ -44,23 +43,14 @@ function App() {
       <div className='App'>
         <Header className='header' open={open} handleOpenClose={handleOpenClose} user={user} setUser={setUser} />
         <main className="main">
-          <Switch>
-            <CustomRoute className="home-route" exact path={[paths.home, paths.main]}>
-              <Home leagues={leagues} />
-            </CustomRoute>
-
-            <CustomRoute path={paths.main + '/:slug'}>
-              <MainPage user={user} leagues={leagues}/>
-            </CustomRoute>
-
-            <CustomRoute path={paths.signup}>
-              <SignUp handleOpenClose={handleOpenClose} setUser={setUser}/>
-            </CustomRoute>
-
-            <CustomRoute path={paths.rules} component={Rules} />
-            <CustomRoute path={paths.top} component={Top} />
-            <CustomRoute render={() => <NotFound subLink='' />} />
-          </Switch>
+          <Routes>
+            <Route path={paths.home} element={<div className="custom-route"><Home leagues={leagues} /></div>} />
+            <Route path={`${paths.main}/:slug`} element={<div className="custom-route"><MainPage user={user} leagues={leagues} /></div>} />
+            <Route path={paths.signup} element={<div className="custom-route"><SignUp handleOpenClose={handleOpenClose} setUser={setUser} /></div>} />
+            <Route path={paths.rules} element={<div className="custom-route"><Rules /></div>} />
+            <Route path={paths.top} element={<div className="custom-route"><Top /></div>} />
+            <Route path="*" element={<div className="custom-route"><NotFound/></div>} />
+          </Routes>
         </main>
         <Footer className="footer" />
       </div>

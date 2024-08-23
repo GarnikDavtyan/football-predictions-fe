@@ -1,16 +1,26 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import {BrowserRouter as Router} from 'react-router-dom';
+import ReactDOM from 'react-dom/client';
+import { BrowserRouter as Router } from 'react-router-dom';
 import './index.css';
 import App from './App';
-
 import * as serviceWorker from './serviceWorker';
-import {SnackbarProvider} from "notistack";
+import { SnackbarProvider } from 'notistack';
 
-const AppWithSnackbar = <SnackbarProvider maxSnack={3}><App/></SnackbarProvider>;
-const AppWithRouter = <Router>{AppWithSnackbar}</Router>;
+const root = ReactDOM.createRoot(document.getElementById('root'));
 
-ReactDOM.render(AppWithRouter, document.getElementById('root'));
+const AppWithSnackbar = (
+    <SnackbarProvider maxSnack={3}>
+        <App />
+    </SnackbarProvider>
+);
+
+const AppWithRouter = (
+    <Router>
+        {AppWithSnackbar}
+    </Router>
+);
+
+root.render(AppWithRouter);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

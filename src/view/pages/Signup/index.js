@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
     Avatar,
     Button,
@@ -58,7 +58,7 @@ const useStyles = makeStyles(theme => ({
 
 
 export default function SignUp({ handleOpenClose, setUser }) {
-    const history = useHistory();
+    const navigate = useNavigate();
     const classes = useStyles();
 
     const formLabelsTheme = createTheme({
@@ -117,7 +117,7 @@ export default function SignUp({ handleOpenClose, setUser }) {
                 localStorage.setItem('user', JSON.stringify(response.data.data));
             })
             .then(() => {
-                history.push(paths.home);
+                navigate(paths.home);
             })
             .catch(function (error) {
                 let errorMessage = error.message;
