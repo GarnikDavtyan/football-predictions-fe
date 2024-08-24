@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import {
-    makeStyles,
     TableContainer,
     Table,
     TableHead,
@@ -10,65 +9,81 @@ import {
     TableCell,
     Paper,
     Grid,
-} from '@material-ui/core';
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
 
-const useStyles = makeStyles({
-    paper: {
-        backgroundColor: "rgba(255, 255, 255, 0.52)",
-        minWidth: '17rem',
-    },
-    rootDiv: {
-        display: 'flex',
-        flexDirection: 'column',
-    },
+const StyledPaper = styled(Paper)({
+    backgroundColor: 'rgba(255, 255, 255, 0.52)',
+    minWidth: '17rem',
+});
 
-    roundPaper: {
-        backgroundColor: "rgba(255, 255, 255, 0.75)",
-    }
+const RoundPaper = styled(Paper)({
+    backgroundColor: 'rgba(255, 255, 255, 0.75)',
+});
+
+const RootDiv = styled('div')({
+    display: 'flex',
+    flexDirection: 'column',
 });
 
 export default function TournamentTable({ standings }) {
-    const classes = useStyles();
-
     return (
-        <div className={classes.rootDiv}>
-            <Paper square className={classes.roundPaper}>
-                <Grid container justifyContent="center" className={classes.prevNextDiv}>
+        <RootDiv>
+            <RoundPaper square>
+                <Grid container justifyContent="center">
                     <Grid item>Tournament Table</Grid>
                 </Grid>
-            </Paper>
-            <TableContainer className={classes.paper}>
-                <Table className={classes.table} aria-label='tournament table'>
+            </RoundPaper>
+            <TableContainer component={StyledPaper}>
+                <Table aria-label='tournament table'>
                     <TableHead>
                         <TableRow>
-                            {['', 'Team', 'M', 'W', 'D', 'L', 'GD', 'Form', 'P'].map((str, i) =>
-                                <TableCell key={i} align={i - 1 ? 'center' : 'left'} padding="none">{str}</TableCell>
-                            )}
+                            {['', 'Team', 'M', 'W', 'D', 'L', 'GD', 'Form', 'P'].map((str, i) => (
+                                <TableCell key={i} align={i - 1 ? 'center' : 'left'} padding="none">
+                                    {str}
+                                </TableCell>
+                            ))}
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {standings.map((team, i) => (
                             <TableRow key={team.id} hover>
-                                <TableCell align='center' padding="none">{i + 1}</TableCell>
+                                <TableCell align='center' padding="none">
+                                    {i + 1}
+                                </TableCell>
                                 <TableCell padding="none">
                                     <Grid container alignItems="center">
-                                        <img src={team.logo} width="30" height="30" />
+                                        <img src={team.logo} width="30" height="30" alt={team.name} />
                                         &nbsp;
                                         {team.name}
                                     </Grid>
                                 </TableCell>
-                                <TableCell align='center' padding="none">{team.games ?? 0}</TableCell>
-                                <TableCell align='center' padding="none">{team.win ?? 0}</TableCell>
-                                <TableCell align='center' padding="none">{team.draw ?? 0}</TableCell>
-                                <TableCell align='center' padding="none">{team.lose ?? 0}</TableCell>
-                                <TableCell align='center' padding="none">{team.goal_diff ?? 0}</TableCell>
-                                <TableCell align='center' padding="none">{team.form ?? '-'}</TableCell>
-                                <TableCell align='center' padding="none">{team.points ?? 0}</TableCell>
+                                <TableCell align='center' padding="none">
+                                    {team.games ?? 0}
+                                </TableCell>
+                                <TableCell align='center' padding="none">
+                                    {team.win ?? 0}
+                                </TableCell>
+                                <TableCell align='center' padding="none">
+                                    {team.draw ?? 0}
+                                </TableCell>
+                                <TableCell align='center' padding="none">
+                                    {team.lose ?? 0}
+                                </TableCell>
+                                <TableCell align='center' padding="none">
+                                    {team.goal_diff ?? 0}
+                                </TableCell>
+                                <TableCell align='center' padding="none">
+                                    {team.form ?? '-'}
+                                </TableCell>
+                                <TableCell align='center' padding="none">
+                                    {team.points ?? 0}
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
                 </Table>
             </TableContainer>
-        </div>
+        </RootDiv>
     );
 }

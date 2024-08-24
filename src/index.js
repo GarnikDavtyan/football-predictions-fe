@@ -8,19 +8,13 @@ import { SnackbarProvider } from 'notistack';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
-const AppWithSnackbar = (
+root.render(
     <SnackbarProvider maxSnack={3}>
-        <App />
+        <Router>
+            <App />
+        </Router>
     </SnackbarProvider>
 );
-
-const AppWithRouter = (
-    <Router>
-        {AppWithSnackbar}
-    </Router>
-);
-
-root.render(AppWithRouter);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

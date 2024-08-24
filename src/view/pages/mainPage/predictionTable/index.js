@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-
 import {
     Table,
     TableBody,
@@ -8,67 +7,50 @@ import {
     TableHead,
     TableRow,
     Paper,
-    makeStyles,
     Button,
     Grid,
-} from '@material-ui/core';
-import NavigateNextIcon from '@material-ui/icons/NavigateNext';
-import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import FixtureRow from '../../../components/FixtureRow';
-import { useSnackbar } from "notistack";
+import { useSnackbar } from 'notistack';
 import savePredictions from '../../../../helpers/apiRequests/savePredictions';
 import Loading from '../../../components/Loading';
 
-const useStyles = makeStyles(theme => ({
-    paper: {
-        backgroundColor: "rgba(255, 255, 255, 0.52)",
-        marginBottom: "20px"
-    },
+const StyledPaper = styled(Paper)({
+    backgroundColor: 'rgba(255, 255, 255, 0.52)',
+    marginBottom: '20px',
+});
 
-    roundCaption: {
-        backgroundColor: "rgba(255, 255, 255, 0.75)",
-    },
+const RoundCaption = styled(Paper)({
+    backgroundColor: 'rgba(255, 255, 255, 0.75)',
+});
 
-    clickable: {
-        cursor: 'pointer',
-    },
+const RootDiv = styled('div')({
+    display: 'flex',
+    flexDirection: 'column',
+});
 
-    button: {
-        alignSelf: 'flex-end',
-    },
+const StyledTable = styled(Table)({
+    whiteSpace: 'noWrap',
+});
 
-    rootDiv: {
-        display: 'flex',
-        flexDirection: 'column',
-    },
-
-    inputsContainer: {
-        display: 'flex',
-    },
-
-    table: {
-        whiteSpace: 'noWrap',
-    },
-
-    plsSign: {
-        color: 'yellow',
-        textShadow: '-2px 0 black, 0 2px black, 2px 0 black, 0 -2px black',
-    },
-}));
+const PleaseSign = styled(Grid)({
+    color: 'yellow',
+    textShadow: '-2px 0 black, 0 2px black, 2px 0 black, 0 -2px black',
+});
 
 export default function PredictionTable({ user, leagueId, round, setRound, fixtures, rounds }) {
-
-    const classes = useStyles();
-    const { enqueueSnackbar } = useSnackbar();
-
     const [x2FixtureId, setX2FixtureId] = useState(0);
     const [roundsCount, setRoundsCount] = useState(0);
     const [predictions, setPredictions] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
-    const areAllStarted = fixtures.every(fix => fix.status !== 'NS')
+    const { enqueueSnackbar } = useSnackbar();
+    const areAllStarted = fixtures.every(fix => fix.status !== 'NS');
 
-    const handleRoundChangeCLick = dif => round + dif > 0 && round + dif <= roundsCount && setRound(round + dif);
+    const handleRoundChangeClick = dif => round + dif > 0 && round + dif <= roundsCount && setRound(round + dif);
 
     const handleSubmit = e => {
         e.preventDefault();
@@ -96,13 +78,13 @@ export default function PredictionTable({ user, leagueId, round, setRound, fixtu
             setIsLoading(true);
 
             savePredictions(leagueId, round, updatedPredictions)
-            .then(() => enqueueSnackbar("Predictions Saved", { variant: "success" }))
-            .catch((error) => { 
-                enqueueSnackbar(error.message, { variant: "error" });
-            })
-            .finally(() => {
-                setIsLoading(false);
-            });
+                .then(() => enqueueSnackbar("Predictions Saved", { variant: "success" }))
+                .catch((error) => {
+                    enqueueSnackbar(error.message, { variant: "error" });
+                })
+                .finally(() => {
+                    setIsLoading(false);
+                });
 
             setPredictions(updatedPredictions);
         } catch (error) {
@@ -120,13 +102,12 @@ export default function PredictionTable({ user, leagueId, round, setRound, fixtu
         setRoundsCount(rounds);
     }, [leagueId]);
 
-
     return (
         <>
-            <div className={classes.rootDiv}>
-                <Paper square className={classes.roundCaption}>
+            <RootDiv>
+                <RoundCaption square>
                     <Grid container justifyContent="space-between" alignItems='center'>
-                        <Grid onClick={() => handleRoundChangeCLick(-1)} item>
+                        <Grid onClick={() => handleRoundChangeClick(-1)} item>
                             <Button
                                 disabled={round === 1}
                                 component='span'
@@ -134,11 +115,11 @@ export default function PredictionTable({ user, leagueId, round, setRound, fixtu
                                 size="small"
                                 startIcon={<NavigateBeforeIcon />}
                             >
-                                previous round
+                                Previous Round
                             </Button>
                         </Grid>
                         <Grid item>{`Round ${round}`}</Grid>
-                        <Grid onClick={() => handleRoundChangeCLick(1)} item>
+                        <Grid onClick={() => handleRoundChangeClick(1)} item>
                             <Button
                                 disabled={round === roundsCount}
                                 component='span'
@@ -146,17 +127,16 @@ export default function PredictionTable({ user, leagueId, round, setRound, fixtu
                                 size="small"
                                 endIcon={<NavigateNextIcon />}
                             >
-                                next round
+                                Next Round
                             </Button>
                         </Grid>
                     </Grid>
-                </Paper>
+                </RoundCaption>
                 <form onSubmit={handleSubmit}>
-                    <TableContainer square component={Paper} className={classes.paper}>
-                        <Table className={classes.table} aria-label="simple table">
+                    <TableContainer square component={StyledPaper}>
+                        <StyledTable aria-label="simple table">
                             <TableHead>
                                 <TableRow>
-
                                     <TableCell align="center" padding="none" />
                                     <TableCell align="right">First Team</TableCell>
                                     <TableCell align="center" padding="none">Result</TableCell>
@@ -164,7 +144,6 @@ export default function PredictionTable({ user, leagueId, round, setRound, fixtu
                                     <TableCell align="center" padding="none">x2</TableCell>
                                     <TableCell align="center" padding="none">Prediction</TableCell>
                                     <TableCell align="center" padding="none">Points</TableCell>
-
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -180,24 +159,24 @@ export default function PredictionTable({ user, leagueId, round, setRound, fixtu
                                     />
                                 ))}
                             </TableBody>
-                        </Table>
+                        </StyledTable>
                     </TableContainer>
-                    {user
-                        ? 
+                    {user ?
                         !areAllStarted &&
-                            <Grid container justifyContent="flex-end">
-                                <Button
-                                    type="submit"
-                                    variant="contained"
-                                    color="secondary"
-                                >Save Prediction</Button>
-                            </Grid>
-                        : <Grid container className={classes.plsSign} justifyContent='center' component='h3'> Please Sign In To Predict </Grid>
+                        <Grid container justifyContent="flex-end">
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                color="secondary"
+                            >
+                                Save Prediction
+                            </Button>
+                        </Grid>
+                        : <PleaseSign container justifyContent='center' component='h1'> Please Sign In To Predict </PleaseSign>
                     }
                 </form>
-            </div >
+            </RootDiv>
             {isLoading && <Loading />}
         </>
     );
 }
-

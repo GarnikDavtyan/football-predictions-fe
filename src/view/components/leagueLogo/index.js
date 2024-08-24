@@ -1,7 +1,12 @@
 import React from 'react';
-const leagueLogoStyle = {
-    objectFit: "contain"
-};
-const leagueLogo = ({ src, alt }) => <img src={src} alt={alt} height={100} width={100} style={leagueLogoStyle}/>
+import { styled } from '@mui/material/styles';
 
-export default leagueLogo;
+const StyledImg = styled('img')({
+  objectFit: 'contain',
+  height: 100,
+  width: 100
+});
+
+const LeagueLogo = ({ src, alt }) => <StyledImg src={src} alt={alt} />;
+
+export default LeagueLogo;

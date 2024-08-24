@@ -1,6 +1,5 @@
-import React, {useEffect, useRef, useState} from 'react';
-
-import {makeStyles} from '@material-ui/core';
+import React, { useEffect, useRef, useState } from 'react';
+import { styled } from '@mui/material/styles';
 import PredictionTable from '../../pages/MainPage/PredictionTable';
 import Top10UsersPerLeagueList from '../../pages/MainPage/Top10UsersPerLeagueList';
 import TournamentTable from '../../pages/MainPage/TournamentTable';
@@ -9,22 +8,15 @@ import getTournamentTable from '../../../helpers/apiRequests/getTournamentTable'
 import getTop10ByLeague from '../../../helpers/apiRequests/getTop10ByLeague';
 import Loading from '../../components/Loading';
 
-const useStyles = makeStyles({
-    tablesContainer: {
-        display: "grid",
-        gridTemplateColumns: "0.75fr 1.5fr 0.75fr",
-        gridGap: "20px"
-    },
-    td:{
-        padding: 0,
-    }
+const TablesContainer = styled('div')({
+    display: 'grid',
+    gridTemplateColumns: '0.75fr 1.5fr 0.75fr',
+    gridGap: '20px'
 });
 
 export default function LeagueTablesContainer(props) {
-
     const { user, leagueSlug, league } = props;
 
-    const classes = useStyles();
     const [round, setRound] = useState(0);
     const [fixtures, setFixtures] = useState([]);
     const [standings, setStandings] = useState([]);
@@ -52,48 +44,49 @@ export default function LeagueTablesContainer(props) {
             ];
     
             if (leagueChanged) {
-                promises.push(getTournamentTable(league.id))
+                promises.push(getTournamentTable(league.id));
             }
             
             Promise.all(promises)
-            .then((responses) => {
-                const [top10Response, fixturesResponse, standingsResponse] = responses;
-                setTop10({
-                    leaguePoints: top10Response.data.data.leaguePoints,
-                    roundPoints: top10Response.data.data.roundPoints,
-                });
-                setFixtures(fixturesResponse.data.data);
+                .then((responses) => {
+                    const [top10Response, fixturesResponse, standingsResponse] = responses;
+                    setTop10({
+                        leaguePoints: top10Response.data.data.leaguePoints,
+                        roundPoints: top10Response.data.data.roundPoints,
+                    });
+                    setFixtures(fixturesResponse.data.data);
 
-                if (leagueChanged) {
-                    setStandings(standingsResponse.data.data);  
-                }
-            })
-            .catch(error => {
-                console.error("Error fetching data:", error);
-            })
-            .finally(() => {
-                setIsLoading(false);
-            });
+                    if (leagueChanged) {
+                        setStandings(standingsResponse.data.data);  
+                    }
+                })
+                .catch(error => {
+                    console.error("Error fetching data:", error);
+                })
+                .finally(() => {
+                    setIsLoading(false);
+                });
 
             prevLeagueSlugRef.current = leagueSlug;
         }
     }, [round, leagueSlug]);
 
     return (
-        !isLoading ?
-        <div className={classes.tablesContainer} >
-            <Top10UsersPerLeagueList top10={top10} />
-            <PredictionTable 
+        !isLoading ? (
+            <TablesContainer>
+                <Top10UsersPerLeagueList top10={top10} />
+                <PredictionTable 
                     setRound={setRound} 
                     round={round} 
                     leagueId={league.id} 
                     user={user} 
                     fixtures={fixtures} 
                     rounds={league.current_round}
-            />
-            <TournamentTable standings={standings} />
-        </div >
-        :
-        <Loading />
-    )
+                />
+                <TournamentTable standings={standings} />
+            </TablesContainer>
+        ) : (
+            <Loading />
+        )
+    );
 }

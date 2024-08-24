@@ -1,57 +1,52 @@
 import React from "react";
-import {Link} from "react-router-dom";
-import {Card, CardContent, CardMedia, makeStyles, Typography} from "@material-ui/core";
-import {paths} from '../../../constants'
+import { Link } from "react-router-dom";
+import { Card, CardContent, CardMedia, Typography } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import { paths } from '../../../constants';
 
-const useStyles = makeStyles({
-    card: {
-        maxWidth: 345,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "rgba(255, 255, 255, 0.61)",
-        '&:hover':{
-            cursor:'pointer',
-        }
-    },
-
-    media: {
-        margin:"20px",
-        height: 140,
-        width: "70%",
-        backgroundSize: "contain"
-    },
-    link: {
-        textDecoration: 'none',
-        '&:hover':{
-            transform: "scale(0.9)",
-            transition: ".3s linear",
-            boxShadow: "0 4px 10px 0 rgba(132, 138, 145, 0.77)",
-            position: "relative"
-        }
-    }
-
-
+const StyledCard = styled(Card)({
+  maxWidth: 345,
+  minWidth: 200,
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center",
+  backgroundColor: "rgba(255, 255, 255, 0.61)",
+  '&:hover': {
+    cursor: 'pointer',
+  }
 });
 
-export default function LeagueCard({league}) {
-    const classes = useStyles();
+const StyledCardMedia = styled(CardMedia)({
+  margin: "20px",
+  height: 140,
+  width: "70%",
+  backgroundSize: "contain"
+});
 
-    return (
-        <Link to={paths.main + '/' + league.slug} className={classes.link}>
-            <Card className={classes.card}>
-                <CardMedia
-                    className={classes.media}
-                    image={league.logo}
-                />
-                <CardContent>
-                    <Typography gutterBottom variant="h5" component="h2">
-                        {league.name}
-                    </Typography>
-                </CardContent>
-            </Card>
-        </Link>
-    );
+const StyledLink = styled(Link)({
+  textDecoration: 'none',
+  '&:hover': {
+    transform: "scale(0.9)",
+    transition: ".3s linear",
+    boxShadow: "0 4px 10px 0 rgba(132, 138, 145, 0.77)",
+    position: "relative"
+  }
+});
+
+export default function LeagueCard({ league }) {
+  return (
+    <StyledLink to={paths.main + '/' + league.slug}>
+      <StyledCard>
+        <StyledCardMedia
+          image={league.logo}
+        />
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="h2">
+            {league.name}
+          </Typography>
+        </CardContent>
+      </StyledCard>
+    </StyledLink>
+  );
 }
-

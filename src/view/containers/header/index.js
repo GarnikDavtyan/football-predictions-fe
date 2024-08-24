@@ -1,34 +1,24 @@
 import React from 'react';
-import { withStyles } from '@material-ui/core/styles'
+import { styled } from '@mui/material/styles';
 import HeaderLogo from './HeaderLogo';
-import HeaderButtonsContainer from './HeaderButtonsContainer'
+import HeaderButtonsContainer from './HeaderButtonsContainer';
 
-const styles = () => ({
-    header: {
-        backgroundColor: "rgba(255, 255, 255, 0.15)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        width: "-webkit-fill-available",
-        color: "#fff",
-        padding: '10px'
-    },
-    MuiDialogTitle: {
-        color: "#fff",
-
-    }
+const HeaderContainer = styled('header')({
+    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '100%',
+    color: '#fff',
+    padding: '10px',
 });
 
-function Header({classes, user, ...restProps}) {
+export default function Header({ user, ...restProps }) {
     return (
-        <header className={classes.header}>
+        <HeaderContainer>
             <HeaderLogo />
-
-            <span>{user ? user.name : 'Guest' }</span>
-
-            <HeaderButtonsContainer user={user} {...restProps}/>
-        </header>
-    )
+            <span>{user ? user.name : 'Guest'}</span>
+            <HeaderButtonsContainer user={user} {...restProps} />
+        </HeaderContainer>
+    );
 }
-
-export default withStyles(styles)(Header)

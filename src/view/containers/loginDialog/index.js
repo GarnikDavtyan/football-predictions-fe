@@ -10,19 +10,26 @@ import {
     InputAdornment,
     IconButton,
     FormControl,
-    Input
-} from '@material-ui/core';
-import {Visibility, VisibilityOff} from "@material-ui/icons";
+    Input,
+    Link
+} from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { paths } from '../../../constants';
-import { Link } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
-import "./login.css";
-import {login} from '../../../helpers/auth';
+import { login } from '../../../helpers/auth';
+import { styled } from '@mui/material/styles';
+
+const StyledLink = styled(Link)({
+    paddingBottom: '10px',
+    paddingLeft: '20px',
+    color: '#3f51b5',
+    textDecoration: 'none',
+    cursor: 'pointer'
+});
 
 export default function LoginDialog({ open, handleOpenClose, setUser }) {
 
     const [showPassword, setShowPassword] = useState(false);
-
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -39,7 +46,7 @@ export default function LoginDialog({ open, handleOpenClose, setUser }) {
             })
             .catch(function (error) {
                 let errorMessage = error.message;
-                enqueueSnackbar(errorMessage, { variant: "error" })
+                enqueueSnackbar(errorMessage, { variant: 'error' })
             })
     }
 
@@ -56,6 +63,7 @@ export default function LoginDialog({ open, handleOpenClose, setUser }) {
             <form onSubmit={handleLogin} noValidate>
                 <DialogContent>
                     <TextField
+                        variant='standard'
                         value={email}
                         onChange={(e) => setEmail(e.target.value)} 
                         margin="dense"
@@ -64,29 +72,29 @@ export default function LoginDialog({ open, handleOpenClose, setUser }) {
                         fullWidth
                         autoFocus
                     />
-                    <FormControl
+                    <TextField
+                        variant='standard'
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)} 
+                        margin="dense"
+                        label="Password"
+                        type={showPassword ? 'text' : 'password'}
                         fullWidth
-                        margin="dense">
-                        <InputLabel>Password</InputLabel>
-                        <Input
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)} 
-                            name="password"
-                            type={showPassword ? 'text' : 'password'}
-                            endAdornment={
+                        InputProps={{
+                            endAdornment: (
                                 <InputAdornment position="end">
                                     <IconButton
                                         aria-label="toggle password visibility"
                                         onClick={() => setShowPassword(!showPassword)}
                                         onMouseDown={(e) => handleMouseDownPassword(e)}
                                         edge="end"
-                                    >
+                                        size="large">
                                         {showPassword ? <Visibility /> : <VisibilityOff />}
                                     </IconButton>
                                 </InputAdornment>
-                            }
-                        />
-                    </FormControl>
+                            ),
+                        }}
+                    />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleOpenClose} color="primary">
@@ -97,7 +105,9 @@ export default function LoginDialog({ open, handleOpenClose, setUser }) {
                     </Button>
                 </DialogActions>
             </form>
-            <Link onClick={handleOpenClose} to={paths.signup} className="link">Don't have an account?  Sign up</Link>
+            <StyledLink onClick={handleOpenClose} href={paths.signup}>
+                Don't have an account? Sign up
+            </StyledLink>
         </Dialog>
     );
 }

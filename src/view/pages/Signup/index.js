@@ -13,63 +13,67 @@ import {
     InputLabel,
     OutlinedInput,
     IconButton,
-    MuiThemeProvider,
-    makeStyles,
-} from '@material-ui/core';
-import { createTheme } from '@material-ui/core/styles'
-import { Visibility, VisibilityOff } from "@material-ui/icons";
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+    styled,
+    ThemeProvider,
+    createTheme
+} from '@mui/material';
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { paths } from '../../../constants';
-import {register} from '../../../helpers/auth';
+import { register } from '../../../helpers/auth';
 import { validatePassword, validateUsername, validateEmail } from '../../../helpers/validation/signupValidation';
 import { useSnackbar } from 'notistack';
 import Loading from '../../components/Loading';
+import { adaptV4Theme } from '@mui/material/styles';
 
-const useStyles = makeStyles(theme => ({
-    container: {
-        margin: 'auto',
-    },
+const ContainerStyled = styled(Container)({
+    margin: 'auto',
+});
 
-    paper: {
-        margin: theme.spacing(1),
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        backgroundColor: 'white',
-        padding: "20px",
-        borderRadius: "15px"
-    },
-    avatar: {
-        margin: theme.spacing(1),
-        backgroundColor: theme.palette.primary.dark,
-    },
-    form: {
-        width: '100%',
-        marginTop: theme.spacing(3),
-    },
-    submit: {
-        margin: theme.spacing(3, 0, 2),
-    },
-    link: {
-        textDecoration: "none",
-        color: "#3f51b5",
-    }
+const PaperStyled = styled('div')(({ theme }) => ({
+    margin: theme.spacing(1),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    padding: '20px',
+    borderRadius: '15px'
 }));
 
+const AvatarStyled = styled(Avatar)(({ theme }) => ({
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.primary.dark,
+}));
 
-export default function SignUp({ handleOpenClose, setUser }) {
-    const navigate = useNavigate();
-    const classes = useStyles();
+const FormStyled = styled('form')({
+    width: '100%',
+    marginTop: '16px'
+});
 
-    const formLabelsTheme = createTheme({
-        overrides: {
-            MuiFormLabel: {
+const SubmitButton = styled(Button)(({ theme }) => ({
+    margin: theme.spacing(3, 0, 2),
+}));
+
+const LinkStyled = styled(Link)({
+    textDecoration: 'none',
+    color: '#3f51b5',
+});
+
+const FormLabelTheme = createTheme({
+    components: {
+        MuiFormLabel: {
+            styleOverrides: {
                 asterisk: {
                     color: '#db3131',
                 }
             }
         }
-    });
+    }
+});
+
+export default function SignUp({ handleOpenClose, setUser }) {
+    const navigate = useNavigate();
+    const formLabelsTheme = FormLabelTheme;
 
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
@@ -86,65 +90,52 @@ export default function SignUp({ handleOpenClose, setUser }) {
 
     const { enqueueSnackbar } = useSnackbar();
 
-    let userNameRef = useRef();
+    const userNameRef = useRef();
 
+    useEffect(() => {
+        userNameRef.current && userNameRef.current.focus();
+    }, []);
 
-    useEffect(() => userNameRef.current && userNameRef.current.focus(), []);
-    
     const disabledSignUpButton = !(validateUsername(username) && validateEmail(email) && validatePassword(password) && password === repeatPassword);
 
-    const handleChange = (e, setValue) => { setValue(e.target.value) };
+    const handleChange = (e, setValue) => setValue(e.target.value);
 
-    const handleClickShowPassword = (setValue) => {
-        setValue(!showPassword);
-    };
+    const handleClickShowPassword = () => setShowPassword(prev => !prev);
+    const handleClickShowRepeatPassword = () => setShowRepeatPassword(prev => !prev);
+    const handleMouseDownPassword = (e) => e.preventDefault();
 
-    const handleClickShowRepeatPassword = (setValue) => {
-        setValue(!showRepeatPassword);
-    };
-
-
-    const handleMouseDownPassword = e => {
-        e.preventDefault();
-    };
-
-    const handleSubmit = e => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         setIsLoading(true);
         register(username, email, password, repeatPassword)
-             .then((response) => {
+            .then((response) => {
                 setUser(response.data.data.user);
                 localStorage.setItem('user', JSON.stringify(response.data.data));
             })
-            .then(() => {
-                navigate(paths.home);
+            .then(() => navigate(paths.home))
+            .catch((error) => {
+                enqueueSnackbar(error.message, { variant: "error" });
             })
-            .catch(function (error) {
-                let errorMessage = error.message;
-                enqueueSnackbar(errorMessage, { variant: "error" })
-            })
-            .finally(() => {
-                setIsLoading(false)
-            })
+            .finally(() => setIsLoading(false));
     };
 
     return (
         <>
-            <Container component="main" maxWidth="xs" className={classes.container}>
-                <div className={classes.paper}>
-                    <Avatar className={classes.avatar}>
+            <ContainerStyled component="main" maxWidth="xs">
+                <PaperStyled>
+                    <AvatarStyled>
                         <LockOutlinedIcon />
-                    </Avatar>
+                    </AvatarStyled>
                     <Typography component="h1" variant="h5">
                         Sign Up
                     </Typography>
-                    <MuiThemeProvider theme={formLabelsTheme}>
-                        <form className={classes.form} noValidate onSubmit={handleSubmit}>
+                    <ThemeProvider theme={formLabelsTheme}>
+                        <FormStyled noValidate onSubmit={handleSubmit}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12}>
                                     <TextField
                                         inputRef={userNameRef}
-                                        variant={"outlined"}
+                                        variant="outlined"
                                         required
                                         fullWidth
                                         id="username"
@@ -154,11 +145,10 @@ export default function SignUp({ handleOpenClose, setUser }) {
                                         size="small"
                                         error={isTouchedUsername && !validateUsername(username)}
                                         onChange={(e) => handleChange(e, setUsername)}
-                                        onBlur={(e) => { setIsTouchedUsername(true) }}
+                                        onBlur={() => setIsTouchedUsername(true)}
                                     />
                                     {isTouchedUsername && !validateUsername(username) &&
-                                        <FormHelperText error>Username must contain only latin letters and digits(2-20
-                                        chars)</FormHelperText>}
+                                        <FormHelperText error>Username must contain only Latin letters and digits (2-20 chars)</FormHelperText>}
                                 </Grid>
                                 <Grid item xs={12}>
                                     <TextField
@@ -172,12 +162,11 @@ export default function SignUp({ handleOpenClose, setUser }) {
                                         size="small"
                                         error={isTouchedEmail && !validateEmail(email)}
                                         onChange={(e) => handleChange(e, setEmail)}
-                                        onBlur={() => { setIsTouchedEmail(true) }}
+                                        onBlur={() => setIsTouchedEmail(true)}
                                     />
                                     {isTouchedEmail && !validateEmail(email) &&
                                         <FormHelperText error>Email is not valid</FormHelperText>}
                                 </Grid>
-
                                 <Grid item xs={12}>
                                     <FormControl
                                         variant="outlined"
@@ -185,7 +174,7 @@ export default function SignUp({ handleOpenClose, setUser }) {
                                         required
                                         fullWidth
                                         error={isTouchedPassword && !validatePassword(password)}>
-                                        <InputLabel>Password</InputLabel>
+                                        <InputLabel htmlFor="password">Password</InputLabel>
                                         <OutlinedInput
                                             name="password"
                                             type={showPassword ? 'text' : 'password'}
@@ -193,25 +182,24 @@ export default function SignUp({ handleOpenClose, setUser }) {
                                             autoComplete="current-password"
                                             error={isTouchedPassword && !validatePassword(password)}
                                             onChange={(e) => handleChange(e, setPassword)}
-                                            onBlur={() => { setIsTouchedPassword(true) }}
+                                            onBlur={() => setIsTouchedPassword(true)}
                                             endAdornment={
                                                 <InputAdornment position="end">
                                                     <IconButton
                                                         aria-label="toggle password visibility"
-                                                        onClick={() => handleClickShowPassword(setShowPassword)}
-                                                        onMouseDown={(e) => handleMouseDownPassword(e)}
+                                                        onClick={handleClickShowPassword}
+                                                        onMouseDown={handleMouseDownPassword}
                                                         edge="end"
-                                                    >
+                                                        size="large">
                                                         {showPassword ? <Visibility /> : <VisibilityOff />}
                                                     </IconButton>
                                                 </InputAdornment>
                                             }
-                                            labelWidth={83}
+                                            label="Password"
                                         />
                                     </FormControl>
                                     {isTouchedPassword && !validatePassword(password) &&
-                                        <FormHelperText error>Password must contain at least 1 uppercase, 1 lowercase latin
-                                        letters and 1 digit(8 or more chars)</FormHelperText>}
+                                        <FormHelperText error>Password must contain at least 1 uppercase letter, 1 lowercase letter, and 1 digit (8 or more chars)</FormHelperText>}
                                 </Grid>
                                 <Grid item xs={12}>
                                     <FormControl
@@ -220,7 +208,7 @@ export default function SignUp({ handleOpenClose, setUser }) {
                                         required
                                         fullWidth
                                         error={isTouchedRepeatPassword && password !== repeatPassword}>
-                                        <InputLabel>Repeat Password</InputLabel>
+                                        <InputLabel htmlFor="repeat_password">Repeat Password</InputLabel>
                                         <OutlinedInput
                                             name="repeat_password"
                                             type={showRepeatPassword ? 'text' : 'password'}
@@ -228,47 +216,46 @@ export default function SignUp({ handleOpenClose, setUser }) {
                                             autoComplete="current-password"
                                             error={isTouchedRepeatPassword && password !== repeatPassword}
                                             onChange={(e) => handleChange(e, setRepeatPassword)}
-                                            onBlur={() => { setIsTouchedRepeatPassword(true) }}
+                                            onBlur={() => setIsTouchedRepeatPassword(true)}
                                             endAdornment={
                                                 <InputAdornment position="end">
                                                     <IconButton
                                                         aria-label="toggle repeat password visibility"
-                                                        onClick={() => handleClickShowRepeatPassword(setShowRepeatPassword)}
-                                                        onMouseDown={(e) => handleMouseDownPassword(e)}
+                                                        onClick={handleClickShowRepeatPassword}
+                                                        onMouseDown={handleMouseDownPassword}
                                                         edge="end"
-                                                    >
+                                                        size="large">
                                                         {showRepeatPassword ? <Visibility /> : <VisibilityOff />}
                                                     </IconButton>
                                                 </InputAdornment>
                                             }
-                                            labelWidth={137}
+                                            label="Repeat Password"
                                         />
                                     </FormControl>
                                     {isTouchedRepeatPassword && password !== repeatPassword &&
                                         <FormHelperText error>Passwords don't match</FormHelperText>}
                                 </Grid>
                             </Grid>
-                            <Button
+                            <SubmitButton
                                 type="submit"
                                 fullWidth
                                 color="primary"
                                 variant="contained"
-                                className={classes.submit}
                                 disabled={disabledSignUpButton}
                             >
                                 Sign Up
-                            </Button>
+                            </SubmitButton>
                             <Grid container justifyContent="flex-end">
                                 <Grid item>
-                                    <Link onClick={handleOpenClose} to={paths.home} className={classes.link}>
+                                    <LinkStyled onClick={handleOpenClose} to={paths.home}>
                                         Already have an account? Log in
-                                    </Link>
+                                    </LinkStyled>
                                 </Grid>
                             </Grid>
-                        </form>
-                    </MuiThemeProvider>
-                </div>
-            </Container>
+                        </FormStyled>
+                    </ThemeProvider>
+                </PaperStyled>
+            </ContainerStyled>
             {isLoading && <Loading />}
         </>
     );

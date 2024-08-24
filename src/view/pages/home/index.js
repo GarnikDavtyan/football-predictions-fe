@@ -1,20 +1,37 @@
 import React from 'react';
-import { Typography, Box} from "@material-ui/core";
-import LeagueCard from "../../components/LeagueCard";
+import { Typography, Box as MuiBox } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import LeagueCard from '../../components/LeagueCard';
 
-import './home.css';
+const StyledBox = styled(MuiBox)({
+    display: 'grid',
+    gridTemplateColumns: 'repeat(5, 1fr)',
+    gridGap: '10px'
+});
 
+const HomeContainer = styled('div')({
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%',
+});
 
-export default function Home({leagues}){
+const LeagueTitle = styled(Typography)(({ theme }) => ({
+    textAlign: 'center',
+    color: '#fff',
+    fontSize: '45px'
+}));
+
+export default function Home({ leagues }) {
     return (
-        <div className="home">
-            <Box className="box">
+        <HomeContainer>
+            <StyledBox>
                 {leagues.map(league => (
-                    <LeagueCard key={league.id} league={league}/>
-                    )
-                )}
-            </Box>
-            <Typography className="league-title">Leagues</Typography>
-        </div>
+                    <LeagueCard key={league.id} league={league} />
+                ))}
+            </StyledBox>
+            <LeagueTitle>Leagues</LeagueTitle>
+        </HomeContainer>
     );
 }
