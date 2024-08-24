@@ -76,7 +76,7 @@ export default function FixtureRow({ user, fixture, x2FixtureId, setX2FixtureId,
         </TableCell>
         <TableCell align="center" padding="none">
           <span>
-            {isFinished ? `${fixture.score_home} : ${fixture.score_away}` : '- : -'}
+            {isFinished && fixture.score_home && fixture.score_away ? `${fixture.score_home} : ${fixture.score_away}` : '- : -'}
           </span>
         </TableCell>
         <TableCell align="left" padding="none">
@@ -130,7 +130,7 @@ export default function FixtureRow({ user, fixture, x2FixtureId, setX2FixtureId,
           <TableCell colSpan={3}>
             <Paper>
               <DateText color="textSecondary">
-                {`Match start: ${format(new Date(fixture.date), 'eee, MMM d, yyyy h:mm a')}`}
+                {`Match start: ${format(new Date(fixture.date), 'eee, MMM d, yyyy kk:mm')}`}
               </DateText>
             </Paper>
           </TableCell>
