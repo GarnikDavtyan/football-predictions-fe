@@ -24,7 +24,6 @@ import { register } from '../../../helpers/auth';
 import { validatePassword, validateUsername, validateEmail } from '../../../helpers/validation/signupValidation';
 import { useSnackbar } from 'notistack';
 import Loading from '../../components/Loading';
-import { adaptV4Theme } from '@mui/material/styles';
 
 const ContainerStyled = styled(Container)({
     margin: 'auto',
