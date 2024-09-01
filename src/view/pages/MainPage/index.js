@@ -1,21 +1,39 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import LeagueNavTab from './LeagueNavTab';
 import LeagueTablesContainer from '../../containers/LeagueTablesContainer';
+import { axiosInstance } from '../../../helpers/api';
+import Loading from '../../components/Loading';
+import NotFound from '../NotFound';
 
 export default function MainPage(props) {
     let { slug } = useParams();
 
-    const league = props.leagues.find(league => league.slug === slug);
+    const [leagues, setLeagues] = useState([]);
+    const [isLoading, setIsLoading] = useState([]);
 
-    const isValidId = ~props.leagues.findIndex(league => league.slug === slug);
+    useEffect(() => {
+        setIsLoading(true);
+        axiosInstance.get('leagues')
+            .then((response) => {
+                setLeagues(response.data.data);
+            })
+            .then(() => { setIsLoading(false) })
+    }, []);
+
+    const league = leagues.find(league => league.slug === slug);
 
     return (
-        <section>
-            <LeagueNavTab {...props} slug={slug} />
+        !isLoading ?
+            <section>
+                <LeagueNavTab leagues={leagues} slug={slug} />
 
-            {isValidId ? <LeagueTablesContainer {...props} league={league} leagueSlug={slug} /> : <h1 style={{color:'red', textAlign: 'center' }}>There is no such league</h1>}
-
-        </section>
+                {league ?
+                    <LeagueTablesContainer {...props} league={league} leagueSlug={slug} />
+                    :
+                    <NotFound />}
+            </section>
+            :
+            <Loading />
     )
 }

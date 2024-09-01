@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = process.env.REACT_APP_API_URL;
+const API_URL = process.env.REACT_APP_API_URL + '/api';
 
 export const axiosInstance = axios.create({
     baseURL: API_URL
@@ -21,7 +21,7 @@ export const createAuthAxiosInstance = () => {
 
 export const getAxiosInstanceType = () => {
     return localStorage.getItem('user')
-        ? 
+        ?
         createAuthAxiosInstance()
         :
         axiosInstance

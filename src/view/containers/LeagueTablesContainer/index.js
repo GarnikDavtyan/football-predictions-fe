@@ -34,7 +34,7 @@ export default function LeagueTablesContainer(props) {
         if (leagueChanged) {
             setRound(league.current_round);
         }
-        
+
         if (round && (!leagueChanged || roundIsSameAsLeagueCurrent)) {
             setIsLoading(true);
 
@@ -42,11 +42,11 @@ export default function LeagueTablesContainer(props) {
                 getTop10ByLeague(league.id, round),
                 getFixtures(league.id, round),
             ];
-    
+
             if (leagueChanged) {
                 promises.push(getTournamentTable(league.id));
             }
-            
+
             Promise.all(promises)
                 .then((responses) => {
                     const [top10Response, fixturesResponse, standingsResponse] = responses;
@@ -57,7 +57,7 @@ export default function LeagueTablesContainer(props) {
                     setFixtures(fixturesResponse.data.data);
 
                     if (leagueChanged) {
-                        setStandings(standingsResponse.data.data);  
+                        setStandings(standingsResponse.data.data);
                     }
                 })
                 .catch(error => {
@@ -72,21 +72,20 @@ export default function LeagueTablesContainer(props) {
     }, [round, leagueSlug]);
 
     return (
-        !isLoading ? (
+        !isLoading ?
             <TablesContainer>
                 <Top10UsersPerLeagueList top10={top10} />
-                <PredictionTable 
-                    setRound={setRound} 
-                    round={round} 
-                    leagueId={league.id} 
-                    user={user} 
-                    fixtures={fixtures} 
+                <PredictionTable
+                    setRound={setRound}
+                    round={round}
+                    leagueId={league.id}
+                    user={user}
+                    fixtures={fixtures}
                     rounds={league.current_round}
                 />
                 <TournamentTable standings={standings} />
             </TablesContainer>
-        ) : (
+            :
             <Loading />
-        )
     );
 }

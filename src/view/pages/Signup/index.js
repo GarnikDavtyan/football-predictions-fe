@@ -8,22 +8,17 @@ import {
     Grid,
     Typography,
     Container,
-    FormControl,
-    InputAdornment,
-    InputLabel,
-    OutlinedInput,
-    IconButton,
     styled,
     ThemeProvider,
     createTheme
 } from '@mui/material';
-import { Visibility, VisibilityOff } from "@mui/icons-material";
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { paths } from '../../../constants';
-import { register } from '../../../helpers/auth';
+import { register, getCurrentUser } from '../../../helpers/auth';
 import { validatePassword, validateUsername, validateEmail } from '../../../helpers/validation/signupValidation';
-import { useSnackbar } from 'notistack';
 import Loading from '../../components/Loading';
+import PasswordTextField from '../../components/PasswordTextField';
+import displayErrors from '../../../helpers/common/displayErrors';
 
 const ContainerStyled = styled(Container)({
     margin: 'auto',
@@ -87,25 +82,24 @@ export default function SignUp({ handleOpenClose, setUser }) {
     const [isTouchedRepeatPassword, setIsTouchedRepeatPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
-    const { enqueueSnackbar } = useSnackbar();
-
     const userNameRef = useRef();
 
     useEffect(() => {
+        if (getCurrentUser()) {
+            navigate(paths.home);
+        }
+
         userNameRef.current && userNameRef.current.focus();
     }, []);
 
+    const isErrorPassword = isTouchedPassword && !validatePassword(password);
+    const isErrorRepeatPassword = isTouchedRepeatPassword && password !== repeatPassword;
     const disabledSignUpButton = !(validateUsername(username) && validateEmail(email) && validatePassword(password) && password === repeatPassword);
-
-    const handleChange = (e, setValue) => setValue(e.target.value);
-
-    const handleClickShowPassword = () => setShowPassword(prev => !prev);
-    const handleClickShowRepeatPassword = () => setShowRepeatPassword(prev => !prev);
-    const handleMouseDownPassword = (e) => e.preventDefault();
 
     const handleSubmit = (e) => {
         e.preventDefault();
         setIsLoading(true);
+
         register(username, email, password, repeatPassword)
             .then((response) => {
                 setUser(response.data.data.user);
@@ -113,7 +107,7 @@ export default function SignUp({ handleOpenClose, setUser }) {
             })
             .then(() => navigate(paths.home))
             .catch((error) => {
-                enqueueSnackbar(error.message, { variant: "error" });
+                displayErrors(error.response.data);
             })
             .finally(() => setIsLoading(false));
     };
@@ -141,13 +135,12 @@ export default function SignUp({ handleOpenClose, setUser }) {
                                         label="Username"
                                         name="username"
                                         autoComplete="username"
-                                        size="small"
                                         error={isTouchedUsername && !validateUsername(username)}
-                                        onChange={(e) => handleChange(e, setUsername)}
+                                        onChange={(e) => setUsername(e.target.value)}
                                         onBlur={() => setIsTouchedUsername(true)}
                                     />
                                     {isTouchedUsername && !validateUsername(username) &&
-                                        <FormHelperText error>Username must contain only Latin letters and digits (2-20 chars)</FormHelperText>}
+                                        <FormHelperText error>Username must contain only latin letters and digits (2-20 chars)</FormHelperText>}
                                 </Grid>
                                 <Grid item xs={12}>
                                     <TextField
@@ -158,81 +151,38 @@ export default function SignUp({ handleOpenClose, setUser }) {
                                         label="Email Address"
                                         name="email"
                                         autoComplete="email"
-                                        size="small"
                                         error={isTouchedEmail && !validateEmail(email)}
-                                        onChange={(e) => handleChange(e, setEmail)}
+                                        onChange={(e) => setEmail(e.target.value)}
                                         onBlur={() => setIsTouchedEmail(true)}
                                     />
                                     {isTouchedEmail && !validateEmail(email) &&
                                         <FormHelperText error>Email is not valid</FormHelperText>}
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <FormControl
-                                        variant="outlined"
-                                        size="small"
-                                        required
-                                        fullWidth
-                                        error={isTouchedPassword && !validatePassword(password)}>
-                                        <InputLabel htmlFor="password">Password</InputLabel>
-                                        <OutlinedInput
-                                            name="password"
-                                            type={showPassword ? 'text' : 'password'}
-                                            id="password"
-                                            autoComplete="current-password"
-                                            error={isTouchedPassword && !validatePassword(password)}
-                                            onChange={(e) => handleChange(e, setPassword)}
-                                            onBlur={() => setIsTouchedPassword(true)}
-                                            endAdornment={
-                                                <InputAdornment position="end">
-                                                    <IconButton
-                                                        aria-label="toggle password visibility"
-                                                        onClick={handleClickShowPassword}
-                                                        onMouseDown={handleMouseDownPassword}
-                                                        edge="end"
-                                                        size="large">
-                                                        {showPassword ? <Visibility /> : <VisibilityOff />}
-                                                    </IconButton>
-                                                </InputAdornment>
-                                            }
-                                            label="Password"
-                                        />
-                                    </FormControl>
-                                    {isTouchedPassword && !validatePassword(password) &&
-                                        <FormHelperText error>Password must contain at least 1 uppercase letter, 1 lowercase letter, and 1 digit (8 or more chars)</FormHelperText>}
+                                    <PasswordTextField
+                                        label="Password"
+                                        password={password}
+                                        setPassword={setPassword}
+                                        showPassword={showPassword}
+                                        setShowPassword={setShowPassword}
+                                        setIsTouchedPassword={setIsTouchedPassword}
+                                        isErrorPassword={isErrorPassword}
+                                        isRequired={true}
+                                        passwordErrorMessage="Password must contain at least 1 uppercase letter, 1 lowercase letter, and 1 digit (8 or more chars)"
+                                    />
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <FormControl
-                                        variant="outlined"
-                                        size="small"
-                                        required
-                                        fullWidth
-                                        error={isTouchedRepeatPassword && password !== repeatPassword}>
-                                        <InputLabel htmlFor="repeat_password">Repeat Password</InputLabel>
-                                        <OutlinedInput
-                                            name="repeat_password"
-                                            type={showRepeatPassword ? 'text' : 'password'}
-                                            id="repeat_password"
-                                            autoComplete="current-password"
-                                            error={isTouchedRepeatPassword && password !== repeatPassword}
-                                            onChange={(e) => handleChange(e, setRepeatPassword)}
-                                            onBlur={() => setIsTouchedRepeatPassword(true)}
-                                            endAdornment={
-                                                <InputAdornment position="end">
-                                                    <IconButton
-                                                        aria-label="toggle repeat password visibility"
-                                                        onClick={handleClickShowRepeatPassword}
-                                                        onMouseDown={handleMouseDownPassword}
-                                                        edge="end"
-                                                        size="large">
-                                                        {showRepeatPassword ? <Visibility /> : <VisibilityOff />}
-                                                    </IconButton>
-                                                </InputAdornment>
-                                            }
-                                            label="Repeat Password"
-                                        />
-                                    </FormControl>
-                                    {isTouchedRepeatPassword && password !== repeatPassword &&
-                                        <FormHelperText error>Passwords don't match</FormHelperText>}
+                                    <PasswordTextField
+                                        label="Repeat Password"
+                                        password={repeatPassword}
+                                        setPassword={setRepeatPassword}
+                                        showPassword={showRepeatPassword}
+                                        setShowPassword={setShowRepeatPassword}
+                                        setIsTouchedPassword={setIsTouchedRepeatPassword}
+                                        isErrorPassword={isErrorRepeatPassword}
+                                        isRequired={true}
+                                        passwordErrorMessage="The password confirmation field must match password"
+                                    />
                                 </Grid>
                             </Grid>
                             <SubmitButton

@@ -1,9 +1,9 @@
 import React from 'react';
 import { Button, Typography } from '@mui/material';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { paths } from '../../../../constants';
-import LoginDialogForm from '../../LoginDialog';
+import LoginDialogForm from '../../LoginDialogForm';
 import { logout } from '../../../../helpers/auth';
 
 const StyledLink = styled(Link)({
@@ -18,21 +18,12 @@ const StyledButton = styled(Button)({
 
 const ButtonContainer = styled('div')({
     display: 'flex',
-    minWidth: '300px',
-    justifyContent: 'space-evenly',
+    minWidth: '250px',
+    justifyContent: 'space-between',
     alignItems: 'center',
 });
 
 export default function HeaderButtonsContainer(props) {
-    const location = useLocation();
-
-    const handleLogout = () => {
-        logout().then(() => {
-            props.setUser(null);
-            window.location.reload();
-        });
-    };
-
     return (
         <ButtonContainer>
             <StyledLink to={paths.top}>
@@ -41,24 +32,22 @@ export default function HeaderButtonsContainer(props) {
             <StyledLink to={paths.rules}>
                 <Typography variant="body2">Rules</Typography>
             </StyledLink>
-            {!props.user ? (
-                location.pathname === paths.signup || (
-                    <>
-                        <Button
-                            color="primary"
-                            variant="contained"
-                            onClick={props.handleOpenClose}
-                        >
-                            Log In
-                        </Button>
-                        <LoginDialogForm {...props} />
-                    </>
-                )
-            ) : (
-                <StyledButton onClick={handleLogout}>
+            {!props.user ?
+                <>
+                    <Button
+                        color="primary"
+                        variant="contained"
+                        onClick={props.handleOpenClose}
+                    >
+                        Log In
+                    </Button>
+                    <LoginDialogForm {...props} />
+                </>
+                :
+                <StyledButton onClick={() => logout()}>
                     Log Out
                 </StyledButton>
-            )}
+            }
         </ButtonContainer>
     );
 }

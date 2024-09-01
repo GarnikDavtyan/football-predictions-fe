@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { 
-    Grid,  
-    Table, 
-    TableBody, 
-    TableCell, 
-    TableContainer, 
-    TableRow, 
-    Paper, 
-    Avatar, 
-    Select, 
-    MenuItem, 
-    Typography 
+import {
+    Grid,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableRow,
+    Paper,
+    Avatar,
+    Select,
+    MenuItem,
+    Typography
 } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import { getCurrentUser } from '../../../../helpers/auth';
-import randomMaterialColor from 'random-material-color';
+import stringToColor from "../../../../helpers/common/stringToColor";
+import getImageFullUrl from "../../../../helpers/common/getImageFullUrl";
 
 const StyledPaper = styled(Paper)({
     backgroundColor: 'rgba(255, 255, 255, 0.52)',
@@ -36,15 +37,13 @@ const AvatarWrapper = styled('div')({
     margin: '2px',
 });
 
-function getColor(namePrefix) {
-    return randomMaterialColor.getColor({ text: namePrefix });
-}
-
 export default function Top10UsersPerLeagueList({ top10 }) {
     const [users, setUsers] = useState([]);
     const [user, setUser] = useState(null);
     const [authUserName, setAuthUserName] = useState('');
     const [typeOfTop, setTypeOfTop] = useState('leaguePoints');
+
+    const fontWeight = authUserName === user.user.name ? 500 : 'normal';
 
     useEffect(() => {
         setUser(null);
@@ -84,10 +83,10 @@ export default function Top10UsersPerLeagueList({ top10 }) {
                     <TableBody>
                         {users.map((user, i) => (
                             <TableRow key={user.user.name} hover>
-                                <TableCell 
-                                    align="center" 
+                                <TableCell
+                                    align="center"
                                     padding="none"
-                                    style={{ fontWeight: authUserName === user.user.name ? 500 : 'normal' }} 
+                                    style={{ fontWeight: fontWeight }}
                                 >
                                     {i + 1}
                                 </TableCell>
@@ -95,20 +94,20 @@ export default function Top10UsersPerLeagueList({ top10 }) {
                                     <AvatarWrapper>
                                         <Avatar
                                             variant="rounded"
-                                            style={{ backgroundColor: getColor(user.user.name) }}
+                                            style={{ backgroundColor: stringToColor(user.user.name) }}
                                             alt={user.user.name.toUpperCase()}
-                                            src={user.user.avatar || user.user.name}
+                                            src={getImageFullUrl(user.user.avatar)}
                                         />
                                         &emsp;
-                                        <Typography style={{ fontWeight: authUserName === user.user.name ? 500 : 'normal' }}>
+                                        <Typography style={{ fontWeight: fontWeight }}>
                                             {user.user.name}
                                         </Typography>
                                     </AvatarWrapper>
                                 </TableCell>
-                                <TableCell 
-                                    align="center" 
+                                <TableCell
+                                    align="center"
                                     padding="none"
-                                    style={{ fontWeight: authUserName === user.user.name ? 500 : 'normal' }}
+                                    style={{ fontWeight: fontWeight }}
                                 >
                                     {user.points}
                                 </TableCell>
@@ -129,9 +128,9 @@ export default function Top10UsersPerLeagueList({ top10 }) {
                                         <AvatarWrapper>
                                             <Avatar
                                                 variant="rounded"
-                                                style={{ backgroundColor: getColor(user.user.name) }}
+                                                style={{ backgroundColor: stringToColor(user.user.name) }}
                                                 alt={user.user.name.toUpperCase()}
-                                                src={user.user.avatar || user.user.name}
+                                                src={getImageFullUrl(user.user.avatar)}
                                             />
                                             &emsp;
                                             <Typography style={{ fontWeight: 500 }}>

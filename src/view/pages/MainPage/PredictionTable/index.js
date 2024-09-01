@@ -17,6 +17,7 @@ import FixtureRow from '../../../components/FixtureRow';
 import { useSnackbar } from 'notistack';
 import savePredictions from '../../../../helpers/apiRequests/savePredictions';
 import Loading from '../../../components/Loading';
+import displayErrors from '../../../../helpers/common/displayErrors';
 
 const StyledPaper = styled(Paper)({
     backgroundColor: 'rgba(255, 255, 255, 0.52)',
@@ -80,7 +81,7 @@ export default function PredictionTable({ user, leagueId, round, setRound, fixtu
             savePredictions(leagueId, round, updatedPredictions)
                 .then(() => enqueueSnackbar("Predictions Saved", { variant: "success" }))
                 .catch((error) => {
-                    enqueueSnackbar(error.message, { variant: "error" });
+                    displayErrors(error.response.data)
                 })
                 .finally(() => {
                     setIsLoading(false);

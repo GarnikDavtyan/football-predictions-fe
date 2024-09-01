@@ -5,5 +5,6 @@ export const paths = {
     signup: '/signup',
     rules: '/rules',
     top: '/top',
+    profile: '/profile'
 };
 

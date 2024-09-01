@@ -15,6 +15,7 @@ import { styled } from '@mui/material/styles';
 const StyledPaper = styled(Paper)({
     backgroundColor: 'rgba(255, 255, 255, 0.52)',
     minWidth: '17rem',
+    borderRadius: 0
 });
 
 const RoundPaper = styled(Paper)({
@@ -53,7 +54,7 @@ export default function TournamentTable({ standings }) {
                                 </TableCell>
                                 <TableCell padding="none">
                                     <Grid container alignItems="center">
-                                        <img src={team.logo} width="30" height="30" alt={team.name} />
+                                        <img src={team.logo} height="30" alt={team.name} />
                                         &nbsp;
                                         {team.name}
                                     </Grid>

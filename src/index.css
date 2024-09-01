@@ -16,7 +16,8 @@ body {
   background-attachment: fixed;
   background-size: cover;
   background-position: center;
-  min-height: 100vh;
+  min-width: 1024px;
+  overflow-x: auto
 }
 
 code {

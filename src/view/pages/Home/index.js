@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Typography, Box as MuiBox } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import LeagueCard from '../../components/LeagueCard';
+import { axiosInstance } from '../../../helpers/api';
+import Loading from '../../components/Loading';
 
 const StyledBox = styled(MuiBox)({
     display: 'grid',
@@ -17,21 +19,35 @@ const HomeContainer = styled('div')({
     height: '100%',
 });
 
-const LeagueTitle = styled(Typography)(({ theme }) => ({
+const LeagueTitle = styled(Typography)({
     textAlign: 'center',
     color: '#fff',
     fontSize: '45px'
-}));
+});
 
-export default function Home({ leagues }) {
+export default function Home() {
+    const [leagues, setLeagues] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        axiosInstance.get('leagues')
+            .then((response) => {
+                setLeagues(response.data.data);
+            })
+            .then(() => { setIsLoading(false) })
+    }, []);
+
     return (
-        <HomeContainer>
-            <StyledBox>
-                {leagues.map(league => (
-                    <LeagueCard key={league.id} league={league} />
-                ))}
-            </StyledBox>
-            <LeagueTitle>Leagues</LeagueTitle>
-        </HomeContainer>
+        !isLoading ?
+            <HomeContainer>
+                <StyledBox>
+                    {leagues.map(league => (
+                        <LeagueCard key={league.id} league={league} />
+                    ))}
+                </StyledBox>
+                <LeagueTitle>Leagues</LeagueTitle>
+            </HomeContainer>
+            :
+            <Loading />
     );
 }
