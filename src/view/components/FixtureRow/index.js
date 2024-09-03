@@ -34,8 +34,12 @@ export default function FixtureRow({ user, fixture, x2FixtureId, setX2FixtureId,
         score_home: '',
         score_away: '',
         x2: false,
-        points: 0,
+        points: '-',
     });
+
+    const isFinished = fixture.status === 'FT';
+    const isNotStarted = fixture.status === 'NS';
+    const x2Sealed = x2FixtureId && fixtures.find(fix => fix.id === x2FixtureId).status === 'FT';
 
     useEffect(() => {
         if (fixture.predictions && fixture.predictions.length) {
@@ -43,15 +47,16 @@ export default function FixtureRow({ user, fixture, x2FixtureId, setX2FixtureId,
             if (fixture.predictions[0].x2) {
                 setX2FixtureId(fixId);
             }
-            setPredictions(prevPredictions => [...prevPredictions, fixture.predictions[0]]);
+
+            if (isNotStarted) {
+                setPredictions(prevPredictions => [...prevPredictions, fixture.predictions[0]]);
+            }
+
         }
     }, [fixture, fixId, setPredictions, setX2FixtureId]);
 
-    const isFinished = fixture.status === 'FT';
-    const isNotStarted = fixture.status === 'NS';
-
     const handleCheckboxChange = () => {
-        if (x2FixtureId && fixtures.find(fix => fix.id === x2FixtureId).status === 'FT') return;
+        if (x2Sealed) { return };
         setX2FixtureId(fixId);
     };
 
@@ -76,7 +81,7 @@ export default function FixtureRow({ user, fixture, x2FixtureId, setX2FixtureId,
                 </TableCell>
                 <TableCell align="center" padding="none">
                     <span>
-                        {isFinished && fixture.score_home && fixture.score_away ? `${fixture.score_home} : ${fixture.score_away}` : '- : -'}
+                        {isFinished && fixture.score_home !== null && fixture.score_away !== null ? `${fixture.score_home} : ${fixture.score_away}` : '- : -'}
                     </span>
                 </TableCell>
                 <TableCell align="left" padding="none">
@@ -88,7 +93,14 @@ export default function FixtureRow({ user, fixture, x2FixtureId, setX2FixtureId,
                 </TableCell>
                 <TableCell align="center" padding="none">
                     <Checkbox
-                        disabled={!user || !isNotStarted || !prediction.score_home || !prediction.score_away}
+                        disabled={!user
+                            || !isNotStarted
+                            || prediction.score_home === null
+                            || prediction.score_home === ''
+                            || prediction.score_away === null
+                            || prediction.score_away === ''
+                            || x2Sealed
+                        }
                         checked={fixId === x2FixtureId}
                         onChange={handleCheckboxChange}
                         value={fixId}
@@ -117,11 +129,11 @@ export default function FixtureRow({ user, fixture, x2FixtureId, setX2FixtureId,
                             />
                         </InputsContainer>
                     ) : (
-                        `${prediction.score_home || '-'} : ${prediction.score_away || '-'}`
+                        `${prediction.score_home.toString() || '-'} : ${prediction.score_away.toString() || '-'}`
                     )}
                 </TableCell>
                 <TableCell padding="none" align="center">
-                    {user && prediction.points ? prediction.points : '-'}
+                    {user && prediction.points !== null ? prediction.points : '-'}
                 </TableCell>
             </TableRow>
             {info && (

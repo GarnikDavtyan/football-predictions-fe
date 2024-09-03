@@ -43,8 +43,6 @@ export default function Top10UsersPerLeagueList({ top10 }) {
     const [authUserName, setAuthUserName] = useState('');
     const [typeOfTop, setTypeOfTop] = useState('leaguePoints');
 
-    const fontWeight = authUserName === user.user.name ? 500 : 'normal';
-
     useEffect(() => {
         setUser(null);
         const updatedUsers = [...top10[typeOfTop]];
@@ -86,7 +84,7 @@ export default function Top10UsersPerLeagueList({ top10 }) {
                                 <TableCell
                                     align="center"
                                     padding="none"
-                                    style={{ fontWeight: fontWeight }}
+                                    style={{ fontWeight: authUserName === user.user.name ? 500 : 'normal' }}
                                 >
                                     {i + 1}
                                 </TableCell>
@@ -99,7 +97,7 @@ export default function Top10UsersPerLeagueList({ top10 }) {
                                             src={getImageFullUrl(user.user.avatar)}
                                         />
                                         &emsp;
-                                        <Typography style={{ fontWeight: fontWeight }}>
+                                        <Typography style={{ fontWeight: authUserName === user.user.name ? 500 : 'normal' }}>
                                             {user.user.name}
                                         </Typography>
                                     </AvatarWrapper>
@@ -107,7 +105,7 @@ export default function Top10UsersPerLeagueList({ top10 }) {
                                 <TableCell
                                     align="center"
                                     padding="none"
-                                    style={{ fontWeight: fontWeight }}
+                                    style={{ fontWeight: authUserName === user.user.name ? 500 : 'normal' }}
                                 >
                                     {user.points}
                                 </TableCell>

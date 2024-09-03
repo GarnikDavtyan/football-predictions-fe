@@ -11,6 +11,7 @@ import {
     Grid,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { getLetterColor } from '../../../../helpers/common/stringToColor';
 
 const StyledPaper = styled(Paper)({
     backgroundColor: 'rgba(255, 255, 255, 0.52)',
@@ -74,8 +75,16 @@ export default function TournamentTable({ standings }) {
                                 <TableCell align='center' padding="none">
                                     {team.goal_diff ?? 0}
                                 </TableCell>
-                                <TableCell align='center' padding="none">
-                                    {team.form ?? '-'}
+                                <TableCell align="center" padding="none">
+                                    {team.form ? (
+                                        team.form.split('').map((letter, index) => (
+                                            <span key={index} style={{ color: getLetterColor(letter), fontWeight: 'bold' }}>
+                                                {letter}
+                                            </span>
+                                        ))
+                                    ) : (
+                                        '-'
+                                    )}
                                 </TableCell>
                                 <TableCell align='center' padding="none">
                                     {team.points ?? 0}

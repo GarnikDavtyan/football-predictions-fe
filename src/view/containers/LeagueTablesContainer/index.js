@@ -81,7 +81,7 @@ export default function LeagueTablesContainer(props) {
                     leagueId={league.id}
                     user={user}
                     fixtures={fixtures}
-                    rounds={league.current_round}
+                    roundsCount={league.current_round}
                 />
                 <TournamentTable standings={standings} />
             </TablesContainer>

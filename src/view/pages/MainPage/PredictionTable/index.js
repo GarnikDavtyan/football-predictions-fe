@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
     Table,
     TableBody,
@@ -42,9 +42,8 @@ const PleaseSign = styled(Grid)({
     textShadow: '-2px 0 black, 0 2px black, 2px 0 black, 0 -2px black',
 });
 
-export default function PredictionTable({ user, leagueId, round, setRound, fixtures, rounds }) {
+export default function PredictionTable({ user, leagueId, round, setRound, fixtures, roundsCount }) {
     const [x2FixtureId, setX2FixtureId] = useState(0);
-    const [roundsCount, setRoundsCount] = useState(0);
     const [predictions, setPredictions] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -61,7 +60,7 @@ export default function PredictionTable({ user, leagueId, round, setRound, fixtu
             }
 
             const updatedPredictions = predictions.map((prediction) => {
-                if (!prediction.score_home || !prediction.score_away) {
+                if (prediction.score_home === '' || prediction.score_away === '') {
                     throw new Error("PREDICTION_MISSING");
                 }
 
@@ -72,7 +71,7 @@ export default function PredictionTable({ user, leagueId, round, setRound, fixtu
                 };
             });
 
-            if (fixtures.length === predictions.length && !x2FixtureId) {
+            if (fixtures.filter(fix => fix.status === 'NS').length === predictions.length && !x2FixtureId) {
                 throw new Error("X2_MISSING");
             }
 
@@ -98,10 +97,6 @@ export default function PredictionTable({ user, leagueId, round, setRound, fixtu
             }
         }
     };
-
-    useEffect(() => {
-        setRoundsCount(rounds);
-    }, [leagueId]);
 
     return (
         <>
