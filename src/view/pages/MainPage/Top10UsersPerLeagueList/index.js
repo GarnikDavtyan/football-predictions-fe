@@ -91,7 +91,6 @@ export default function Top10UsersPerLeagueList({ top10 }) {
                                 <TableCell align="right" padding="none">
                                     <AvatarWrapper>
                                         <Avatar
-                                            variant="rounded"
                                             style={{ backgroundColor: stringToColor(user.user.name) }}
                                             alt={user.user.name.toUpperCase()}
                                             src={getImageFullUrl(user.user.avatar)}
@@ -125,7 +124,6 @@ export default function Top10UsersPerLeagueList({ top10 }) {
                                     <TableCell align="right" padding="none">
                                         <AvatarWrapper>
                                             <Avatar
-                                                variant="rounded"
                                                 style={{ backgroundColor: stringToColor(user.user.name) }}
                                                 alt={user.user.name.toUpperCase()}
                                                 src={getImageFullUrl(user.user.avatar)}

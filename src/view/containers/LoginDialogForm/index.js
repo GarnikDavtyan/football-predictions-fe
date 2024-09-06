@@ -35,7 +35,7 @@ export default function LoginDialogForm({ open, handleOpenClose }) {
                 localStorage.setItem('user', JSON.stringify(response.data.data));
                 window.location.reload();
             })
-            .catch(function (error) {
+            .catch((error) => {
                 displayErrors(error.response.data);
             })
     }

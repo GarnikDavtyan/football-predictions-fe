@@ -13,7 +13,7 @@ import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import DeleteIcon from '@mui/icons-material/Delete';
 import stringToColor from "../../../helpers/common/stringToColor";
 import { paths } from "../../../constants";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
     validateEmail,
     validatePassword,
@@ -64,6 +64,11 @@ const StyledBox = styled(Box)({
 const AvatarButtonsContainer = styled('div')({
     display: "flex",
     alignItems: "center"
+});
+
+const Verify = styled(Typography)({
+    color: "red",
+    textAlign: "center"
 });
 
 export default function Profile({ user, setUser }) {
@@ -216,7 +221,8 @@ export default function Profile({ user, setUser }) {
                     {user && user.avatar &&
                         <IconButton color="primary" component="span" onClick={handleDeleteAvatar}>
                             <DeleteIcon />
-                        </IconButton>}
+                        </IconButton>
+                    }
                 </AvatarButtonsContainer>
                 <StyledBox>
                     <TextField
@@ -278,14 +284,23 @@ export default function Profile({ user, setUser }) {
                         isErrorPassword={isErrorRepeatPassword}
                         passwordErrorMessage="The password confirmation field must match password"
                     />
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={handleSaveChanges}
-                        disabled={disabledSaveButton}
-                    >
-                        Save Changes
-                    </Button>
+                    {user && !user.email_verified_at
+                        ?
+                        <Verify style={{ color: 'red' }}>
+                            Please verify your email. <br />
+                            Check your inbox for the verification email.<br />
+                            Click <Link to={'/verification/resend'}>here</Link> to resend the verification email.
+                        </Verify>
+                        :
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={handleSaveChanges}
+                            disabled={disabledSaveButton}
+                        >
+                            Save Changes
+                        </Button>
+                    }
                 </StyledBox>
             </StyledContainer>
             {isLoading && <Loading />}

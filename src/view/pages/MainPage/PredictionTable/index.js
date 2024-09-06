@@ -37,8 +37,8 @@ const StyledTable = styled(Table)({
     whiteSpace: 'noWrap',
 });
 
-const PleaseSign = styled(Grid)({
-    color: 'yellow',
+const Info = styled(Grid)({
+    color: 'gold',
     textShadow: '-2px 0 black, 0 2px black, 2px 0 black, 0 -2px black',
 });
 
@@ -157,18 +157,22 @@ export default function PredictionTable({ user, leagueId, round, setRound, fixtu
                             </TableBody>
                         </StyledTable>
                     </TableContainer>
-                    {user ?
-                        !areAllStarted &&
-                        <Grid container justifyContent="flex-end">
-                            <Button
-                                type="submit"
-                                variant="contained"
-                                color="secondary"
-                            >
-                                Save Prediction
-                            </Button>
-                        </Grid>
-                        : <PleaseSign container justifyContent='center' component='h1'> Please Sign In To Predict </PleaseSign>
+                    {user
+                        ?
+                        user.email_verified_at
+                            ?
+                            !areAllStarted &&
+                            <Grid container justifyContent="flex-end">
+                                <Button
+                                    type="submit"
+                                    variant="contained"
+                                    color="secondary"
+                                >
+                                    Save Prediction
+                                </Button>
+                            </Grid>
+                            : <Info container justifyContent='center' component='h1'> Please Verifiy Your Email To Predict </Info>
+                        : <Info container justifyContent='center' component='h1'> Please Sign In To Predict </Info>
                     }
                 </form>
             </RootDiv>

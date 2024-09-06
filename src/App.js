@@ -13,6 +13,7 @@ import Profile from './view/pages/Profile';
 import { paths } from './constants';
 import Loading from "./view/components/Loading";
 import { getCurrentUser } from './helpers/auth';
+import Verification from './view/pages/Verification';
 
 function App() {
 
@@ -43,6 +44,7 @@ function App() {
                         <Route path={paths.profile} element={<div className="custom-route"><Profile user={user} setUser={setUser} /></div>} />
                         <Route path={paths.rules} element={<div className="custom-route"><Rules /></div>} />
                         <Route path={paths.top} element={<div className="custom-route"><Top /></div>} />
+                        <Route path={`${paths.verification}/:action`} element={<div className="custom-route"><Verification user={user} setUser={setUser} /></div>} />
                         <Route path="*" element={<div className="custom-route"><NotFound /></div>} />
                     </Routes>
                 </main>

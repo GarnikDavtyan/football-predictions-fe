@@ -94,6 +94,7 @@ export default function FixtureRow({ user, fixture, x2FixtureId, setX2FixtureId,
                 <TableCell align="center" padding="none">
                     <Checkbox
                         disabled={!user
+                            || !user.email_verified_at
                             || !isNotStarted
                             || prediction.score_home === null
                             || prediction.score_home === ''
@@ -111,7 +112,7 @@ export default function FixtureRow({ user, fixture, x2FixtureId, setX2FixtureId,
                     {isNotStarted ? (
                         <InputsContainer>
                             <PredictionInput
-                                disabled={!user}
+                                disabled={!user || !user.email_verified_at}
                                 prediction={prediction}
                                 setPrediction={setPrediction}
                                 setPredictions={setPredictions}
@@ -120,7 +121,7 @@ export default function FixtureRow({ user, fixture, x2FixtureId, setX2FixtureId,
                             />
                             {` - `}
                             <PredictionInput
-                                disabled={!user}
+                                disabled={!user || !user.email_verified_at}
                                 prediction={prediction}
                                 setPrediction={setPrediction}
                                 setPredictions={setPredictions}
