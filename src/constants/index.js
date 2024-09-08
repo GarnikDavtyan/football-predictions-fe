@@ -6,6 +6,7 @@ export const paths = {
     rules: '/rules',
     top: '/top',
     profile: '/profile',
-    verification: '/verification'
+    verification: '/verification',
+    reset: 'reset-password'
 };
 

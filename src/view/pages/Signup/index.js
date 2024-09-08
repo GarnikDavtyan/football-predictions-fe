@@ -92,9 +92,15 @@ export default function SignUp({ handleOpenClose, setUser }) {
         userNameRef.current && userNameRef.current.focus();
     }, []);
 
+    const isErrorUsername = isTouchedUsername && !validateUsername(username);
+    const isErrorEmail = isTouchedEmail && !validateEmail(email);
     const isErrorPassword = isTouchedPassword && !validatePassword(password);
     const isErrorRepeatPassword = isTouchedRepeatPassword && password !== repeatPassword;
-    const disabledSignUpButton = !(validateUsername(username) && validateEmail(email) && validatePassword(password) && password === repeatPassword);
+    const disabledSignUpButton =
+        !(validateUsername(username) &&
+            validateEmail(email) &&
+            validatePassword(password) &&
+            password === repeatPassword);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -135,11 +141,11 @@ export default function SignUp({ handleOpenClose, setUser }) {
                                         label="Username"
                                         name="username"
                                         autoComplete="username"
-                                        error={isTouchedUsername && !validateUsername(username)}
+                                        error={isErrorUsername}
                                         onChange={(e) => setUsername(e.target.value)}
                                         onBlur={() => setIsTouchedUsername(true)}
                                     />
-                                    {isTouchedUsername && !validateUsername(username) &&
+                                    {isErrorUsername &&
                                         <FormHelperText error>Username must contain only latin letters and digits (2-20 chars)</FormHelperText>}
                                 </Grid>
                                 <Grid item xs={12}>
@@ -151,11 +157,11 @@ export default function SignUp({ handleOpenClose, setUser }) {
                                         label="Email Address"
                                         name="email"
                                         autoComplete="email"
-                                        error={isTouchedEmail && !validateEmail(email)}
+                                        error={isErrorEmail}
                                         onChange={(e) => setEmail(e.target.value)}
                                         onBlur={() => setIsTouchedEmail(true)}
                                     />
-                                    {isTouchedEmail && !validateEmail(email) &&
+                                    {isErrorEmail &&
                                         <FormHelperText error>Email is not valid</FormHelperText>}
                                 </Grid>
                                 <Grid item xs={12}>

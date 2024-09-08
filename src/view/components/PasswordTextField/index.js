@@ -14,7 +14,8 @@ export default function PasswordTextField(props) {
         setIsTouchedPassword,
         isErrorPassword,
         passwordErrorMessage,
-        isRequired
+        isRequired,
+        disabled
     } = props;
 
     return (
@@ -47,6 +48,7 @@ export default function PasswordTextField(props) {
             helperText={
                 isErrorPassword && passwordErrorMessage
             }
+            disabled={disabled}
         />
     )
 }

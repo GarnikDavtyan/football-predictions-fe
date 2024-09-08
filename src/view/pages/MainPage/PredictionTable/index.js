@@ -171,8 +171,8 @@ export default function PredictionTable({ user, leagueId, round, setRound, fixtu
                                     Save Prediction
                                 </Button>
                             </Grid>
-                            : <Info container justifyContent='center' component='h1'> Please Verifiy Your Email To Predict </Info>
-                        : <Info container justifyContent='center' component='h1'> Please Sign In To Predict </Info>
+                            : <Info container justifyContent='center' component='h1'> Please Verify Your Email Address To Predict </Info>
+                        : <Info container justifyContent='center' component='h1'> Please Log In To Predict </Info>
                     }
                 </form>
             </RootDiv>

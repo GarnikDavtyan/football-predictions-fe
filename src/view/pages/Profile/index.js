@@ -31,10 +31,10 @@ const StyledContainer = styled(Paper)({
     padding: "40px",
     display: "flex",
     flexDirection: "column",
+    justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#fff",
     margin: "auto",
-    marginTop: "40px",
     borderRadius: "10px",
     width: "500px",
 });
@@ -79,6 +79,7 @@ export default function Profile({ user, setUser }) {
     const [repeatPassword, setRepeatPassword] = useState("");
     const [avatar, setAvatar] = useState('');
     const [avatarFile, setAvatarFile] = useState(null);
+    const [emailNotVerified, setEmailNotVerified] = useState(false);
 
     const [isTouchedUsername, setIsTouchedUsername] = useState(false);
     const [isTouchedEmail, setIsTouchedEmail] = useState(false);
@@ -119,6 +120,7 @@ export default function Profile({ user, setUser }) {
 
             setUsername(user.name);
             setEmail(user.email);
+            setEmailNotVerified(!user.email_verified_at);
             if (user.avatar) {
                 setAvatar(getImageFullUrl(user.avatar));
             }
@@ -205,25 +207,27 @@ export default function Profile({ user, setUser }) {
                     src={avatar}
                     bgcolor={bgcolor}
                 />
-                <AvatarButtonsContainer>
-                    <label htmlFor="upload-avatar">
-                        <IconButton color="primary" component="span">
-                            <PhotoCamera />
-                        </IconButton>
-                        <input
-                            accept="image/*"
-                            id="upload-avatar"
-                            type="file"
-                            style={{ display: "none" }}
-                            onChange={handleAvatarChange}
-                        />
-                    </label>
-                    {user && user.avatar &&
-                        <IconButton color="primary" component="span" onClick={handleDeleteAvatar}>
-                            <DeleteIcon />
-                        </IconButton>
-                    }
-                </AvatarButtonsContainer>
+                {user && !emailNotVerified &&
+                    <AvatarButtonsContainer>
+                        <label htmlFor="upload-avatar">
+                            <IconButton color="primary" component="span">
+                                <PhotoCamera />
+                            </IconButton>
+                            <input
+                                accept="image/*"
+                                id="upload-avatar"
+                                type="file"
+                                style={{ display: "none" }}
+                                onChange={handleAvatarChange}
+                            />
+                        </label>
+                        {user && user.avatar &&
+                            <IconButton color="primary" component="span" onClick={handleDeleteAvatar}>
+                                <DeleteIcon />
+                            </IconButton>
+                        }
+                    </AvatarButtonsContainer>
+                }
                 <StyledBox>
                     <TextField
                         label="Username"
@@ -236,6 +240,7 @@ export default function Profile({ user, setUser }) {
                             isErrorUsername &&
                             "Username must contain only latin letters and digits (2-20 chars)"
                         }
+                        disabled={emailNotVerified}
                     />
                     <TextField
                         label="Email"
@@ -246,6 +251,7 @@ export default function Profile({ user, setUser }) {
                         error={isErrorEmail}
                         onBlur={() => setIsTouchedEmail(true)}
                         helperText={isErrorEmail && "Email is not valid"}
+                        disabled={emailNotVerified}
                     />
                     <PasswordTextField
                         label="Old Password"
@@ -256,6 +262,7 @@ export default function Profile({ user, setUser }) {
                         setIsTouchedPassword={() => { }}
                         isErrorPassword={isErrorOldPassword}
                         passwordErrorMessage="Old password is required to change the password"
+                        disabled={emailNotVerified}
                     />
                     <PasswordTextField
                         label="New Password"
@@ -273,6 +280,7 @@ export default function Profile({ user, setUser }) {
                                 "The new password must be different from the old password"
                                 : ''
                         }
+                        disabled={emailNotVerified}
                     />
                     <PasswordTextField
                         label="Repeat Password"
@@ -283,11 +291,12 @@ export default function Profile({ user, setUser }) {
                         setIsTouchedPassword={setIsTouchedRepeatPassword}
                         isErrorPassword={isErrorRepeatPassword}
                         passwordErrorMessage="The password confirmation field must match password"
+                        disabled={emailNotVerified}
                     />
-                    {user && !user.email_verified_at
+                    {user && emailNotVerified
                         ?
                         <Verify style={{ color: 'red' }}>
-                            Please verify your email. <br />
+                            Please verify your email address. <br />
                             Check your inbox for the verification email.<br />
                             Click <Link to={'/verification/resend'}>here</Link> to resend the verification email.
                         </Verify>

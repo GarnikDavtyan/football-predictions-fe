@@ -13,7 +13,7 @@ const HeaderContainer = styled('header')({
     position: 'relative',
     width: '100%',
     color: '#fff',
-    height: '65px',
+    height: '60px',
     paddingLeft: '10px',
     paddingRight: '10px'
 });
