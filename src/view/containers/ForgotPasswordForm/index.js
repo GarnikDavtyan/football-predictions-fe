@@ -25,7 +25,7 @@ export default function ForgotPasswordForm({ open, handleOpenClose, isLoading, s
 
         sendResetLink(email)
             .then((response) => {
-                enqueueSnackbar(response.data.data, { variant: "success" });
+                enqueueSnackbar(response.data.message, { variant: "success" });
                 handleOpenClose();
             })
             .catch((error) => {
