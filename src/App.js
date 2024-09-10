@@ -15,6 +15,7 @@ import Loading from "./view/components/Loading";
 import { getCurrentUser } from './helpers/auth';
 import Verification from './view/pages/Verification';
 import PasswordReset from './view/pages/PasswordReset';
+import DeleteAccount from './view/pages/DeleteAccount';
 
 function App() {
 
@@ -42,7 +43,7 @@ function App() {
                     handleOpenClose={handleOpenClose}
                     user={user}
                     setUser={setUser}
-                    isLoading = {isLoading}
+                    isLoading={isLoading}
                     setIsLoading={setIsLoading}
                 />
                 <main className="main">
@@ -98,6 +99,14 @@ function App() {
                             {
                                 <div className="custom-route">
                                     <PasswordReset />
+                                </div>
+                            }
+                        />
+                        <Route path={`${paths.account}/:result`}
+                            element=
+                            {
+                                <div className="custom-route">
+                                    <DeleteAccount setUser={setUser} />
                                 </div>
                             }
                         />

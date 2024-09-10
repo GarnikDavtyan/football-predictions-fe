@@ -19,7 +19,7 @@ import {
     validatePassword,
     validateUsername,
 } from "../../../helpers/validation/signupValidation";
-import { updateProfile, deleteAvatar } from "../../../helpers/apiRequests/updateProfile";
+import { updateProfile, deleteAvatar, requestDeleteAccount } from "../../../helpers/apiRequests/profile";
 import { enqueueSnackbar } from "notistack";
 import getImageFullUrl from "../../../helpers/common/getImageFullUrl";
 import Loading from "../../components/Loading";
@@ -197,6 +197,16 @@ export default function Profile({ user, setUser }) {
         }).finally(() => setIsLoading(false));
     };
 
+    const handleDeleteAccountClick = () => {
+        setIsLoading(true);
+
+        requestDeleteAccount().then((response) => {
+            enqueueSnackbar(response.data.message, { variant: "success" });
+        }).catch((error) => {
+            displayErrors(error.response.data);
+        }).finally(() => setIsLoading(false));
+    }
+
     return (
         <>
             <StyledContainer>
@@ -301,14 +311,25 @@ export default function Profile({ user, setUser }) {
                             Click <Link to={'/verification/resend'}>here</Link> to resend the verification email.
                         </Verify>
                         :
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={handleSaveChanges}
-                            disabled={disabledSaveButton}
-                        >
-                            Save Changes
-                        </Button>
+                        <>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={handleSaveChanges}
+                                disabled={disabledSaveButton}
+                            >
+                                Save Changes
+                            </Button>
+                            <Button
+                                variant="outlined"
+                                color="error"
+                                size="small"
+                                endIcon={<DeleteIcon />}
+                                onClick={handleDeleteAccountClick}
+                            >
+                                Request Account Deletion
+                            </Button>
+                        </>
                     }
                 </StyledBox>
             </StyledContainer>

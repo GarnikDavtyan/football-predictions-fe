@@ -8,3 +8,8 @@ export const updateProfile = (formData) => {
 export const deleteAvatar = () => {
     return createAuthAxiosInstance().delete(`profile/avatar-delete`);
 }
+
+export const requestDeleteAccount = () => {
+    return createAuthAxiosInstance().post(`/profile/account-delete-request`);
+}
+

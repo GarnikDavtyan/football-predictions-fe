@@ -91,7 +91,7 @@ export default function PredictionTable({ user, leagueId, round, setRound, fixtu
             if (error.message === 'PREDICTION_MISSING') {
                 enqueueSnackbar("Check predictions, not all the fields filled for some of the matches", { variant: "error" });
             } else if (error.message === 'X2_MISSING') {
-                enqueueSnackbar("Select the double point match", { variant: "error" });
+                enqueueSnackbar("Select the double point match", { variant: "warning" });
             } else if (error.message === 'EMPTY') {
                 enqueueSnackbar("Nothing to save", { variant: "warning" });
             }

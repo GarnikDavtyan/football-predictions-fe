@@ -7,6 +7,7 @@ export const paths = {
     top: '/top',
     profile: '/profile',
     verification: '/verification',
-    reset: 'reset-password'
+    reset: '/reset-password',
+    account: '/delete-account'
 };
 
