@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Typography, Box as MuiBox } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import LeagueCard from '../../components/LeagueCard';
-import { axiosInstance } from '../../../helpers/api';
-import Loading from '../../components/Loading';
 
 const StyledBox = styled(MuiBox)({
     display: 'grid',
@@ -25,29 +23,15 @@ const LeagueTitle = styled(Typography)({
     fontSize: '45px'
 });
 
-export default function Home() {
-    const [leagues, setLeagues] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
-
-    useEffect(() => {
-        axiosInstance.get('leagues')
-            .then((response) => {
-                setLeagues(response.data.data);
-            })
-            .then(() => { setIsLoading(false) })
-    }, []);
-
+export default function Home({ leagues }) {
     return (
-        !isLoading ?
-            <HomeContainer>
-                <StyledBox>
-                    {leagues.map(league => (
-                        <LeagueCard key={league.id} league={league} />
-                    ))}
-                </StyledBox>
-                <LeagueTitle>Leagues</LeagueTitle>
-            </HomeContainer>
-            :
-            <Loading />
+        <HomeContainer>
+            <StyledBox>
+                {leagues.map(league => (
+                    <LeagueCard key={league.id} league={league} />
+                ))}
+            </StyledBox>
+            <LeagueTitle>Leagues</LeagueTitle>
+        </HomeContainer>
     );
 }

@@ -3,7 +3,8 @@ import { TableRow, TableCell, Checkbox, IconButton, Paper, Typography } from '@m
 import { styled } from '@mui/material/styles';
 import InfoIcon from '@mui/icons-material/Info';
 import PredictionInput from './PredictionInput';
-import { format } from 'date-fns';
+import moment from 'moment';
+import 'moment/locale/en-gb';
 
 const InputsContainer = styled('div')({
     display: 'flex',
@@ -39,7 +40,15 @@ export default function FixtureRow({ user, fixture, x2FixtureId, setX2FixtureId,
 
     const isFinished = fixture.status === 'FT';
     const isNotStarted = fixture.status === 'NS';
-    const x2Sealed = x2FixtureId && fixtures.find(fix => fix.id === x2FixtureId).status === 'FT';
+    const x2Sealed = Boolean(x2FixtureId && fixtures.find(fix => fix.id === x2FixtureId).status === 'FT');
+
+    // Show user local datetime 
+    moment.locale('en-gb');
+    const userOffset = moment().utcOffset()
+    const fixtureDate = moment.utc(fixture.date)
+        .utcOffset(userOffset)
+        .format('llll')
+
 
     useEffect(() => {
         if (fixture.predictions && fixture.predictions.length) {
@@ -143,7 +152,7 @@ export default function FixtureRow({ user, fixture, x2FixtureId, setX2FixtureId,
                     <TableCell colSpan={3}>
                         <Paper>
                             <DateText color="textSecondary">
-                                {`Match start: ${format(new Date(fixture.date), 'eee, MMM d, yyyy kk:mm')}`}
+                                {fixtureDate}
                             </DateText>
                         </Paper>
                     </TableCell>

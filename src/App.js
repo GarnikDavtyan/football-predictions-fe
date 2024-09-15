@@ -16,18 +16,25 @@ import { getCurrentUser } from './helpers/auth';
 import Verification from './view/pages/Verification';
 import PasswordReset from './view/pages/PasswordReset';
 import DeleteAccount from './view/pages/DeleteAccount';
+import { axiosInstance } from './helpers/api';
 
 function App() {
 
     const [open, setOpen] = useState(false);
     const [user, setUser] = useState(null);
+    const [leagues, setLeagues] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         if (getCurrentUser()) {
             setUser(getCurrentUser().user);
         }
-        setIsLoading(false);
+
+        axiosInstance.get('leagues')
+            .then((response) => {
+                setLeagues(response.data.data);
+            })
+            .then(() => { setIsLoading(false) })
     }, []);
 
     function handleOpenClose() {
@@ -49,12 +56,12 @@ function App() {
                 <main className="main">
                     <Routes>
                         <Route path={paths.home}
-                            element={<div className="custom-route"><Home /></div>}
+                            element={<div className="custom-route"><Home leagues={leagues} /></div>}
                         />
                         <Route path={`${paths.main}/:slug`}
                             element={
                                 <div className="custom-route">
-                                    <MainPage user={user} />
+                                    <MainPage user={user} leagues={leagues} />
                                 </div>
                             }
                         />

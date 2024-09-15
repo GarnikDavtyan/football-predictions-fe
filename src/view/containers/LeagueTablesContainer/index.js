@@ -30,9 +30,11 @@ export default function LeagueTablesContainer(props) {
 
     useEffect(() => {
         const leagueChanged = prevLeagueSlugRef.current !== leagueSlug;
-        const roundIsSameAsLeagueCurrent = round === league.current_round;
+        const roundToSet = 'postp_round' in league ? league.postp_round : league.current_round;
+        const roundIsSameAsLeagueCurrent = round === roundToSet;
+
         if (leagueChanged) {
-            setRound(league.current_round);
+            setRound(roundToSet);
         }
 
         if (round && (!leagueChanged || roundIsSameAsLeagueCurrent)) {

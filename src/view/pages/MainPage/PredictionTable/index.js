@@ -9,6 +9,8 @@ import {
     Paper,
     Button,
     Grid,
+    Select,
+    MenuItem,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
@@ -114,7 +116,22 @@ export default function PredictionTable({ user, leagueId, round, setRound, fixtu
                                 Previous Round
                             </Button>
                         </Grid>
-                        <Grid item>{`Round ${round}`}</Grid>
+                        <Grid item>
+                            Round&nbsp;
+                            <Select
+                                variant="standard"
+                                labelId="round-label"
+                                id="round"
+                                value={round > 0 && round <= roundsCount ? round : ''}
+                                onChange={e => setRound(e.target.value)}
+                            >
+                                {[...Array(roundsCount)].map((_, i) => (
+                                    <MenuItem key={i + 1} value={i + 1}>
+                                        {i + 1}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </Grid>
                         <Grid onClick={() => handleRoundChangeClick(1)} item>
                             <Button
                                 disabled={round === roundsCount}
