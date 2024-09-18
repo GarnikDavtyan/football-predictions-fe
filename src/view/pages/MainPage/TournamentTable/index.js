@@ -40,8 +40,8 @@ export default function TournamentTable({ standings }) {
                 <Table aria-label='tournament table'>
                     <TableHead>
                         <TableRow>
-                            {['', 'Team', 'M', 'W', 'D', 'L', 'GD', 'Form', 'P'].map((str, i) => (
-                                <TableCell key={i} align={i - 1 ? 'center' : 'left'} padding="none">
+                            {['', 'Team', '', 'M', 'W', 'D', 'L', 'GD', 'Form', 'P'].map((str, i) => (
+                                <TableCell key={i} align='center' sx={{ p: 0.25 }}>
                                     {str}
                                 </TableCell>
                             ))}
@@ -54,9 +54,13 @@ export default function TournamentTable({ standings }) {
                                     {i + 1}
                                 </TableCell>
                                 <TableCell padding="none">
-                                    <Grid container alignItems="center">
+                                    <Grid container alignItems="center" justifyContent="center">
                                         <img src={team.logo} height="30" alt={team.name} />
                                         &nbsp;
+                                    </Grid>
+                                </TableCell>
+                                <TableCell padding="none">
+                                    <Grid container alignItems="center">
                                         {team.name}
                                     </Grid>
                                 </TableCell>
@@ -94,6 +98,6 @@ export default function TournamentTable({ standings }) {
                     </TableBody>
                 </Table>
             </TableContainer>
-        </RootDiv>
+        </RootDiv >
     );
 }

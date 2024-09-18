@@ -150,13 +150,13 @@ export default function PredictionTable({ user, leagueId, round, setRound, fixtu
                         <StyledTable aria-label="simple table">
                             <TableHead>
                                 <TableRow>
-                                    <TableCell align="center" padding="none" />
-                                    <TableCell align="right">First Team</TableCell>
-                                    <TableCell align="center" padding="none">Result</TableCell>
-                                    <TableCell align="left" padding="none">Second Team</TableCell>
-                                    <TableCell align="center" padding="none">x2</TableCell>
-                                    <TableCell align="center" padding="none">Prediction</TableCell>
-                                    <TableCell align="center" padding="none">Points</TableCell>
+                                    <TableCell />
+                                    <TableCell align="right">Home</TableCell>
+                                    <TableCell align="center" sx={{ p: 0.5 }}>Result</TableCell>
+                                    <TableCell align="left">Away</TableCell>
+                                    <TableCell align="center" sx={{ p: 0.5 }}>x2</TableCell>
+                                    <TableCell align="center" sx={{ p: 0.5 }}>Prediction</TableCell>
+                                    <TableCell align="center" sx={{ p: 0.5 }}>Points</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -192,8 +192,10 @@ export default function PredictionTable({ user, leagueId, round, setRound, fixtu
                         : <Info container justifyContent='center' component='h1'> Please Log In To Predict </Info>
                     }
                 </form>
-            </RootDiv>
-            {isLoading && <Loading />}
+                {!fixtures.length && <Info container justifyContent='center' component='h1'> Fixtures are not available yet </Info>}
+            </RootDiv >
+            {isLoading && <Loading />
+            }
         </>
     );
 }

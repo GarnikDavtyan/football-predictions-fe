@@ -27,15 +27,17 @@ const LinkStyled = styled(Link)({
     color: 'rgba(252, 252, 252, 0.55)',
 });
 
+const email = process.env.REACT_APP_EMAIL;
+
 function Copyright() {
     return (
         <Text variant="body2">
-            {'Copyright © '}
+            Copyright ©&nbsp;
             <LinkStyled to={paths.home}>
                 Predictor
-            </LinkStyled>{' '}
+            </LinkStyled>&nbsp;
             {new Date().getFullYear()}
-            {'.'}
+            .
         </Text>
     );
 }
@@ -44,9 +46,10 @@ export default function Footer() {
     return (
         <FooterContainer>
             <FooterContent>
-                <Text>Contact Email Address:
-                    <LinkStyled to={'mailto:predictor.football2024@gmail.com'}>
-                        predictor.football2024@gmail.com
+                <Text variant="body2">
+                    Contact Email Address:&nbsp;
+                    <LinkStyled to={'mailto:' + email}>
+                        {email}
                     </LinkStyled>
                 </Text>
                 <Copyright />

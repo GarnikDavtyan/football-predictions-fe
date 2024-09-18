@@ -10,7 +10,7 @@ import Loading from '../../components/Loading';
 
 const TablesContainer = styled('div')({
     display: 'grid',
-    gridTemplateColumns: '0.75fr 1.5fr 0.75fr',
+    gridTemplateColumns: '0.6fr 1.6fr 0.8fr',
     gridGap: '20px'
 });
 
@@ -30,11 +30,10 @@ export default function LeagueTablesContainer(props) {
 
     useEffect(() => {
         const leagueChanged = prevLeagueSlugRef.current !== leagueSlug;
-        const roundToSet = 'postp_round' in league ? league.postp_round : league.current_round;
-        const roundIsSameAsLeagueCurrent = round === roundToSet;
+        const roundIsSameAsLeagueCurrent = round === league.current_round;
 
         if (leagueChanged) {
-            setRound(roundToSet);
+            setRound(league.current_round);
         }
 
         if (round && (!leagueChanged || roundIsSameAsLeagueCurrent)) {
@@ -83,7 +82,7 @@ export default function LeagueTablesContainer(props) {
                     leagueId={league.id}
                     user={user}
                     fixtures={fixtures}
-                    roundsCount={league.current_round}
+                    roundsCount={league.rounds}
                 />
                 <TournamentTable standings={standings} />
             </TablesContainer>

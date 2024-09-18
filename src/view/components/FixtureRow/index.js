@@ -23,6 +23,12 @@ const DivLeft = styled('div')({
     alignItems: 'center',
 });
 
+const LogoContainer = styled('div')({
+    width: '50px',
+    display: 'flex',
+    justifyContent: 'center'
+});
+
 const DateText = styled(Typography)({
     textAlign: 'center',
 });
@@ -85,7 +91,9 @@ export default function FixtureRow({ user, fixture, x2FixtureId, setX2FixtureId,
                     <DivRight>
                         {fixture.team_home.name}
                         &nbsp;
-                        <img src={fixture.team_home.logo} alt={fixture.team_home.name} height="30" />
+                        <LogoContainer>
+                            <img src={fixture.team_home.logo} alt={fixture.team_home.name} height="30" />
+                        </LogoContainer>
                     </DivRight>
                 </TableCell>
                 <TableCell align="center" padding="none">
@@ -95,7 +103,9 @@ export default function FixtureRow({ user, fixture, x2FixtureId, setX2FixtureId,
                 </TableCell>
                 <TableCell align="left" padding="none">
                     <DivLeft>
-                        <img src={fixture.team_away.logo} alt={fixture.team_away.name} height="30" />
+                        <LogoContainer>
+                            <img src={fixture.team_away.logo} alt={fixture.team_away.name} height="30" />
+                        </LogoContainer>
                         &nbsp;
                         {fixture.team_away.name}
                     </DivLeft>
