@@ -1,11 +1,12 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import LeagueNavTab from './LeagueNavTab';
 import LeagueTablesContainer from '../../containers/LeagueTablesContainer';
 import NotFound from '../NotFound';
 
 export default function MainPage(props) {
     const { slug } = useParams();
+    const userToWatch = useSearchParams()[0].get('user')
 
     let leagues = props.leagues;
 
@@ -16,7 +17,12 @@ export default function MainPage(props) {
             <LeagueNavTab leagues={leagues} slug={slug} />
 
             {league ?
-                <LeagueTablesContainer {...props} league={league} leagueSlug={slug} />
+                <LeagueTablesContainer
+                    {...props}
+                    league={league}
+                    leagueSlug={slug}
+                    userToWatch={userToWatch}
+                />
                 :
                 <NotFound />}
         </section>

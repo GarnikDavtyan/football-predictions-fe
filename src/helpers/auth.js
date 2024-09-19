@@ -23,6 +23,5 @@ export const logout = () => {
     return api.createAuthAxiosInstance().post(`/logout`)
         .then(() => {
             localStorage.removeItem('user');
-            window.location.reload();
         });
 };

@@ -40,7 +40,6 @@ export default function FixtureRow({ user, fixture, x2FixtureId, setX2FixtureId,
         fixture_id: fixId,
         score_home: '',
         score_away: '',
-        x2: false,
         points: '-',
     });
 

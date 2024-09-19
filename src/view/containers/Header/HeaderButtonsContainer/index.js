@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Typography } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { paths } from '../../../../constants';
 import LoginDialogForm from '../../LoginDialogForm';
@@ -24,6 +24,14 @@ const ButtonContainer = styled('div')({
 });
 
 export default function HeaderButtonsContainer(props) {
+    const navigate = useNavigate();
+
+    const handlelogout = () => {
+        props.setUser(null);
+        navigate(paths.home, { replace: true });
+        logout();
+    };
+
     return (
         <ButtonContainer>
             <StyledLink to={paths.top}>
@@ -44,7 +52,7 @@ export default function HeaderButtonsContainer(props) {
                     <LoginDialogForm {...props} />
                 </>
                 :
-                <StyledButton onClick={() => logout()}>
+                <StyledButton onClick={handlelogout}>
                     Log Out
                 </StyledButton>
             }

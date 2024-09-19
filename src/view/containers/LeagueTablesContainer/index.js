@@ -7,6 +7,8 @@ import getFixtures from '../../../helpers/apiRequests/getFixturesByLeagueId';
 import getTournamentTable from '../../../helpers/apiRequests/getTournamentTable';
 import getTop10ByLeague from '../../../helpers/apiRequests/getTop10ByLeague';
 import Loading from '../../components/Loading';
+import { enqueueSnackbar } from 'notistack';
+import NotFound from '../../pages/NotFound';
 
 const TablesContainer = styled('div')({
     display: 'grid',
@@ -15,7 +17,7 @@ const TablesContainer = styled('div')({
 });
 
 export default function LeagueTablesContainer(props) {
-    const { user, leagueSlug, league } = props;
+    const { user, leagueSlug, league, userToWatch } = props;
 
     const [round, setRound] = useState(0);
     const [fixtures, setFixtures] = useState([]);
@@ -25,6 +27,7 @@ export default function LeagueTablesContainer(props) {
         roundPoints: []
     });
     const [isLoading, setIsLoading] = useState(false);
+    const [isNotFound, setIsNotFound] = useState(false);
 
     const prevLeagueSlugRef = useRef();
 
@@ -41,7 +44,7 @@ export default function LeagueTablesContainer(props) {
 
             const promises = [
                 getTop10ByLeague(league.id, round),
-                getFixtures(league.id, round),
+                getFixtures(league.id, round, userToWatch),
             ];
 
             if (leagueChanged) {
@@ -62,7 +65,11 @@ export default function LeagueTablesContainer(props) {
                     }
                 })
                 .catch(error => {
-                    console.error("Error fetching data:", error);
+                    if (error.status === 404) {
+                        setIsNotFound(true);
+                    } else {
+                        enqueueSnackbar('Something went wrong', { variant: "error" });
+                    }
                 })
                 .finally(() => {
                     setIsLoading(false);
@@ -70,22 +77,29 @@ export default function LeagueTablesContainer(props) {
 
             prevLeagueSlugRef.current = leagueSlug;
         }
-    }, [round, leagueSlug]);
+    }, [round, leagueSlug, userToWatch]);
 
     return (
         !isLoading ?
-            <TablesContainer>
-                <Top10UsersPerLeagueList top10={top10} />
-                <PredictionTable
-                    setRound={setRound}
-                    round={round}
-                    leagueId={league.id}
-                    user={user}
-                    fixtures={fixtures}
-                    roundsCount={league.rounds}
-                />
-                <TournamentTable standings={standings} />
-            </TablesContainer>
+            !isNotFound ?
+                <TablesContainer>
+                    <Top10UsersPerLeagueList
+                        top10={top10}
+                        league={league.slug}
+                        userToWatch={userToWatch}
+                    />
+                    <PredictionTable
+                        setRound={setRound}
+                        round={round}
+                        leagueId={league.id}
+                        user={user}
+                        fixtures={fixtures}
+                        roundsCount={league.rounds}
+                    />
+                    <TournamentTable standings={standings} />
+                </TablesContainer>
+                :
+                <NotFound />
             :
             <Loading />
     );

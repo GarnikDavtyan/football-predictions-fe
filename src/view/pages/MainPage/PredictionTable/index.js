@@ -45,7 +45,7 @@ const Info = styled(Grid)({
 });
 
 export default function PredictionTable({ user, leagueId, round, setRound, fixtures, roundsCount }) {
-    const [x2FixtureId, setX2FixtureId] = useState(0);
+    const [x2FixtureId, setX2FixtureId] = useState(null);
     const [predictions, setPredictions] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -61,16 +61,10 @@ export default function PredictionTable({ user, leagueId, round, setRound, fixtu
                 throw new Error("EMPTY");
             }
 
-            const updatedPredictions = predictions.map((prediction) => {
+            predictions.map((prediction) => {
                 if (prediction.score_home === '' || prediction.score_away === '') {
                     throw new Error("PREDICTION_MISSING");
                 }
-
-                const x2Value = prediction.fixture_id === x2FixtureId ? true : false;
-                return {
-                    ...prediction,
-                    x2: x2Value,
-                };
             });
 
             if (fixtures.filter(fix => fix.status === 'NS').length === predictions.length && !x2FixtureId) {
@@ -79,7 +73,7 @@ export default function PredictionTable({ user, leagueId, round, setRound, fixtu
 
             setIsLoading(true);
 
-            savePredictions(leagueId, round, updatedPredictions)
+            savePredictions(leagueId, round, predictions, x2FixtureId)
                 .then(() => enqueueSnackbar("Predictions Saved", { variant: "success" }))
                 .catch((error) => {
                     displayErrors(error.response.data)
@@ -87,8 +81,6 @@ export default function PredictionTable({ user, leagueId, round, setRound, fixtu
                 .finally(() => {
                     setIsLoading(false);
                 });
-
-            setPredictions(updatedPredictions);
         } catch (error) {
             if (error.message === 'PREDICTION_MISSING') {
                 enqueueSnackbar("Check predictions, not all the fields filled for some of the matches", { variant: "error" });
@@ -145,54 +137,56 @@ export default function PredictionTable({ user, leagueId, round, setRound, fixtu
                         </Grid>
                     </Grid>
                 </RoundCaption>
-                <form onSubmit={handleSubmit}>
-                    <TableContainer square component={StyledPaper}>
-                        <StyledTable aria-label="simple table">
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell />
-                                    <TableCell align="right">Home</TableCell>
-                                    <TableCell align="center" sx={{ p: 0.5 }}>Result</TableCell>
-                                    <TableCell align="left">Away</TableCell>
-                                    <TableCell align="center" sx={{ p: 0.5 }}>x2</TableCell>
-                                    <TableCell align="center" sx={{ p: 0.5 }}>Prediction</TableCell>
-                                    <TableCell align="center" sx={{ p: 0.5 }}>Points</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {fixtures.map(fixture => (
-                                    <FixtureRow
-                                        fixtures={fixtures}
-                                        key={fixture.id}
-                                        fixture={fixture}
-                                        x2FixtureId={x2FixtureId}
-                                        setX2FixtureId={setX2FixtureId}
-                                        user={user}
-                                        setPredictions={setPredictions}
-                                    />
-                                ))}
-                            </TableBody>
-                        </StyledTable>
-                    </TableContainer>
-                    {user
-                        ?
-                        user.email_verified_at
+                {fixtures.length ?
+                    <form onSubmit={handleSubmit}>
+                        <TableContainer square component={StyledPaper}>
+                            <StyledTable aria-label="simple table">
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell />
+                                        <TableCell align="right">Home</TableCell>
+                                        <TableCell align="center" sx={{ p: 0.5 }}>Result</TableCell>
+                                        <TableCell align="left">Away</TableCell>
+                                        <TableCell align="center" sx={{ p: 0.5 }}>x2</TableCell>
+                                        <TableCell align="center" sx={{ p: 0.5 }}>Prediction</TableCell>
+                                        <TableCell align="center" sx={{ p: 0.5 }}>Points</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {fixtures.map(fixture => (
+                                        <FixtureRow
+                                            fixtures={fixtures}
+                                            key={fixture.id}
+                                            fixture={fixture}
+                                            x2FixtureId={x2FixtureId}
+                                            setX2FixtureId={setX2FixtureId}
+                                            user={user}
+                                            setPredictions={setPredictions}
+                                        />
+                                    ))}
+                                </TableBody>
+                            </StyledTable>
+                        </TableContainer>
+                        {user
                             ?
-                            !areAllStarted &&
-                            <Grid container justifyContent="flex-end">
-                                <Button
-                                    type="submit"
-                                    variant="contained"
-                                    color="secondary"
-                                >
-                                    Save Prediction
-                                </Button>
-                            </Grid>
-                            : <Info container justifyContent='center' component='h1'> Please Verify Your Email Address To Predict </Info>
-                        : <Info container justifyContent='center' component='h1'> Please Log In To Predict </Info>
-                    }
-                </form>
-                {!fixtures.length && <Info container justifyContent='center' component='h1'> Fixtures are not available yet </Info>}
+                            user.email_verified_at
+                                ?
+                                !areAllStarted &&
+                                <Grid container justifyContent="flex-end">
+                                    <Button
+                                        type="submit"
+                                        variant="contained"
+                                        color="secondary"
+                                    >
+                                        Save Prediction
+                                    </Button>
+                                </Grid>
+                                : <Info container justifyContent='center' component='h1'> Please Verify Your Email Address To Predict </Info>
+                            : <Info container justifyContent='center' component='h1'> Please Log In To Predict </Info>
+                        }
+                    </form>
+                    :
+                    <Info container justifyContent='center' component='h1' mt={5}> Matches are not available for this round yet</Info>}
             </RootDiv >
             {isLoading && <Loading />
             }
