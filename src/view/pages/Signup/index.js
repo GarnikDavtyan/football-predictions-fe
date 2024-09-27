@@ -1,16 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
-    Avatar,
-    Button,
     TextField,
     FormHelperText,
     Grid,
     Typography,
-    Container,
-    styled,
     ThemeProvider,
-    createTheme
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { paths } from '../../../constants';
@@ -19,55 +14,18 @@ import { validatePassword, validateUsername, validateEmail } from '../../../help
 import Loading from '../../components/Loading';
 import PasswordTextField from '../../components/PasswordTextField';
 import displayErrors from '../../../helpers/common/displayErrors';
-
-const ContainerStyled = styled(Container)({
-    margin: 'auto',
-});
-
-const PaperStyled = styled('div')(({ theme }) => ({
-    margin: theme.spacing(1),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    backgroundColor: 'white',
-    padding: '20px',
-    borderRadius: '15px'
-}));
-
-const AvatarStyled = styled(Avatar)(({ theme }) => ({
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.primary.dark,
-}));
-
-const FormStyled = styled('form')({
-    width: '100%',
-    marginTop: '16px'
-});
-
-const SubmitButton = styled(Button)(({ theme }) => ({
-    margin: theme.spacing(3, 0, 2),
-}));
-
-const LinkStyled = styled(Link)({
-    textDecoration: 'none',
-    color: '#3f51b5',
-});
-
-const FormLabelTheme = createTheme({
-    components: {
-        MuiFormLabel: {
-            styleOverrides: {
-                asterisk: {
-                    color: '#db3131',
-                }
-            }
-        }
-    }
-});
+import {
+    StyledAvatar,
+    StyledContainer,
+    StyledForm,
+    StyledLink,
+    StyledPaper,
+    SubmitButton,
+    FormLabelTheme
+} from './styledComponents';
 
 export default function SignUp({ handleOpenClose, setUser }) {
     const navigate = useNavigate();
-    const formLabelsTheme = FormLabelTheme;
 
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
@@ -120,16 +78,16 @@ export default function SignUp({ handleOpenClose, setUser }) {
 
     return (
         <>
-            <ContainerStyled component="main" maxWidth="xs">
-                <PaperStyled>
-                    <AvatarStyled>
+            <StyledContainer component="main" maxWidth="xs">
+                <StyledPaper>
+                    <StyledAvatar>
                         <LockOutlinedIcon />
-                    </AvatarStyled>
+                    </StyledAvatar>
                     <Typography component="h1" variant="h5">
                         Sign Up
                     </Typography>
-                    <ThemeProvider theme={formLabelsTheme}>
-                        <FormStyled noValidate onSubmit={handleSubmit}>
+                    <ThemeProvider theme={FormLabelTheme}>
+                        <StyledForm noValidate onSubmit={handleSubmit}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12}>
                                     <TextField
@@ -202,15 +160,15 @@ export default function SignUp({ handleOpenClose, setUser }) {
                             </SubmitButton>
                             <Grid container justifyContent="flex-end">
                                 <Grid item>
-                                    <LinkStyled onClick={handleOpenClose} to={paths.home}>
+                                    <StyledLink onClick={handleOpenClose} to={paths.home}>
                                         Already have an account? Log in
-                                    </LinkStyled>
+                                    </StyledLink>
                                 </Grid>
                             </Grid>
-                        </FormStyled>
+                        </StyledForm>
                     </ThemeProvider>
-                </PaperStyled>
-            </ContainerStyled>
+                </StyledPaper>
+            </StyledContainer>
             {isLoading && <Loading />}
         </>
     );

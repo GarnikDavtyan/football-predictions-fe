@@ -13,8 +13,12 @@ export default function MainPage(props) {
     const league = leagues.find(league => league.slug === slug);
 
     return (
-        <section>
-            <LeagueNavTab leagues={leagues} slug={slug} />
+        <section style={{ height: '100%' }}>
+            <LeagueNavTab
+                leagues={leagues}
+                slug={slug}
+                userToWatch={userToWatch}
+            />
 
             {league ?
                 <LeagueTablesContainer

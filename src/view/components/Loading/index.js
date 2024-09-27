@@ -6,7 +6,7 @@ const Background = styled('div')({
   display: 'flex',
   alignItems: 'center',
   backgroundColor: 'rgba(0, 0, 0, 0.75)',
-  position: 'absolute',
+  position: 'fixed',
   top: 0,
   left: 0,
   width: '100%',
@@ -15,7 +15,7 @@ const Background = styled('div')({
 });
 
 const ProgressWrapper = styled('div')({
-  width: '100%',
+  width: '100%'
 });
 
 export default function Loading() {

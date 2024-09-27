@@ -1,30 +1,11 @@
 import React from 'react';
-import { styled } from '@mui/material/styles';
-
-const Container = styled('div')({
-    maxWidth: '800px',
-    margin: 'auto',
-    marginTop: '40px',
-    backgroundColor: 'rgba(255, 255, 255, 0.61)',
-    padding: '20px',
-    borderRadius: '10px'
-});
-
-const Heading = styled('h1')({
-    textAlign: 'center'
-});
-
-const OlLists = styled('ol')({
-    marginLeft: '10px',
-});
-
-const UlLists = styled('ul')({
-    marginLeft: '20px',
-});
-
-const Li = styled('li')({
-    marginBottom: '20px',
-});
+import {
+    Container,
+    Heading,
+    OlLists,
+    UlLists,
+    Li
+} from './styledComponents'
 
 export default function Rules() {
     return (
@@ -41,7 +22,7 @@ export default function Rules() {
                     <UlLists>
                         <Li><strong>Exact Score Prediction (5 Points):</strong> If you correctly predict the exact score of the match, you will earn 5 points.</Li>
                         <Li><strong>Goal Difference Prediction (3 Points):</strong> If you don't get the exact score but correctly predict the goal difference between the two teams, you will earn 3 points.</Li>
-                        <Li><strong>Correct Result Prediction (1 Point):</strong> If you only predict the correct result (win, lose, or draw) but not the exact score or goal difference, you will earn 1 point.</Li>
+                        <Li><strong>Correct Result Prediction (2 Points):</strong> If you only predict the correct result (win, lose, or draw) but not the exact score or goal difference, you will earn 2 points.</Li>
                         <Li><strong>Double Points Match:</strong> You can choose one match in each round as your double points match, which will double the points earned for that match.</Li>
                     </UlLists>
                 </Li>

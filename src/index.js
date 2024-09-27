@@ -5,12 +5,14 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { SnackbarProvider } from 'notistack';
+import ScrollToTop from './view/components/ScrollToTop';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
     <SnackbarProvider maxSnack={5}>
         <Router>
+            <ScrollToTop />
             <App />
         </Router>
     </SnackbarProvider>

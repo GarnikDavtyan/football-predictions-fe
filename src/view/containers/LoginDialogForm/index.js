@@ -10,24 +10,11 @@ import {
 } from '@mui/material';
 import { paths } from '../../../constants';
 import { login } from '../../../helpers/auth';
-import { styled } from '@mui/material/styles';
-import { Link } from 'react-router-dom';
 import PasswordTextField from '../../components/PasswordTextField';
 import displayErrors from '../../../helpers/common/displayErrors';
 import ForgotPasswordForm from '../ForgotPasswordForm';
 import { validateEmail, validatePassword } from '../../../helpers/validation/signupValidation';
-
-const LinksContainer = styled('div')({
-    display: 'flex',
-    justifyContent: 'space-between'
-});
-
-const StyledLink = styled(Link)({
-    padding: '20px 20px 10px 20px',
-    color: '#3f51b5',
-    textDecoration: 'none',
-    cursor: 'pointer'
-});
+import { LinksContainer, StyledLink } from './styledComponents';
 
 export default function LoginDialogForm({ open, handleOpenClose, ...restProps }) {
 

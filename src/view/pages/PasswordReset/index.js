@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { styled } from "@mui/material/styles";
 import {
-    Paper,
     TextField,
     Button,
-    Typography,
-    Box
+    Typography
 } from "@mui/material";
 import { paths } from "../../../constants";
 import { useNavigate, useParams } from "react-router-dom";
@@ -19,33 +16,7 @@ import { getCurrentUser } from "../../../helpers/auth";
 import PasswordTextField from "../../components/PasswordTextField";
 import displayErrors from "../../../helpers/common/displayErrors";
 import { resetPassword } from "../../../helpers/apiRequests/passwordReset";
-
-const StyledContainer = styled(Paper)({
-    padding: "40px",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#fff",
-    margin: "auto",
-    borderRadius: "10px",
-    width: "500px",
-});
-
-const StyledBox = styled(Box)({
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    width: "100%",
-    maxWidth: "400px",
-    "& .MuiTextField-root": {
-        marginBottom: "20px",
-        width: "100%",
-    },
-    "& .MuiButton-root": {
-        marginTop: "20px",
-    },
-});
+import { StyledBox, StyledContainer } from "./styledComponents";
 
 export default function PasswordReset() {
     const { token } = useParams();

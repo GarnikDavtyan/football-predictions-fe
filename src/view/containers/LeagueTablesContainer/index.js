@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { styled } from '@mui/material/styles';
 import PredictionTable from '../../pages/MainPage/PredictionTable';
 import Top10UsersPerLeagueList from '../../pages/MainPage/Top10UsersPerLeagueList';
 import TournamentTable from '../../pages/MainPage/TournamentTable';
@@ -9,12 +8,11 @@ import getTop10ByLeague from '../../../helpers/apiRequests/getTop10ByLeague';
 import Loading from '../../components/Loading';
 import { enqueueSnackbar } from 'notistack';
 import NotFound from '../../pages/NotFound';
-
-const TablesContainer = styled('div')({
-    display: 'grid',
-    gridTemplateColumns: '0.6fr 1.6fr 0.8fr',
-    gridGap: '20px'
-});
+import { Box, Typography, useMediaQuery } from '@mui/material';
+import Flickity from 'react-flickity-component';
+import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
+import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
+import { TablesContainer, SlideContainer, SlidesContainer } from './styledComponents';
 
 export default function LeagueTablesContainer(props) {
     const { user, leagueSlug, league, userToWatch } = props;
@@ -31,7 +29,22 @@ export default function LeagueTablesContainer(props) {
 
     const prevLeagueSlugRef = useRef();
 
+    const isMobile = useMediaQuery('(max-width:500px)');
+
+    const flickityOptions = {
+        initialIndex: 1,
+        prevNextButtons: false,
+        pageDots: false,
+        percentPosition: false,
+        selectedAttraction: 0.2,
+        friction: 1,
+        adaptiveHeight: true,
+        contain: true,
+        dragThreshold: 50
+    }
+
     useEffect(() => {
+        setIsNotFound(false);
         const leagueChanged = prevLeagueSlugRef.current !== leagueSlug;
         const roundIsSameAsLeagueCurrent = round === league.current_round;
 
@@ -82,22 +95,64 @@ export default function LeagueTablesContainer(props) {
     return (
         !isLoading ?
             !isNotFound ?
-                <TablesContainer>
-                    <Top10UsersPerLeagueList
-                        top10={top10}
-                        league={league.slug}
-                        userToWatch={userToWatch}
-                    />
-                    <PredictionTable
-                        setRound={setRound}
-                        round={round}
-                        leagueId={league.id}
-                        user={user}
-                        fixtures={fixtures}
-                        roundsCount={league.rounds}
-                    />
-                    <TournamentTable standings={standings} />
-                </TablesContainer>
+                !isMobile
+                    ?
+                    <TablesContainer>
+                        <Top10UsersPerLeagueList
+                            top10={top10}
+                            league={league.slug}
+                            userToWatch={userToWatch}
+                        />
+                        <PredictionTable
+                            setRound={setRound}
+                            round={round}
+                            leagueId={league.id}
+                            user={user}
+                            fixtures={fixtures}
+                            roundsCount={league.rounds}
+                            userToWatch={userToWatch}
+                        />
+                        <TournamentTable standings={standings} />
+                    </TablesContainer>
+                    :
+                    <>
+                        <Box sx={{ display: 'flex', justifyContent: 'center' }} mb={1}>
+                            <KeyboardDoubleArrowLeftIcon fontSize='small' color='info' />
+                            <Typography fontSize='small' color='info.main'>
+                                slide for the tables
+                            </Typography>
+                            <KeyboardDoubleArrowRightIcon fontSize='small' color='info' />
+                        </Box>
+                        <SlidesContainer>
+                            <Flickity
+                                options={flickityOptions}
+                                reloadOnUpdate
+                                style={{ outline: 'none' }}
+                            >
+                                <SlideContainer>
+                                    <Top10UsersPerLeagueList
+                                        top10={top10}
+                                        league={league.slug}
+                                        userToWatch={userToWatch}
+                                    />
+                                </SlideContainer>
+                                <SlideContainer>
+                                    <PredictionTable
+                                        setRound={setRound}
+                                        round={round}
+                                        leagueId={league.id}
+                                        user={user}
+                                        fixtures={fixtures}
+                                        roundsCount={league.rounds}
+                                        userToWatch={userToWatch}
+                                    />
+                                </SlideContainer>
+                                <SlideContainer>
+                                    <TournamentTable standings={standings} />
+                                </SlideContainer>
+                            </Flickity>
+                        </SlidesContainer>
+                    </>
                 :
                 <NotFound />
             :

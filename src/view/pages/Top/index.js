@@ -3,43 +3,26 @@ import top1Image from './../../images/top/top1.png';
 import top2Image from './../../images/top/top2.png';
 import top3Image from './../../images/top/top3.png';
 import {
-    Paper,
     Table,
     TableBody,
     TableCell,
     TableContainer,
     TableRow,
-    styled
+    useMediaQuery
 } from "@mui/material";
 import getTop from '../../../helpers/apiRequests/getTop';
 import { getCurrentUser } from '../../../helpers/auth';
 import Loading from '../../components/Loading';
 import TopUser from './TopUser';
 import RestTopRow from './RestTopRow';
-
-const RootDiv = styled('div')({
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    margin: 'auto',
-    marginTop: '20px',
-    width: 'fit-content',
-    color: 'white'
-});
-
-const Top3users = styled('div')({
-    display: 'flex',
-});
-
-const PaperStyled = styled(Paper)({
-    backgroundColor: "rgba(255, 255, 255, 0.52)",
-});
-
+import { StyledPaper, Top3users, RootDiv } from './styledComponents';
 export default function Top() {
     const [usersTop, setUsersTop] = useState([]);
     const [user, setUser] = useState(null);
     const [authUserName, setAuthUserName] = useState('');
     const [isLoading, setIsLoading] = useState(true);
+
+    const isMobile = useMediaQuery('(max-width:600px)');
 
     useEffect(() => {
         getTop().then(response => {
@@ -63,6 +46,15 @@ export default function Top() {
             <RootDiv>
                 <h1>Top Users</h1>
                 <Top3users>
+                    {isMobile && usersTop[0] &&
+                        <TopUser
+                            whichTop='top1'
+                            image={top1Image}
+                            topUser={usersTop[0]}
+                            authUserName={authUserName}
+                            shadowColor='gold'
+                        />
+                    }
                     {usersTop[1] &&
                         <TopUser
                             whichTop='top2'
@@ -72,7 +64,7 @@ export default function Top() {
                             shadowColor='silver'
                         />
                     }
-                    {usersTop[0] &&
+                    {!isMobile && usersTop[0] &&
                         <TopUser
                             whichTop='top1'
                             image={top1Image}
@@ -91,7 +83,7 @@ export default function Top() {
                         />
                     }
                 </Top3users>
-                <TableContainer component={PaperStyled}>
+                <TableContainer component={StyledPaper}>
                     <Table aria-label="customized table">
                         <TableBody>
                             {usersTop.slice(3).map((user, i) => (

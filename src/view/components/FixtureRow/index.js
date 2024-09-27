@@ -1,37 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import { TableRow, TableCell, Checkbox, IconButton, Paper, Typography } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import {
+    TableRow,
+    TableCell,
+    Checkbox,
+    IconButton,
+    Paper,
+    Typography,
+    useMediaQuery
+} from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
 import PredictionInput from './PredictionInput';
 import moment from 'moment';
 import 'moment/locale/en-gb';
-
-const InputsContainer = styled('div')({
-    display: 'flex',
-    justifyContent: 'center',
-});
-
-const DivRight = styled('div')({
-    display: 'flex',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-});
-
-const DivLeft = styled('div')({
-    display: 'flex',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-});
-
-const LogoContainer = styled('div')({
-    width: '50px',
-    display: 'flex',
-    justifyContent: 'center'
-});
-
-const DateText = styled(Typography)({
-    textAlign: 'center',
-});
+import {
+    InputsContainer,
+    DivRight,
+    DivLeft,
+    LogoContainer,
+    DateText,
+    MobileColumnContainer
+} from './styledComponents';
 
 export default function FixtureRow({ user, fixture, x2FixtureId, setX2FixtureId, fixtures, setPredictions }) {
     const fixId = fixture.id;
@@ -45,7 +33,7 @@ export default function FixtureRow({ user, fixture, x2FixtureId, setX2FixtureId,
 
     const isFinished = fixture.status === 'FT';
     const isNotStarted = fixture.status === 'NS';
-    const x2Sealed = Boolean(x2FixtureId && fixtures.find(fix => fix.id === x2FixtureId).status === 'FT');
+    const x2Sealed = Boolean(x2FixtureId && fixtures.find(fix => fix.id === x2FixtureId).status !== 'NS');
 
     // Show user local datetime 
     moment.locale('en-gb');
@@ -65,9 +53,8 @@ export default function FixtureRow({ user, fixture, x2FixtureId, setX2FixtureId,
             if (isNotStarted) {
                 setPredictions(prevPredictions => [...prevPredictions, fixture.predictions[0]]);
             }
-
         }
-    }, [fixture, fixId, setPredictions, setX2FixtureId]);
+    }, [fixture, fixId]);
 
     const handleCheckboxChange = () => {
         if (x2Sealed) { return };
@@ -78,96 +65,190 @@ export default function FixtureRow({ user, fixture, x2FixtureId, setX2FixtureId,
         setInfo(!info);
     };
 
+    const isMobile = useMediaQuery('(max-width:500px)');
+
     return (
         <>
-            <TableRow key={fixId} id={fixId}>
-                <TableCell component="th" scope="row" align="center" padding="none">
-                    <IconButton onClick={handleInfoClick} value={fixId} size="large">
-                        <InfoIcon />
-                    </IconButton>
-                </TableCell>
-                <TableCell align="right" padding="none">
-                    <DivRight>
-                        {fixture.team_home.name}
-                        &nbsp;
-                        <LogoContainer>
-                            <img src={fixture.team_home.logo} alt={fixture.team_home.name} height="30" />
-                        </LogoContainer>
-                    </DivRight>
-                </TableCell>
-                <TableCell align="center" padding="none">
-                    <span>
-                        {isFinished && fixture.score_home !== null && fixture.score_away !== null ? `${fixture.score_home} : ${fixture.score_away}` : '- : -'}
-                    </span>
-                </TableCell>
-                <TableCell align="left" padding="none">
-                    <DivLeft>
-                        <LogoContainer>
-                            <img src={fixture.team_away.logo} alt={fixture.team_away.name} height="30" />
-                        </LogoContainer>
-                        &nbsp;
-                        {fixture.team_away.name}
-                    </DivLeft>
-                </TableCell>
-                <TableCell align="center" padding="none">
-                    <Checkbox
-                        disabled={!user
-                            || !user.email_verified_at
-                            || !isNotStarted
-                            || prediction.score_home === null
-                            || prediction.score_home === ''
-                            || prediction.score_away === null
-                            || prediction.score_away === ''
-                            || x2Sealed
-                        }
-                        checked={fixId === x2FixtureId}
-                        onChange={handleCheckboxChange}
-                        value={fixId}
-                        color="secondary"
-                    />
-                </TableCell>
-                <TableCell align="center" padding="none">
-                    {isNotStarted ? (
-                        <InputsContainer>
-                            <PredictionInput
-                                disabled={!user || !user.email_verified_at}
-                                prediction={prediction}
-                                setPrediction={setPrediction}
-                                setPredictions={setPredictions}
-                                fixtureId={fixture.id}
-                                which="score_home"
+            {!isMobile ?
+                <TableRow key={fixId} id={fixId}>
+                    <TableCell component="th" scope="row" align="center" padding="none">
+                        <IconButton onClick={handleInfoClick} value={fixId} size="large">
+                            <InfoIcon />
+                        </IconButton>
+                    </TableCell>
+                    <TableCell align="right" padding="none">
+                        <DivRight>
+                            {fixture.team_home.name}
+                            <LogoContainer>
+                                <img src={fixture.team_home.logo} alt={fixture.team_home.name} height="30" />
+                            </LogoContainer>
+                        </DivRight>
+                    </TableCell>
+                    <TableCell align="center" padding="none">
+                        <span>
+                            {isFinished && fixture.score_home !== null && fixture.score_away !== null ? `${fixture.score_home} : ${fixture.score_away}` : '- : -'}
+                        </span>
+                    </TableCell>
+                    <TableCell align="left" padding="none">
+                        <DivLeft>
+                            <LogoContainer>
+                                <img src={fixture.team_away.logo} alt={fixture.team_away.name} height="30" />
+                            </LogoContainer>
+                            {fixture.team_away.name}
+                        </DivLeft>
+                    </TableCell>
+                    <TableCell align="center" padding="none">
+                        <Checkbox
+                            disabled={!user
+                                || !user.email_verified_at
+                                || !isNotStarted
+                                || prediction.score_home === null
+                                || prediction.score_home === ''
+                                || prediction.score_away === null
+                                || prediction.score_away === ''
+                                || x2Sealed
+                            }
+                            checked={fixId === x2FixtureId}
+                            onChange={handleCheckboxChange}
+                            value={fixId}
+                            color="secondary"
+                        />
+                    </TableCell>
+                    <TableCell align="center" padding="none">
+                        {isNotStarted ? (
+                            <InputsContainer>
+                                <PredictionInput
+                                    disabled={!user || !user.email_verified_at}
+                                    prediction={prediction}
+                                    setPrediction={setPrediction}
+                                    setPredictions={setPredictions}
+                                    fixtureId={fixture.id}
+                                    which="score_home"
+                                />
+                                {` - `}
+                                <PredictionInput
+                                    disabled={!user || !user.email_verified_at}
+                                    prediction={prediction}
+                                    setPrediction={setPrediction}
+                                    setPredictions={setPredictions}
+                                    fixtureId={fixture.id}
+                                    which="score_away"
+                                />
+                            </InputsContainer>
+                        ) : (
+                            `${prediction.score_home.toString() || '-'} : ${prediction.score_away.toString() || '-'}`
+                        )}
+                    </TableCell>
+                    <TableCell padding="none" align="center">
+                        <p style={{ fontWeight: 500 }}>
+                            {user && prediction.points !== null ? prediction.points : '-'}
+                        </p>
+                    </TableCell>
+                </TableRow>
+                :
+                // Mobile view
+                <TableRow key={fixId} id={fixId}>
+                    <TableCell padding='none' align='center'>
+                        <IconButton onClick={handleInfoClick} value={fixId} size="small">
+                            <InfoIcon />
+                        </IconButton>
+                    </TableCell>
+                    <TableCell align="center" padding='none' sx={{ px: 1 }}>
+                        <MobileColumnContainer>
+                            <Typography>
+                                {isFinished && fixture.score_home !== null ? `${fixture.score_home}` : '-'}
+                            </Typography>
+                            <Typography>
+                                {isFinished && fixture.score_away !== null ? `${fixture.score_away}` : '-'}
+                            </Typography>
+                        </MobileColumnContainer>
+                    </TableCell>
+                    <TableCell padding='none' align='center'>
+                        <MobileColumnContainer>
+                            <LogoContainer>
+                                <img src={fixture.team_home.logo} alt={fixture.team_home.name} height="30" />
+                            </LogoContainer>
+                            <LogoContainer>
+                                <img src={fixture.team_away.logo} alt={fixture.team_away.name} height="30" />
+                            </LogoContainer>
+                        </MobileColumnContainer>
+                    </TableCell>
+                    <TableCell padding='none' align='left'>
+                        <MobileColumnContainer style={{ alignItems: 'start' }}>
+                            <Typography>{fixture.team_home.name}</Typography>
+                            <Typography>{fixture.team_away.name}</Typography>
+                        </MobileColumnContainer>
+                    </TableCell>
+                    <TableCell align='center' padding='none' sx={{ pr: 1 }}>
+                        <MobileColumnContainer>
+                            {isNotStarted ? (
+                                <>
+                                    <PredictionInput
+                                        disabled={!user || !user.email_verified_at}
+                                        prediction={prediction}
+                                        setPrediction={setPrediction}
+                                        setPredictions={setPredictions}
+                                        fixtureId={fixture.id}
+                                        which="score_home"
+                                    />
+                                    <PredictionInput
+                                        disabled={!user || !user.email_verified_at}
+                                        prediction={prediction}
+                                        setPrediction={setPrediction}
+                                        setPredictions={setPredictions}
+                                        fixtureId={fixture.id}
+                                        which="score_away"
+                                    />
+                                </>
+                            ) : (
+                                <>
+                                    <Typography>
+                                        {prediction.score_home.toString() || '-'}
+                                    </Typography>
+                                    <Typography>
+                                        {prediction.score_away.toString() || '-'}
+                                    </Typography>
+                                </>
+                            )}
+                        </MobileColumnContainer>
+                    </TableCell>
+                    <TableCell align="center" padding='none'>
+                        <MobileColumnContainer>
+                            <Checkbox
+                                disabled={!user
+                                    || !user.email_verified_at
+                                    || !isNotStarted
+                                    || prediction.score_home === null
+                                    || prediction.score_home === ''
+                                    || prediction.score_away === null
+                                    || prediction.score_away === ''
+                                    || x2Sealed
+                                }
+                                checked={fixId === x2FixtureId}
+                                onChange={handleCheckboxChange}
+                                value={fixId}
+                                color="secondary"
                             />
-                            {` - `}
-                            <PredictionInput
-                                disabled={!user || !user.email_verified_at}
-                                prediction={prediction}
-                                setPrediction={setPrediction}
-                                setPredictions={setPredictions}
-                                fixtureId={fixture.id}
-                                which="score_away"
-                            />
-                        </InputsContainer>
-                    ) : (
-                        `${prediction.score_home.toString() || '-'} : ${prediction.score_away.toString() || '-'}`
-                    )}
-                </TableCell>
-                <TableCell padding="none" align="center">
-                    {user && prediction.points !== null ? prediction.points : '-'}
-                </TableCell>
-            </TableRow>
-            {info && (
+                            <Typography sx={{ fontWeight: 500 }}>
+                                {user && prediction.points !== null ? prediction.points : '-'}
+                            </Typography>
+                        </MobileColumnContainer>
+                    </TableCell>
+                </TableRow >
+            }
+            {info &&
                 <TableRow>
                     <TableCell />
-                    <TableCell colSpan={3}>
+                    <TableCell colSpan={isMobile ? 4 : 3} sx={{ px: 0 }}>
                         <Paper>
                             <DateText color="textSecondary">
                                 {fixtureDate}
                             </DateText>
                         </Paper>
                     </TableCell>
-                    <TableCell colSpan={3} />
+                    <TableCell colSpan={isMobile ? 0 : 3} />
                 </TableRow>
-            )}
+            }
         </>
     );
 }

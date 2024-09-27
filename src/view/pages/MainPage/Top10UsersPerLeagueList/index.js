@@ -6,39 +6,24 @@ import {
     TableCell,
     TableContainer,
     TableRow,
-    Paper,
     Avatar,
     Select,
     MenuItem,
-    Typography
+    Typography,
+    useMediaQuery
 } from "@mui/material";
-import { styled } from '@mui/material/styles';
 import { getCurrentUser } from '../../../../helpers/auth';
 import stringToColor from "../../../../helpers/common/stringToColor";
 import getImageFullUrl from "../../../../helpers/common/getImageFullUrl";
 import { useNavigate } from "react-router-dom";
 import { paths } from "../../../../constants";
 import VisibilityTwoToneIcon from '@mui/icons-material/VisibilityTwoTone';
-
-const StyledPaper = styled(Paper)({
-    backgroundColor: 'rgba(255, 255, 255, 0.52)',
-    minWidth: '17rem',
-});
-
-const RoundPaper = styled(Paper)({
-    backgroundColor: 'rgba(255, 255, 255, 0.75)',
-});
-
-const RootDiv = styled('div')({
-    display: 'flex',
-    flexDirection: 'column',
-});
-
-const AvatarWrapper = styled('div')({
-    display: 'flex',
-    alignItems: 'center',
-    margin: '2px',
-});
+import {
+    StyledPaper,
+    RoundPaper,
+    RootDiv,
+    AvatarContainer
+} from "./styledComponents";
 
 export default function Top10UsersPerLeagueList({ top10, league, userToWatch }) {
     const [users, setUsers] = useState([]);
@@ -74,9 +59,11 @@ export default function Top10UsersPerLeagueList({ top10, league, userToWatch }) 
 
     };
 
+    const isMobile = useMediaQuery('(max-width:500px)');
+
     return (
         <RootDiv>
-            <RoundPaper square>
+            <RoundPaper ismobile={+isMobile}>
                 <Grid container justifyContent="center">
                     <Grid item>Top 10 users of the&nbsp;
                         <Select
@@ -92,7 +79,7 @@ export default function Top10UsersPerLeagueList({ top10, league, userToWatch }) 
                     </Grid>
                 </Grid>
             </RoundPaper>
-            <TableContainer square component={StyledPaper}>
+            <TableContainer ismobile={+isMobile} component={StyledPaper}>
                 <Table aria-label="customized table">
                     <TableBody>
                         {users.map((user, i) => (
@@ -113,7 +100,7 @@ export default function Top10UsersPerLeagueList({ top10, league, userToWatch }) 
                                     {i + 1}
                                 </TableCell>
                                 <TableCell align="right" padding="none">
-                                    <AvatarWrapper>
+                                    <AvatarContainer>
                                         <Avatar
                                             style={{ backgroundColor: stringToColor(user.user.name) }}
                                             alt={user.user.name.toUpperCase()}
@@ -130,7 +117,7 @@ export default function Top10UsersPerLeagueList({ top10, league, userToWatch }) 
                                                 sx={{ color: 'green' }}
                                             />
                                         }
-                                    </AvatarWrapper>
+                                    </AvatarContainer>
                                 </TableCell>
                                 <TableCell
                                     align="center"
@@ -153,7 +140,7 @@ export default function Top10UsersPerLeagueList({ top10, league, userToWatch }) 
                                         {user.rank}
                                     </TableCell>
                                     <TableCell align="right" padding="none">
-                                        <AvatarWrapper>
+                                        <AvatarContainer>
                                             <Avatar
                                                 style={{ backgroundColor: stringToColor(user.user.name) }}
                                                 alt={user.user.name.toUpperCase()}
@@ -163,7 +150,7 @@ export default function Top10UsersPerLeagueList({ top10, league, userToWatch }) 
                                             <Typography style={{ fontWeight: 500 }}>
                                                 {user.user.name}
                                             </Typography>
-                                        </AvatarWrapper>
+                                        </AvatarContainer>
                                     </TableCell>
                                     <TableCell align="center" padding="none" style={{ fontWeight: 500 }}>
                                         {user.points}

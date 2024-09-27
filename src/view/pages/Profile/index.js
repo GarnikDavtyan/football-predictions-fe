@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { styled } from "@mui/material/styles";
 import {
-    Paper,
     TextField,
     Button,
-    Avatar,
     Typography,
-    Box,
     IconButton,
 } from "@mui/material";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
@@ -26,50 +22,13 @@ import Loading from "../../components/Loading";
 import { getCurrentUser } from "../../../helpers/auth";
 import PasswordTextField from "../../components/PasswordTextField";
 import displayErrors from "../../../helpers/common/displayErrors";
-
-const StyledContainer = styled(Paper)({
-    padding: "40px",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#fff",
-    margin: "auto",
-    borderRadius: "10px",
-    width: "500px",
-});
-
-const StyledAvatar = styled(Avatar)(({ bgcolor }) => ({
-    width: "70px",
-    height: "70px",
-    marginBottom: "5px",
-    backgroundColor: bgcolor,
-}));
-
-const StyledBox = styled(Box)({
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    width: "100%",
-    maxWidth: "400px",
-    "& .MuiTextField-root": {
-        marginBottom: "20px",
-        width: "100%",
-    },
-    "& .MuiButton-root": {
-        marginTop: "20px",
-    },
-});
-
-const AvatarButtonsContainer = styled('div')({
-    display: "flex",
-    alignItems: "center"
-});
-
-const Verify = styled(Typography)({
-    color: "red",
-    textAlign: "center"
-});
+import {
+    StyledAvatar,
+    StyledBox,
+    StyledContainer,
+    AvatarButtonsContainer,
+    Verify
+} from "./styledComponents";
 
 export default function Profile({ user, setUser }) {
     const [username, setUsername] = useState("");
@@ -127,7 +86,7 @@ export default function Profile({ user, setUser }) {
         } else {
             navigate(paths.home);
         }
-    }, []);
+    }, [user]);
 
     const handleAvatarChange = (event) => {
         const file = event.target.files[0];

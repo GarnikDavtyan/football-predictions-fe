@@ -1,18 +1,16 @@
 import React, { useState } from 'react';
 import {
-    Table,
     TableBody,
     TableCell,
     TableContainer,
     TableHead,
     TableRow,
-    Paper,
     Button,
     Grid,
     Select,
     MenuItem,
+    useMediaQuery,
 } from '@mui/material';
-import { styled } from '@mui/material/styles';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import FixtureRow from '../../../components/FixtureRow';
@@ -20,31 +18,25 @@ import { useSnackbar } from 'notistack';
 import savePredictions from '../../../../helpers/apiRequests/savePredictions';
 import Loading from '../../../components/Loading';
 import displayErrors from '../../../../helpers/common/displayErrors';
+import {
+    StyledPaper,
+    StyledTable,
+    RoundCaption,
+    RootDiv,
+    Info
+} from './styledComponents';
 
-const StyledPaper = styled(Paper)({
-    backgroundColor: 'rgba(255, 255, 255, 0.52)',
-    marginBottom: '20px',
-});
+export default function PredictionTable(props) {
+    const {
+        user,
+        leagueId,
+        round,
+        setRound,
+        fixtures,
+        roundsCount,
+        userToWatch
+    } = props;
 
-const RoundCaption = styled(Paper)({
-    backgroundColor: 'rgba(255, 255, 255, 0.75)',
-});
-
-const RootDiv = styled('div')({
-    display: 'flex',
-    flexDirection: 'column',
-});
-
-const StyledTable = styled(Table)({
-    whiteSpace: 'noWrap',
-});
-
-const Info = styled(Grid)({
-    color: 'gold',
-    textShadow: '-2px 0 black, 0 2px black, 2px 0 black, 0 -2px black',
-});
-
-export default function PredictionTable({ user, leagueId, round, setRound, fixtures, roundsCount }) {
     const [x2FixtureId, setX2FixtureId] = useState(null);
     const [predictions, setPredictions] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -54,6 +46,8 @@ export default function PredictionTable({ user, leagueId, round, setRound, fixtu
 
     const handleRoundChangeClick = dif => round + dif > 0 && round + dif <= roundsCount && setRound(round + dif);
 
+    const isMobile = useMediaQuery('(max-width:500px)');
+
     const handleSubmit = e => {
         e.preventDefault();
         try {
@@ -61,13 +55,13 @@ export default function PredictionTable({ user, leagueId, round, setRound, fixtu
                 throw new Error("EMPTY");
             }
 
-            predictions.map((prediction) => {
+            for (const prediction of predictions) {
                 if (prediction.score_home === '' || prediction.score_away === '') {
                     throw new Error("PREDICTION_MISSING");
                 }
-            });
+            }
 
-            if (fixtures.filter(fix => fix.status === 'NS').length === predictions.length && !x2FixtureId) {
+            if ((fixtures.filter(fix => fix.status === 'NS').length <= predictions.length) && !x2FixtureId) {
                 throw new Error("X2_MISSING");
             }
 
@@ -83,7 +77,7 @@ export default function PredictionTable({ user, leagueId, round, setRound, fixtu
                 });
         } catch (error) {
             if (error.message === 'PREDICTION_MISSING') {
-                enqueueSnackbar("Check predictions, not all the fields filled for some of the matches", { variant: "error" });
+                enqueueSnackbar("Check the predictions, missing fields", { variant: "error" });
             } else if (error.message === 'X2_MISSING') {
                 enqueueSnackbar("Select the double point match", { variant: "warning" });
             } else if (error.message === 'EMPTY') {
@@ -95,7 +89,10 @@ export default function PredictionTable({ user, leagueId, round, setRound, fixtu
     return (
         <>
             <RootDiv>
-                <RoundCaption square>
+                {userToWatch && isMobile &&
+                    <Info container justifyContent='center' component='h1' mb={1}>{userToWatch}'s predictions</Info>
+                }
+                <RoundCaption>
                     <Grid container justifyContent="space-between" alignItems='center'>
                         <Grid onClick={() => handleRoundChangeClick(-1)} item>
                             <Button
@@ -105,7 +102,7 @@ export default function PredictionTable({ user, leagueId, round, setRound, fixtu
                                 size="small"
                                 startIcon={<NavigateBeforeIcon />}
                             >
-                                Previous Round
+                                Previous
                             </Button>
                         </Grid>
                         <Grid item>
@@ -132,26 +129,38 @@ export default function PredictionTable({ user, leagueId, round, setRound, fixtu
                                 size="small"
                                 endIcon={<NavigateNextIcon />}
                             >
-                                Next Round
+                                Next
                             </Button>
                         </Grid>
                     </Grid>
                 </RoundCaption>
                 {fixtures.length ?
                     <form onSubmit={handleSubmit}>
-                        <TableContainer square component={StyledPaper}>
-                            <StyledTable aria-label="simple table">
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell />
-                                        <TableCell align="right">Home</TableCell>
-                                        <TableCell align="center" sx={{ p: 0.5 }}>Result</TableCell>
-                                        <TableCell align="left">Away</TableCell>
-                                        <TableCell align="center" sx={{ p: 0.5 }}>x2</TableCell>
-                                        <TableCell align="center" sx={{ p: 0.5 }}>Prediction</TableCell>
-                                        <TableCell align="center" sx={{ p: 0.5 }}>Points</TableCell>
-                                    </TableRow>
-                                </TableHead>
+                        <TableContainer component={StyledPaper} sx={{ mb: 1 }}>
+                            <StyledTable aria-label="simple table" size='small'>
+                                {!isMobile ?
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell />
+                                            <TableCell align="right">Home</TableCell>
+                                            <TableCell align="center" sx={{ p: 0.5 }}>Result</TableCell>
+                                            <TableCell align="left">Away</TableCell>
+                                            <TableCell align="center" sx={{ p: 0.5 }}>x2</TableCell>
+                                            <TableCell align="center" sx={{ p: 0.5 }}>Prediction</TableCell>
+                                            <TableCell align="center" sx={{ p: 0.5 }}>Points</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    :
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell />
+                                            <TableCell align='center' padding='none'>R</TableCell>
+                                            <TableCell align='center' colSpan={2} padding='none'>Match</TableCell>
+                                            <TableCell align='center' padding='none' sx={{ pr: 1 }}>P</TableCell>
+                                            <TableCell align="center" padding='none'>x2</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                }
                                 <TableBody>
                                     {fixtures.map(fixture => (
                                         <FixtureRow
@@ -178,7 +187,7 @@ export default function PredictionTable({ user, leagueId, round, setRound, fixtu
                                         variant="contained"
                                         color="secondary"
                                     >
-                                        Save Prediction
+                                        Save Predictions
                                     </Button>
                                 </Grid>
                                 : <Info container justifyContent='center' component='h1'> Please Verify Your Email Address To Predict </Info>

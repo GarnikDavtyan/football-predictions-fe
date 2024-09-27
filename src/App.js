@@ -56,81 +56,33 @@ function App() {
                 <main className="main">
                     <Routes>
                         <Route path={paths.home}
-                            element={<div className="custom-route"><Home leagues={leagues} /></div>}
+                            element={<Home leagues={leagues} />}
                         />
                         <Route path={`${paths.main}/:slug`}
-                            element={
-                                <div className="custom-route">
-                                    <MainPage user={user} leagues={leagues} />
-                                </div>
-                            }
+                            element={<MainPage user={user} leagues={leagues} />}
                         />
                         <Route path={paths.signup}
-                            element={
-                                <div className="custom-route">
-                                    <SignUp handleOpenClose={handleOpenClose} setUser={setUser} />
-                                </div>
-                            }
+                            element={<SignUp handleOpenClose={handleOpenClose} setUser={setUser} />}
                         />
                         <Route path={paths.profile}
-                            element={
-                                <div className="custom-route">
-                                    <Profile user={user} setUser={setUser} />
-                                </div>
-                            }
+                            element={<Profile user={user} setUser={setUser} />}
                         />
-                        <Route path={paths.rules}
-                            element={
-                                <div className="custom-route">
-                                    <Rules />
-                                </div>
-                            }
-                        />
-                        <Route path={paths.top}
-                            element={
-                                <div className="custom-route">
-                                    <Top />
-                                </div>
-                            }
-                        />
+                        <Route path={paths.rules} element={<Rules />} />
+                        <Route path={paths.top} element={<Top />} />
+                        <Route path={`${paths.reset}/:token`} element={<PasswordReset />} />
                         <Route path={`${paths.verification}/:action`}
-                            element=
-                            {
-                                <div className="custom-route">
-                                    <Verification user={user} setUser={setUser} />
-                                </div>
-                            }
-                        />
-                        <Route path={`${paths.reset}/:token`}
-                            element=
-                            {
-                                <div className="custom-route">
-                                    <PasswordReset />
-                                </div>
-                            }
+                            element={<Verification user={user} setUser={setUser} />}
                         />
                         <Route path={`${paths.account}/:result`}
-                            element=
-                            {
-                                <div className="custom-route">
-                                    <DeleteAccount setUser={setUser} />
-                                </div>
-                            }
+                            element={<DeleteAccount setUser={setUser} />}
                         />
-                        <Route path="*"
-                            element={
-                                <div className="custom-route">
-                                    <NotFound />
-                                </div>
-                            }
-                        />
+                        <Route path="*" element={<NotFound />} />
                     </Routes>
                 </main>
                 <Footer className="footer" />
             </div>
             :
             <Loading />
-
     );
 }
 

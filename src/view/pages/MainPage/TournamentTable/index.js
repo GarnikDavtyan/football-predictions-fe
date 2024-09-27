@@ -7,36 +7,27 @@ import {
     TableBody,
     TableRow,
     TableCell,
-    Paper,
     Grid,
+    useMediaQuery,
 } from '@mui/material';
-import { styled } from '@mui/material/styles';
 import { getLetterColor } from '../../../../helpers/common/stringToColor';
-
-const StyledPaper = styled(Paper)({
-    backgroundColor: 'rgba(255, 255, 255, 0.52)',
-    minWidth: '17rem',
-    borderRadius: 0
-});
-
-const RoundPaper = styled(Paper)({
-    backgroundColor: 'rgba(255, 255, 255, 0.75)',
-});
-
-const RootDiv = styled('div')({
-    display: 'flex',
-    flexDirection: 'column',
-});
+import {
+    StyledPaper,
+    RoundPaper,
+    RootDiv
+} from './styledComponents';
 
 export default function TournamentTable({ standings }) {
+    const isMobile = useMediaQuery('(max-width:500px)');
+
     return (
         <RootDiv>
-            <RoundPaper square>
+            <RoundPaper ismobile={+isMobile}>
                 <Grid container justifyContent="center">
                     <Grid item>Tournament Table</Grid>
                 </Grid>
             </RoundPaper>
-            <TableContainer component={StyledPaper}>
+            <TableContainer ismobile={+isMobile} component={StyledPaper} >
                 <Table aria-label='tournament table'>
                     <TableHead>
                         <TableRow>

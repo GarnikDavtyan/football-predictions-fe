@@ -1,12 +1,8 @@
-import { Avatar, styled, TableCell, TableRow, Typography } from "@mui/material";
+import { Avatar, TableCell, TableRow, Typography } from "@mui/material";
 import React from "react";
 import stringToColor from "../../../helpers/common/stringToColor";
 import getImageFullUrl from "../../../helpers/common/getImageFullUrl";
-
-const AvatarNameContainer = styled('div')({
-    display: 'flex',
-    alignItems: 'center'
-});
+import { AvatarNameContainer } from "./styledComponents";
 
 export default function RestTopRow(props) {
     const {
