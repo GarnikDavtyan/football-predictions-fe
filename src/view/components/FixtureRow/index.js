@@ -6,7 +6,8 @@ import {
     IconButton,
     Paper,
     Typography,
-    useMediaQuery
+    useMediaQuery,
+    Grid,
 } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
 import PredictionInput from './PredictionInput';
@@ -18,10 +19,11 @@ import {
     DivLeft,
     LogoContainer,
     DateText,
-    MobileColumnContainer
+    MobileColumnContainer,
+    TopUserPredictionsText
 } from './styledComponents';
 
-export default function FixtureRow({ user, fixture, x2FixtureId, setX2FixtureId, fixtures, setPredictions }) {
+export default function FixtureRow({ user, fixture, x2FixtureId, setX2FixtureId, x2Sealed, setPredictions }) {
     const fixId = fixture.id;
     const [info, setInfo] = useState(false);
     const [prediction, setPrediction] = useState({
@@ -33,7 +35,6 @@ export default function FixtureRow({ user, fixture, x2FixtureId, setX2FixtureId,
 
     const isFinished = fixture.status === 'FT';
     const isNotStarted = fixture.status === 'NS';
-    const x2Sealed = Boolean(x2FixtureId && fixtures.find(fix => fix.id === x2FixtureId).status !== 'NS');
 
     // Show user local datetime 
     moment.locale('en-gb');
@@ -44,14 +45,14 @@ export default function FixtureRow({ user, fixture, x2FixtureId, setX2FixtureId,
 
 
     useEffect(() => {
-        if (fixture.predictions && fixture.predictions.length) {
-            setPrediction(fixture.predictions[0]);
-            if (fixture.predictions[0].x2) {
+        if (fixture.prediction) {
+            setPrediction(fixture.prediction);
+            if (fixture.prediction.x2) {
                 setX2FixtureId(fixId);
             }
 
             if (isNotStarted) {
-                setPredictions(prevPredictions => [...prevPredictions, fixture.predictions[0]]);
+                setPredictions(prevPredictions => [...prevPredictions, fixture.prediction]);
             }
         }
     }, [fixture, fixId]);
@@ -244,10 +245,47 @@ export default function FixtureRow({ user, fixture, x2FixtureId, setX2FixtureId,
                             <DateText color="textSecondary">
                                 {fixtureDate}
                             </DateText>
+                            {fixture.top10_predictions && fixture.top10_predictions.length > 0 &&
+                                <>
+                                    <hr />
+                                    <Grid container mt={1}>
+                                        <Grid item xs={5} textAlign={'end'} mb={0.5}>
+                                            <Typography color="textSecondary">
+                                                Top 10
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={2} mb={0.5} />
+                                        <Grid item xs={5} textAlign={'start'} mb={0.5}>
+                                            <Typography color="textSecondary">
+                                                Points
+                                            </Typography>
+                                        </Grid>
+                                        {fixture.top10_predictions.map(prediction => (
+                                            <React.Fragment key={prediction.user_id}>
+                                                <Grid item xs={5} textAlign={'end'}>
+                                                    <TopUserPredictionsText color="textSecondary">
+                                                        {prediction.user.name}
+                                                    </TopUserPredictionsText>
+                                                </Grid>
+                                                <Grid item xs={2} textAlign={'center'}>
+                                                    <TopUserPredictionsText color="textSecondary">
+                                                        {prediction.score_home + ':' + prediction.score_away}
+                                                    </TopUserPredictionsText>
+                                                </Grid>
+                                                <Grid item xs={5} textAlign={'start'}>
+                                                    <TopUserPredictionsText color="textSecondary">
+                                                        {prediction.points ?? '-'}
+                                                    </TopUserPredictionsText>
+                                                </Grid>
+                                            </React.Fragment>
+                                        ))}
+                                    </Grid>
+                                </>
+                            }
                         </Paper>
                     </TableCell>
                     <TableCell colSpan={isMobile ? 0 : 3} />
-                </TableRow>
+                </TableRow >
             }
         </>
     );

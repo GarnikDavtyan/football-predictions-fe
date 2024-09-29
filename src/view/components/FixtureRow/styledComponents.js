@@ -28,6 +28,10 @@ const DateText = styled(Typography)({
     textAlign: 'center',
 });
 
+const TopUserPredictionsText = styled(Typography)({
+    fontSize: '0.9rem'
+});
+
 const MobileColumnContainer = styled('div')({
     '@media (max-width: 500px)': {
         display: 'flex',
@@ -56,5 +60,6 @@ export {
     LogoContainer,
     DateText,
     MobileColumnContainer,
-    InputNum
+    InputNum,
+    TopUserPredictionsText
 };

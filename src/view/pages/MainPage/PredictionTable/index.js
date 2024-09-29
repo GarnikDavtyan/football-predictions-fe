@@ -43,6 +43,7 @@ export default function PredictionTable(props) {
 
     const { enqueueSnackbar } = useSnackbar();
     const areAllStarted = fixtures.every(fix => fix.status !== 'NS');
+    const x2Sealed = Boolean(x2FixtureId && fixtures.find(fix => fix.id === x2FixtureId).status !== 'NS');
 
     const handleRoundChangeClick = dif => round + dif > 0 && round + dif <= roundsCount && setRound(round + dif);
 
@@ -56,7 +57,8 @@ export default function PredictionTable(props) {
             }
 
             for (const prediction of predictions) {
-                if (prediction.score_home === '' || prediction.score_away === '') {
+                if ((prediction.score_home === '' && prediction.score_away !== '')
+                    || (prediction.score_home !== '' && prediction.score_away === '')) {
                     throw new Error("PREDICTION_MISSING");
                 }
             }
@@ -65,9 +67,13 @@ export default function PredictionTable(props) {
                 throw new Error("X2_MISSING");
             }
 
-            setIsLoading(true);
+            let x2 = x2FixtureId;
+            if (x2Sealed) {
+                x2 = null;
+            }
 
-            savePredictions(leagueId, round, predictions, x2FixtureId)
+            setIsLoading(true);
+            savePredictions(leagueId, round, predictions, x2)
                 .then(() => enqueueSnackbar("Predictions Saved", { variant: "success" }))
                 .catch((error) => {
                     displayErrors(error.response.data)
@@ -164,9 +170,9 @@ export default function PredictionTable(props) {
                                 <TableBody>
                                     {fixtures.map(fixture => (
                                         <FixtureRow
-                                            fixtures={fixtures}
                                             key={fixture.id}
                                             fixture={fixture}
+                                            x2Sealed={x2Sealed}
                                             x2FixtureId={x2FixtureId}
                                             setX2FixtureId={setX2FixtureId}
                                             user={user}
