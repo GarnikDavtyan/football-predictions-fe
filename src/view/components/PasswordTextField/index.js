@@ -30,20 +30,22 @@ export default function PasswordTextField(props) {
             onChange={(e) => setPassword(e.target.value)}
             error={isErrorPassword}
             onBlur={() => setIsTouchedPassword(true)}
-            InputProps={{
-                endAdornment: (
-                    <InputAdornment position="end">
-                        <IconButton
-                            aria-label="toggle password visibility"
-                            onClick={() => setShowPassword((prev) => !prev)}
-                            onMouseDown={(e) => e.preventDefault()}
-                            edge="end"
-                            size="large"
-                        >
-                            {showPassword ? <Visibility /> : <VisibilityOff />}
-                        </IconButton>
-                    </InputAdornment>
-                ),
+            slotProps={{
+                input: {
+                    endAdornment: (
+                        <InputAdornment position="end">
+                            <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={() => setShowPassword((prev) => !prev)}
+                                onMouseDown={(e) => e.preventDefault()}
+                                edge="end"
+                                size="large"
+                            >
+                                {showPassword ? <Visibility /> : <VisibilityOff />}
+                            </IconButton>
+                        </InputAdornment>
+                    )
+                }
             }}
             helperText={
                 isErrorPassword && passwordErrorMessage

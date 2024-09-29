@@ -7,7 +7,7 @@ import {
     TableBody,
     TableRow,
     TableCell,
-    Grid,
+    Grid2 as Grid,
     useMediaQuery,
 } from '@mui/material';
 import { getLetterColor } from '../../../../helpers/common/stringToColor';
@@ -24,7 +24,7 @@ export default function TournamentTable({ standings }) {
         <RootDiv>
             <RoundPaper ismobile={+isMobile}>
                 <Grid container justifyContent="center">
-                    <Grid item>Tournament Table</Grid>
+                    <Grid>Tournament Table</Grid>
                 </Grid>
             </RoundPaper>
             <TableContainer ismobile={+isMobile} component={StyledPaper} >
@@ -73,7 +73,12 @@ export default function TournamentTable({ standings }) {
                                 <TableCell align="center" padding="none">
                                     {team.form ? (
                                         team.form.split('').map((letter, index) => (
-                                            <span key={index} style={{ color: getLetterColor(letter), fontWeight: 'bold' }}>
+                                            <span key={index}
+                                                style={{
+                                                    color: getLetterColor(letter),
+                                                    fontWeight: 'bold'
+                                                }}
+                                            >
                                                 {letter}
                                             </span>
                                         ))

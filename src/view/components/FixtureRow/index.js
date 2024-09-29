@@ -7,7 +7,7 @@ import {
     Paper,
     Typography,
     useMediaQuery,
-    Grid,
+    Box,
 } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
 import PredictionInput from './PredictionInput';
@@ -23,7 +23,17 @@ import {
     TopUserPredictionsText
 } from './styledComponents';
 
-export default function FixtureRow({ user, fixture, x2FixtureId, setX2FixtureId, x2Sealed, setPredictions }) {
+export default function FixtureRow(props) {
+    const {
+        user,
+        fixture,
+        x2FixtureId,
+        setX2FixtureId,
+        x2Sealed,
+        setPredictions,
+        flickityRef
+    } = props;
+
     const fixId = fixture.id;
     const [info, setInfo] = useState(false);
     const [prediction, setPrediction] = useState({
@@ -65,6 +75,12 @@ export default function FixtureRow({ user, fixture, x2FixtureId, setX2FixtureId,
     const handleInfoClick = () => {
         setInfo(!info);
     };
+
+    useEffect(() => {
+        if (flickityRef && flickityRef.current) {
+            flickityRef.current.resize();
+        }
+    }, [info]);
 
     const isMobile = useMediaQuery('(max-width:500px)');
 
@@ -248,43 +264,35 @@ export default function FixtureRow({ user, fixture, x2FixtureId, setX2FixtureId,
                             {fixture.top10_predictions && fixture.top10_predictions.length > 0 &&
                                 <>
                                     <hr />
-                                    <Grid container mt={1}>
-                                        <Grid item xs={5} textAlign={'end'} mb={0.5}>
-                                            <Typography color="textSecondary">
+                                    <Box sx={{ mt: 1 }} >
+                                        <Box display="flex" sx={{ mb: 0.5 }}>
+                                            <Typography color="textSecondary" textAlign="end" flex={5}>
                                                 Top 10
                                             </Typography>
-                                        </Grid>
-                                        <Grid item xs={2} mb={0.5} />
-                                        <Grid item xs={5} textAlign={'start'} mb={0.5}>
-                                            <Typography color="textSecondary">
+                                            <Box flex={2} />
+                                            <Typography color="textSecondary" textAlign="start" flex={5}>
                                                 Points
                                             </Typography>
-                                        </Grid>
+                                        </Box>
                                         {fixture.top10_predictions.map(prediction => (
-                                            <React.Fragment key={prediction.user_id}>
-                                                <Grid item xs={5} textAlign={'end'}>
-                                                    <TopUserPredictionsText color="textSecondary">
-                                                        {prediction.user.name}
-                                                    </TopUserPredictionsText>
-                                                </Grid>
-                                                <Grid item xs={2} textAlign={'center'}>
-                                                    <TopUserPredictionsText color="textSecondary">
-                                                        {prediction.score_home + ':' + prediction.score_away}
-                                                    </TopUserPredictionsText>
-                                                </Grid>
-                                                <Grid item xs={5} textAlign={'start'}>
-                                                    <TopUserPredictionsText color="textSecondary">
-                                                        {prediction.points ?? '-'}
-                                                    </TopUserPredictionsText>
-                                                </Grid>
-                                            </React.Fragment>
+                                            <Box display="flex" key={prediction.user_id}>
+                                                <TopUserPredictionsText color="textSecondary" textAlign="end" flex={5}>
+                                                    {prediction.user.name}
+                                                </TopUserPredictionsText>
+                                                <TopUserPredictionsText color="textSecondary" textAlign="center" flex={2}>
+                                                    {prediction.score_home + ':' + prediction.score_away}
+                                                </TopUserPredictionsText>
+                                                <TopUserPredictionsText color="textSecondary" textAlign="start" flex={5}>
+                                                    {prediction.points ?? '-'}
+                                                </TopUserPredictionsText>
+                                            </Box>
                                         ))}
-                                    </Grid>
+                                    </Box>
                                 </>
                             }
                         </Paper>
                     </TableCell>
-                    <TableCell colSpan={isMobile ? 0 : 3} />
+                    <TableCell colSpan={isMobile ? 1 : 3} />
                 </TableRow >
             }
         </>

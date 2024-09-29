@@ -1,4 +1,4 @@
-import { Grid, Paper, Table } from '@mui/material';
+import { Grid2 as Grid, Paper, Table } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 const StyledPaper = styled(Paper)({

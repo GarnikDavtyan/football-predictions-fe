@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import {
     TextField,
     FormHelperText,
-    Grid,
+    Grid2 as Grid,
     Typography,
     ThemeProvider,
 } from '@mui/material';
@@ -89,7 +89,7 @@ export default function SignUp({ handleOpenClose, setUser }) {
                     <ThemeProvider theme={FormLabelTheme}>
                         <StyledForm noValidate onSubmit={handleSubmit}>
                             <Grid container spacing={2}>
-                                <Grid item xs={12}>
+                                <Grid size={{ xs: 12 }}>
                                     <TextField
                                         inputRef={userNameRef}
                                         variant="outlined"
@@ -106,7 +106,7 @@ export default function SignUp({ handleOpenClose, setUser }) {
                                     {isErrorUsername &&
                                         <FormHelperText error>Username must contain only latin letters and digits (2-20 chars)</FormHelperText>}
                                 </Grid>
-                                <Grid item xs={12}>
+                                <Grid size={{ xs: 12 }}>
                                     <TextField
                                         variant="outlined"
                                         required
@@ -122,7 +122,7 @@ export default function SignUp({ handleOpenClose, setUser }) {
                                     {isErrorEmail &&
                                         <FormHelperText error>Email is not valid</FormHelperText>}
                                 </Grid>
-                                <Grid item xs={12}>
+                                <Grid size={{ xs: 12 }}>
                                     <PasswordTextField
                                         label="Password"
                                         password={password}
@@ -135,7 +135,7 @@ export default function SignUp({ handleOpenClose, setUser }) {
                                         passwordErrorMessage="Password must contain at least 1 uppercase letter, 1 lowercase letter, and 1 digit (8 or more chars)"
                                     />
                                 </Grid>
-                                <Grid item xs={12}>
+                                <Grid size={{ xs: 12 }}>
                                     <PasswordTextField
                                         label="Repeat Password"
                                         password={repeatPassword}
@@ -159,7 +159,7 @@ export default function SignUp({ handleOpenClose, setUser }) {
                                 Sign Up
                             </SubmitButton>
                             <Grid container justifyContent="flex-end">
-                                <Grid item>
+                                <Grid>
                                     <StyledLink onClick={handleOpenClose} to={paths.home}>
                                         Already have an account? Log in
                                     </StyledLink>

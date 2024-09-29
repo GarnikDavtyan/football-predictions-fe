@@ -31,6 +31,7 @@ export default function LeagueTablesContainer(props) {
 
     const isMobile = useMediaQuery('(max-width:500px)');
 
+    const flickityRef = useRef(null);
     const flickityOptions = {
         initialIndex: 1,
         prevNextButtons: false,
@@ -116,7 +117,7 @@ export default function LeagueTablesContainer(props) {
                     </TablesContainer>
                     :
                     <>
-                        <Box sx={{ display: 'flex', justifyContent: 'center' }} mb={1}>
+                        <Box sx={{ display: 'flex', justifyContent: 'center', mb: 1 }}>
                             <KeyboardDoubleArrowLeftIcon fontSize='small' color='info' />
                             <Typography fontSize='small' color='info.main'>
                                 slide for the tables
@@ -128,6 +129,9 @@ export default function LeagueTablesContainer(props) {
                                 options={flickityOptions}
                                 reloadOnUpdate
                                 style={{ outline: 'none' }}
+                                flickityRef={flickity => {
+                                    flickityRef.current = flickity;
+                                }}
                             >
                                 <SlideContainer>
                                     <Top10UsersPerLeagueList
@@ -145,13 +149,14 @@ export default function LeagueTablesContainer(props) {
                                         fixtures={fixtures}
                                         roundsCount={league.rounds}
                                         userToWatch={userToWatch}
+                                        flickityRef={flickityRef}
                                     />
                                 </SlideContainer>
                                 <SlideContainer>
                                     <TournamentTable standings={standings} />
                                 </SlideContainer>
                             </Flickity>
-                        </SlidesContainer>
+                        </SlidesContainer >
                     </>
                 :
                 <NotFound />

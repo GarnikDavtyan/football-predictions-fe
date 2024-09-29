@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
-    Grid,
+    Grid2 as Grid,
     Table,
     TableBody,
     TableCell,
@@ -65,7 +65,7 @@ export default function Top10UsersPerLeagueList({ top10, league, userToWatch }) 
         <RootDiv>
             <RoundPaper ismobile={+isMobile}>
                 <Grid container justifyContent="center">
-                    <Grid item>Top 10 users of the&nbsp;
+                    <Grid>Top 10 users of the&nbsp;
                         <Select
                             variant="standard"
                             labelId="demo-simple-select-label"

@@ -69,7 +69,7 @@ export default function PasswordReset() {
     return (
         <>
             <StyledContainer>
-                <Typography variant="h4" mb={5}>
+                <Typography variant="h4" sx={{ mb: 5 }}>
                     Reset Password
                 </Typography>
                 <StyledBox>

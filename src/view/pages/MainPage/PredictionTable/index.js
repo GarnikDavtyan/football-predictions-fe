@@ -6,7 +6,7 @@ import {
     TableHead,
     TableRow,
     Button,
-    Grid,
+    Grid2 as Grid,
     Select,
     MenuItem,
     useMediaQuery,
@@ -34,7 +34,8 @@ export default function PredictionTable(props) {
         setRound,
         fixtures,
         roundsCount,
-        userToWatch
+        userToWatch,
+        flickityRef
     } = props;
 
     const [x2FixtureId, setX2FixtureId] = useState(null);
@@ -96,11 +97,17 @@ export default function PredictionTable(props) {
         <>
             <RootDiv>
                 {userToWatch && isMobile &&
-                    <Info container justifyContent='center' component='h1' mb={1}>{userToWatch}'s predictions</Info>
+                    <Info container
+                        justifyContent='center'
+                        component='h1'
+                        sx={{ mb: 1 }}
+                    >
+                        {userToWatch}'s predictions
+                    </Info>
                 }
                 <RoundCaption>
                     <Grid container justifyContent="space-between" alignItems='center'>
-                        <Grid onClick={() => handleRoundChangeClick(-1)} item>
+                        <Grid onClick={() => handleRoundChangeClick(-1)}>
                             <Button
                                 disabled={round === 1}
                                 component='span'
@@ -111,7 +118,7 @@ export default function PredictionTable(props) {
                                 Previous
                             </Button>
                         </Grid>
-                        <Grid item>
+                        <Grid>
                             Round&nbsp;
                             <Select
                                 variant="standard"
@@ -127,7 +134,7 @@ export default function PredictionTable(props) {
                                 ))}
                             </Select>
                         </Grid>
-                        <Grid onClick={() => handleRoundChangeClick(1)} item>
+                        <Grid onClick={() => handleRoundChangeClick(1)}>
                             <Button
                                 disabled={round === roundsCount}
                                 component='span'
@@ -149,21 +156,37 @@ export default function PredictionTable(props) {
                                         <TableRow>
                                             <TableCell />
                                             <TableCell align="right">Home</TableCell>
-                                            <TableCell align="center" sx={{ p: 0.5 }}>Result</TableCell>
+                                            <TableCell align="center" sx={{ p: 0.5 }}>
+                                                Result
+                                            </TableCell>
                                             <TableCell align="left">Away</TableCell>
-                                            <TableCell align="center" sx={{ p: 0.5 }}>x2</TableCell>
-                                            <TableCell align="center" sx={{ p: 0.5 }}>Prediction</TableCell>
-                                            <TableCell align="center" sx={{ p: 0.5 }}>Points</TableCell>
+                                            <TableCell align="center" sx={{ p: 0.5 }}>
+                                                x2
+                                            </TableCell>
+                                            <TableCell align="center" sx={{ p: 0.5 }}>
+                                                Prediction
+                                            </TableCell>
+                                            <TableCell align="center" sx={{ p: 0.5 }}>
+                                                Points
+                                            </TableCell>
                                         </TableRow>
                                     </TableHead>
                                     :
                                     <TableHead>
                                         <TableRow>
                                             <TableCell />
-                                            <TableCell align='center' padding='none'>R</TableCell>
-                                            <TableCell align='center' colSpan={2} padding='none'>Match</TableCell>
-                                            <TableCell align='center' padding='none' sx={{ pr: 1 }}>P</TableCell>
-                                            <TableCell align="center" padding='none'>x2</TableCell>
+                                            <TableCell align='center' padding='none'>
+                                                R
+                                            </TableCell>
+                                            <TableCell align='center' colSpan={2} padding='none'>
+                                                Match
+                                            </TableCell>
+                                            <TableCell align='center' padding='none' sx={{ pr: 1 }}>
+                                                P
+                                            </TableCell>
+                                            <TableCell align="center" padding='none'>
+                                                x2
+                                            </TableCell>
                                         </TableRow>
                                     </TableHead>
                                 }
@@ -177,6 +200,7 @@ export default function PredictionTable(props) {
                                             setX2FixtureId={setX2FixtureId}
                                             user={user}
                                             setPredictions={setPredictions}
+                                            flickityRef={flickityRef}
                                         />
                                     ))}
                                 </TableBody>
@@ -196,12 +220,29 @@ export default function PredictionTable(props) {
                                         Save Predictions
                                     </Button>
                                 </Grid>
-                                : <Info container justifyContent='center' component='h1'> Please Verify Your Email Address To Predict </Info>
-                            : <Info container justifyContent='center' component='h1'> Please Log In To Predict </Info>
+                                : <Info container
+                                    justifyContent='center'
+                                    component='h1'
+                                >
+                                    Please Verify Your Email Address To Predict
+                                </Info>
+                            : <Info container
+                                justifyContent='center'
+                                component='h1'
+                            >
+                                Please Log In To Predict
+                            </Info>
                         }
                     </form>
                     :
-                    <Info container justifyContent='center' component='h1' mt={5}> Matches are not available for this round yet</Info>}
+                    <Info container
+                        justifyContent='center'
+                        component='h1'
+                        sx={{ mt: 5 }}
+                    >
+                        Matches are not available for this round yet
+                    </Info>
+                }
             </RootDiv >
             {isLoading && <Loading />
             }
