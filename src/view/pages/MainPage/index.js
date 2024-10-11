@@ -28,7 +28,8 @@ export default function MainPage(props) {
                     userToWatch={userToWatch}
                 />
                 :
-                <NotFound />}
+                <NotFound />
+            }
         </section>
     )
 }

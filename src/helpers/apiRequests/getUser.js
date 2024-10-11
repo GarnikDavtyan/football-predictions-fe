@@ -1,7 +1,7 @@
-import { createAuthAxiosInstance } from '../api';
+import createAxiosInstance from '../api';
 
 const getUser = () => {
-    return createAuthAxiosInstance().get(`user`);
+    return createAxiosInstance().get(`user`);
 }
 
 export default getUser;

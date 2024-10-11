@@ -1,7 +1,7 @@
 import { styled } from '@mui/material/styles';
 
 const HeaderContainer = styled('header')({
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    backgroundColor: 'rgba(28, 38, 23, 0.46)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -19,7 +19,7 @@ const HeaderContainer = styled('header')({
 });
 
 const ProfileContainer = styled('div')({
-    '@media (min-width: 600px)': {
+    '@media (min-width: 700px)': {
         position: 'absolute',
         left: '50%',
         transform: 'translateX(-50%)'

@@ -1,4 +1,4 @@
-import { getAxiosInstanceType } from '../api';
+import createAxiosInstance from '../api';
 
 const getFixturesByLeagueId = (leagueId, round, userToWatch = '') => {
     let url = `fixtures/${leagueId}/${round}`;
@@ -7,7 +7,7 @@ const getFixturesByLeagueId = (leagueId, round, userToWatch = '') => {
         url += `?user=${userToWatch}`
     }
 
-    return getAxiosInstanceType().get(url)
+    return createAxiosInstance().get(url)
 }
 
 export default getFixturesByLeagueId;

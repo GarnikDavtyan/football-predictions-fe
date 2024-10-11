@@ -16,7 +16,7 @@ import { getCurrentUser } from './helpers/auth';
 import Verification from './view/pages/Verification';
 import PasswordReset from './view/pages/PasswordReset';
 import DeleteAccount from './view/pages/DeleteAccount';
-import { axiosInstance } from './helpers/api';
+import createAxiosInstance from './helpers/api';
 
 function App() {
 
@@ -30,7 +30,7 @@ function App() {
             setUser(getCurrentUser().user);
         }
 
-        axiosInstance.get('leagues')
+        createAxiosInstance().get('leagues')
             .then((response) => {
                 setLeagues(response.data.data);
             })

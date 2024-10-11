@@ -1,15 +1,15 @@
-import { createAuthAxiosInstance } from '../api';
+import createAxiosInstance from '../api';
 
 export const updateProfile = (formData) => {
     formData.append('_method', 'PUT')
-    return createAuthAxiosInstance().post(`profile`, formData,);
+    return createAxiosInstance().post(`profile`, formData,);
 }
 
 export const deleteAvatar = () => {
-    return createAuthAxiosInstance().delete(`profile/avatar-delete`);
+    return createAxiosInstance().delete(`profile/avatar-delete`);
 }
 
 export const requestDeleteAccount = () => {
-    return createAuthAxiosInstance().post(`/profile/account-delete-request`);
+    return createAxiosInstance().post(`/profile/account-delete-request`);
 }
 

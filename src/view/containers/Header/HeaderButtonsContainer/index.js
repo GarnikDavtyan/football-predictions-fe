@@ -7,10 +7,14 @@ import LoginDialogForm from '../../LoginDialogForm';
 import { logout } from '../../../../helpers/auth';
 import { useMediaQuery } from '@mui/material';
 import { ButtonContainer, StyledLink, StyledButton } from './styledComponents';
+import ArticleIcon from '@mui/icons-material/Article';
+import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
+import LoginIcon from '@mui/icons-material/Login';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 export default function HeaderButtonsContainer(props) {
     const navigate = useNavigate();
-    const isMobile = useMediaQuery('(max-width:600px)');
+    const isMobile = useMediaQuery('(max-width:700px)');
     const [anchorEl, setAnchorEl] = useState(null);
 
     const handleLogout = () => {
@@ -33,10 +37,14 @@ export default function HeaderButtonsContainer(props) {
             {!isMobile ?
                 <ButtonContainer>
                     <StyledLink to={paths.top}>
+                        <WorkspacePremiumIcon />
                         <Typography variant="body2">Top Users</Typography>
+
                     </StyledLink>
                     <StyledLink to={paths.rules}>
+                        <ArticleIcon />
                         <Typography variant="body2">Rules</Typography>
+
                     </StyledLink>
                     {!props.user ?
                         <>
@@ -44,13 +52,19 @@ export default function HeaderButtonsContainer(props) {
                                 color="primary"
                                 variant="contained"
                                 onClick={props.handleOpenClose}
+                                endIcon={<LoginIcon />}
                             >
                                 Log In
                             </Button>
                             <LoginDialogForm {...props} />
                         </>
                         :
-                        <StyledButton onClick={handleLogout}>Log Out</StyledButton>
+                        <StyledButton
+                            onClick={handleLogout}
+                            endIcon={<LogoutIcon />}
+                        >
+                            Log Out
+                        </StyledButton>
                     }
                 </ButtonContainer>
                 :
@@ -74,11 +88,13 @@ export default function HeaderButtonsContainer(props) {
                         <MenuItem onClick={handleMenuClose}>
                             <StyledLink to={paths.top}>
                                 <Typography variant="body2">Top Users</Typography>
+                                <WorkspacePremiumIcon />
                             </StyledLink>
                         </MenuItem>
                         <MenuItem onClick={handleMenuClose}>
                             <StyledLink to={paths.rules}>
                                 <Typography variant="body2">Rules</Typography>
+                                <ArticleIcon />
                             </StyledLink>
                         </MenuItem>
                         {!props.user ?
@@ -87,13 +103,14 @@ export default function HeaderButtonsContainer(props) {
                                     color="primary"
                                     variant="contained"
                                     onClick={props.handleOpenClose}
+                                    endIcon={<LoginIcon />}
                                 >
                                     Log In
                                 </Button>
                             </MenuItem>
                             :
                             <MenuItem onClick={handleLogout}>
-                                <StyledButton>Log Out</StyledButton>
+                                <StyledButton endIcon={<LogoutIcon />}>Log Out</StyledButton>
                             </MenuItem>
                         }
                     </Menu>

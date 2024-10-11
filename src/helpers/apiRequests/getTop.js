@@ -1,7 +1,7 @@
-import { getAxiosInstanceType } from '../api';
+import createAxiosInstance from '../api';
 
 const getTop = () => {
-    return getAxiosInstanceType().get(`points`)
+    return createAxiosInstance().get(`points`)
 }
 
 export default getTop;

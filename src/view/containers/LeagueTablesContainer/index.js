@@ -13,6 +13,7 @@ import Flickity from 'react-flickity-component';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
 import { TablesContainer, SlideContainer, SlidesContainer } from './styledComponents';
+import { grey } from '@mui/material/colors';
 
 export default function LeagueTablesContainer(props) {
     const { user, leagueSlug, league, userToWatch } = props;
@@ -118,11 +119,11 @@ export default function LeagueTablesContainer(props) {
                     :
                     <>
                         <Box sx={{ display: 'flex', justifyContent: 'center', mb: 1 }}>
-                            <KeyboardDoubleArrowLeftIcon fontSize='small' color='info' />
-                            <Typography fontSize='small' color='info.main'>
-                                slide for the tables
+                            <KeyboardDoubleArrowLeftIcon fontSize='small' sx={{ color: grey[400] }} />
+                            <Typography fontSize='small' sx={{ color: grey[400] }}>
+                                swipe for the tables
                             </Typography>
-                            <KeyboardDoubleArrowRightIcon fontSize='small' color='info' />
+                            <KeyboardDoubleArrowRightIcon fontSize='small' sx={{ color: grey[400] }} />
                         </Box>
                         <SlidesContainer>
                             <Flickity

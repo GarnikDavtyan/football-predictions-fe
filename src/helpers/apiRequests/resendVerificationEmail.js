@@ -1,7 +1,7 @@
-import { createAuthAxiosInstance } from '../api';
+import createAxiosInstance from '../api';
 
 const resendVerificationEmail = () => {
-    return createAuthAxiosInstance().post(`email/resend-verification`);
+    return createAxiosInstance().post(`email/resend-verification`);
 }
 
 export default resendVerificationEmail;

@@ -1,7 +1,7 @@
-import { createAuthAxiosInstance } from '../api';
+import createAxiosInstance from '../api';
 
 const savePredictions = (leagueId, round, predictions, x2Fixture) => {
-    return createAuthAxiosInstance().post(`fixtures/${leagueId}/${round}`, {
+    return createAxiosInstance().post(`fixtures/${leagueId}/${round}`, {
         predictions: predictions,
         x2_fixture_id: x2Fixture
     });

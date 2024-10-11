@@ -42,7 +42,7 @@ export default function Top() {
     }, []);
 
     return (
-        <>
+        !isLoading ?
             <RootDiv>
                 <h1>Top Users</h1>
                 <Top3users>
@@ -113,7 +113,7 @@ export default function Top() {
                     </Table>
                 </TableContainer>
             </RootDiv >
-            {isLoading && <Loading />}
-        </>
+            :
+            <Loading />
     )
 }

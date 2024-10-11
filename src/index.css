@@ -20,3 +20,9 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
+
+@media (max-width: 500px) {
+  body {
+    background-image: url("./view/images/backgrounds/cl_mobile.jpg");
+  }
+}

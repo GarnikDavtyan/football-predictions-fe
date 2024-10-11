@@ -90,7 +90,7 @@ export default function FixtureRow(props) {
                 <TableRow key={fixId} id={fixId}>
                     <TableCell component="th" scope="row" align="center" padding="none">
                         <IconButton onClick={handleInfoClick} value={fixId} size="large">
-                            <InfoIcon />
+                            <InfoIcon color={info ? 'success' : ''} />
                         </IconButton>
                     </TableCell>
                     <TableCell align="right" padding="none">
@@ -167,7 +167,7 @@ export default function FixtureRow(props) {
                 <TableRow key={fixId} id={fixId}>
                     <TableCell padding='none' align='center'>
                         <IconButton onClick={handleInfoClick} value={fixId} size="small">
-                            <InfoIcon />
+                            <InfoIcon color={info ? 'success' : ''} />
                         </IconButton>
                     </TableCell>
                     <TableCell align="center" padding='none' sx={{ px: 1 }}>
