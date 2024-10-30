@@ -17,6 +17,7 @@ import Verification from './view/pages/Verification';
 import PasswordReset from './view/pages/PasswordReset';
 import DeleteAccount from './view/pages/DeleteAccount';
 import createAxiosInstance from './helpers/api';
+import getUser from './helpers/apiRequests/getUser';
 
 function App() {
 
@@ -27,6 +28,9 @@ function App() {
 
     useEffect(() => {
         if (getCurrentUser()) {
+            //Making an authorized request to automatically refresh the access token
+            getUser();
+
             setUser(getCurrentUser().user);
         }
 

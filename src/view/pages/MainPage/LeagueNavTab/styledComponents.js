@@ -12,6 +12,9 @@ const StyledTab = styled(Tab)({
     backgroundColor: '#fff',
     borderRadius: '10px',
     margin: '10px',
+    '@media (max-width: 1400px)': {
+        minWidth: 180,
+    },
 });
 
 const SlideContainer = styled('div')({

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 const StyledCard = styled(Card)({
     maxWidth: '345px',
-    minWidth: '200px',
+    minWidth: '180px',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -20,12 +20,12 @@ const StyledCard = styled(Card)({
 
     '@media (min-width:1000px) and (max-width:1200px)': {
         maxWidth: '100%',
-        minWidth: '80%',
+        minWidth: '170px',
     },
 
     '@media (max-width: 500px)': {
         maxWidth: '100%',
-        minWidth: '90%',
+        minWidth: '160px',
     },
 });
 
@@ -37,12 +37,10 @@ const StyledCardMedia = styled(CardMedia)({
 
     '@media (min-width:1000px) and (max-width:1200px)': {
         height: '120px',
-        width: '60%'
     },
 
     '@media (max-width: 500px)': {
         height: '100px',
-        width: '50%',
     },
 });
 

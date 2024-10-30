@@ -14,6 +14,12 @@ const LeagueTitle = styled(Typography)({
     margin: 'auto',
     color: '#fff',
     fontSize: '45px',
+    marginBottom: '20px',
+
+    '@media (max-width: 1000px)': {
+        fontSize: '35px',
+        margin: 'auto'
+    },
 
     '@media (max-width: 500px)': {
         fontSize: '25px',
@@ -22,9 +28,21 @@ const LeagueTitle = styled(Typography)({
 });
 
 const BoxContainer = styled('div')({
-    '@media (max-width: 500px)': {
+    '@media (max-width: 1000px)': {
         display: 'flex',
         flexDirection: 'column-reverse'
+    },
+});
+
+const ClContainer = styled('div')({
+    display: 'flex',
+    justifyContent: 'center',
+    '@media (max-width: 1000px)': {
+        marginBottom: '20px'
+    },
+
+    '@media (max-width: 500px)': {
+        marginBottom: '8px'
     },
 });
 
@@ -50,5 +68,6 @@ export {
     HomeContainer,
     LeagueTitle,
     BoxContainer,
-    StyledBox
+    StyledBox,
+    ClContainer
 };

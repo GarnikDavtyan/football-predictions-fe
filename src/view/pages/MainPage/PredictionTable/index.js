@@ -43,8 +43,10 @@ export default function PredictionTable(props) {
     const [isLoading, setIsLoading] = useState(false);
 
     const { enqueueSnackbar } = useSnackbar();
-    const areAllStarted = fixtures.every(fix => fix.status !== 'NS');
-    const x2Sealed = Boolean(x2FixtureId && fixtures.find(fix => fix.id === x2FixtureId).status !== 'NS');
+
+    const notStartedStatuses = ['NS', 'PST'];
+    const areAllStarted = fixtures.every(fix => !notStartedStatuses.includes(fix.status));
+    const x2Sealed = Boolean(x2FixtureId && !notStartedStatuses.includes(fixtures.find(fix => fix.id === x2FixtureId).status));
 
     const handleRoundChangeClick = dif => round + dif > 0 && round + dif <= roundsCount && setRound(round + dif);
 
@@ -63,8 +65,8 @@ export default function PredictionTable(props) {
                     throw new Error("PREDICTION_MISSING");
                 }
             }
-
-            if ((fixtures.filter(fix => fix.status === 'NS').length <= predictions.length) && !x2FixtureId) {
+            
+            if ((fixtures.filter(fix => notStartedStatuses.includes(fix.status)).length <= predictions.length) && !x2FixtureId) {
                 throw new Error("X2_MISSING");
             }
 

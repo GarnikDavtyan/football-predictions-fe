@@ -45,6 +45,7 @@ export default function FixtureRow(props) {
 
     const isFinished = fixture.status === 'FT';
     const isNotStarted = fixture.status === 'NS';
+    const isPostponed = fixture.status === 'PST';
 
     // Show user local datetime 
     moment.locale('en-gb');
@@ -61,7 +62,7 @@ export default function FixtureRow(props) {
                 setX2FixtureId(fixId);
             }
 
-            if (isNotStarted) {
+            if (isNotStarted || isPostponed) {
                 setPredictions(prevPredictions => [...prevPredictions, fixture.prediction]);
             }
         }
@@ -90,7 +91,7 @@ export default function FixtureRow(props) {
                 <TableRow key={fixId} id={fixId}>
                     <TableCell component="th" scope="row" align="center" padding="none">
                         <IconButton onClick={handleInfoClick} value={fixId} size="large">
-                            <InfoIcon color={info ? 'success' : ''} />
+                            <InfoIcon color={isPostponed ? 'warning' : info ? 'success' : ''} />
                         </IconButton>
                     </TableCell>
                     <TableCell align="right" padding="none">
@@ -118,7 +119,7 @@ export default function FixtureRow(props) {
                         <Checkbox
                             disabled={!user
                                 || !user.email_verified_at
-                                || !isNotStarted
+                                || (!isNotStarted && !isPostponed)
                                 || prediction.score_home === null
                                 || prediction.score_home === ''
                                 || prediction.score_away === null
@@ -132,7 +133,7 @@ export default function FixtureRow(props) {
                         />
                     </TableCell>
                     <TableCell align="center" padding="none">
-                        {isNotStarted ? (
+                        {isNotStarted || isPostponed ? (
                             <InputsContainer>
                                 <PredictionInput
                                     disabled={!user || !user.email_verified_at}
@@ -167,7 +168,7 @@ export default function FixtureRow(props) {
                 <TableRow key={fixId} id={fixId}>
                     <TableCell padding='none' align='center'>
                         <IconButton onClick={handleInfoClick} value={fixId} size="small">
-                            <InfoIcon color={info ? 'success' : ''} />
+                            <InfoIcon color={isPostponed ? 'warning' : info ? 'success' : ''} />
                         </IconButton>
                     </TableCell>
                     <TableCell align="center" padding='none' sx={{ px: 1 }}>
@@ -198,7 +199,7 @@ export default function FixtureRow(props) {
                     </TableCell>
                     <TableCell align='center' padding='none' sx={{ pr: 1 }}>
                         <MobileColumnContainer>
-                            {isNotStarted ? (
+                            {isNotStarted || isPostponed ? (
                                 <>
                                     <PredictionInput
                                         disabled={!user || !user.email_verified_at}
@@ -234,7 +235,7 @@ export default function FixtureRow(props) {
                             <Checkbox
                                 disabled={!user
                                     || !user.email_verified_at
-                                    || !isNotStarted
+                                    || (!isNotStarted && !isPostponed)
                                     || prediction.score_home === null
                                     || prediction.score_home === ''
                                     || prediction.score_away === null
@@ -259,7 +260,7 @@ export default function FixtureRow(props) {
                     <TableCell colSpan={isMobile ? 4 : 3} sx={{ px: 0 }}>
                         <Paper>
                             <DateText color="textSecondary">
-                                {fixtureDate}
+                                {isPostponed ? 'Postponed' : fixtureDate}
                             </DateText>
                             {fixture.top10_predictions && fixture.top10_predictions.length > 0 &&
                                 <>
